@@ -1,1 +1,34 @@
-node_modules
+# Dependencies
+node_modules/
+package-lock.json
+yarn.lock
+
+# Build output
+dist/
+build/
+*.log
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Other
+.git/
+.github/
+.next/
+.turbo/
+.sam/
+sam/
+build-output.txt

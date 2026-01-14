@@ -1,17 +1,17 @@
 import { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { Toaster } from "@/app/components/ui/sonner";
-import { Preloader } from "@/app/components/Preloader";
-import { AuthPage } from "@/app/pages/AuthPage";
-import { DashboardPage } from "@/app/pages/DashboardPage";
-import { ImageGenerationPage } from "@/app/pages/ImageGenerationPage";
-import { VideoGenerationPage } from "@/app/pages/VideoGenerationPage";
-import { BulkGenerationPage } from "@/app/pages/BulkGenerationPage";
-import { FailedJobsPage } from "@/app/pages/FailedJobsPage";
-import { UsageAnalyticsPage } from "@/app/pages/UsageAnalyticsPage";
-import { BillingPage } from "@/app/pages/BillingPage";
-import { SettingsPage } from "@/app/pages/SettingsPage";
-import { DashboardLayout } from "@/app/components/DashboardLayout";
+import { Toaster } from "@/app/components/ui/Sonner/sonner";
+import { Preloader } from "@/app/components/Preloader/Preloader";
+import { AuthPage } from "@/app/pages/AuthPage/AuthPage";
+import { DashboardPage } from "@/app/pages/DashboardPage/DashboardPage";
+import { ImageGenerationPage } from "@/app/pages/ImageGenerationPage/ImageGenerationPage";
+import { VideoGenerationPage } from "@/app/pages/VideoGenerationPage/VideoGenerationPage";
+import { BulkGenerationPage } from "@/app/pages/BulkGenerationPage/BulkGenerationPage";
+import { FailedJobsPage } from "@/app/pages/FailedJobsPage/FailedJobsPage";
+import { UsageAnalyticsPage } from "@/app/pages/UsageAnalyticsPage/UsageAnalyticsPage";
+import { BillingPage } from "@/app/pages/BillingPage/BillingPage";
+import { SettingsPage } from "@/app/pages/SettingsPage/SettingsPage";
+import { DashboardLayout } from "@/app/components/DashboardLayout/DashboardLayout";
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
