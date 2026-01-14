@@ -1,0 +1,32 @@
+{
+  "mockFailedJobs": [
+    {
+      "id": "JOB-001",
+      "type": "Image",
+      "errorReason": "Invalid input parameters",
+      "timestamp": "2026-01-13 10:45 AM",
+      "details": "Resolution exceeded maximum allowed dimensions (8000x8000)"
+    },
+    {
+      "id": "JOB-002",
+      "type": "Video",
+      "errorReason": "Timeout exceeded",
+      "timestamp": "2026-01-13 10:30 AM",
+      "details": "Generation took longer than 5 minutes timeout limit"
+    },
+    {
+      "id": "JOB-003",
+      "type": "Image",
+      "errorReason": "Content policy violation",
+      "timestamp": "2026-01-13 10:15 AM",
+      "details": "Prompt contained restricted keywords"
+    },
+    {
+      "id": "JOB-004",
+      "type": "Video",
+      "errorReason": "Insufficient resources",
+      "timestamp": "2026-01-13 10:00 AM",
+      "details": "GPU memory limit exceeded for 4K resolution"
+    }
+  ]
+}

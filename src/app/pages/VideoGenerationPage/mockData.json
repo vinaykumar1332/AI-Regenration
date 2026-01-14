@@ -1,0 +1,32 @@
+{
+  "mockVideos": [
+    {
+      "id": 1,
+      "status": "completed",
+      "prompt": "Person walking on runway",
+      "duration": "10s",
+      "resolution": "1080p"
+    },
+    {
+      "id": 2,
+      "status": "completed",
+      "prompt": "Product showcase rotation",
+      "duration": "20s",
+      "resolution": "4K"
+    },
+    {
+      "id": 3,
+      "status": "processing",
+      "prompt": "Abstract motion graphics",
+      "duration": "10s",
+      "resolution": "1080p"
+    },
+    {
+      "id": 4,
+      "status": "failed",
+      "prompt": "Complex animation sequence",
+      "duration": "20s",
+      "resolution": "4K"
+    }
+  ]
+}

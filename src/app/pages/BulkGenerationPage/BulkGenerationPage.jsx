@@ -6,13 +6,9 @@ import { Badge } from "@/app/components/ui/Badge/badge";
 import { Progress } from "@/app/components/ui/Progress/progress";
 import { Upload, FileArchive, RefreshCw, Download } from "lucide-react";
 import { toast } from "sonner";
+import mockData from "./mockData.json";
 
-const mockJobs = [
-  { id: 1, fileName: "batch_001.zip", type: "Image", total: 150, completed: 150, failed: 0, status: "completed" },
-  { id: 2, fileName: "video_batch_alpha.zip", type: "Video", total: 50, completed: 35, failed: 2, status: "processing" },
-  { id: 3, fileName: "mixed_content.zip", type: "Mixed", total: 200, completed: 180, failed: 5, status: "processing" },
-  { id: 4, fileName: "product_images.zip", type: "Image", total: 80, completed: 80, failed: 0, status: "completed" },
-];
+const { mockJobs } = mockData;
 
 export function BulkGenerationPage() {
   const [jobs, setJobs] = useState(mockJobs);

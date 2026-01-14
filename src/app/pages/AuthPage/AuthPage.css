@@ -1,0 +1,46 @@
+/* Auth Page Container Styles */
+.auth-grid-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    width: 100%;
+    max-width: 1280px;
+    margin: 0 auto;
+    align-items: center;
+}
+
+/* Desktop layout - 2 columns */
+@media (min-width: 768px) {
+    .auth-grid-container {
+        grid-template-columns: 1fr 1fr;
+        gap: 4rem;
+    }
+}
+
+/* Illustration container */
+.auth-illustration {
+    display: none;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+}
+
+@media (min-width: 768px) {
+    .auth-illustration {
+        display: flex;
+    }
+}
+
+/* Form container */
+.auth-form-container {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.auth-form-container .card {
+    width: 100%;
+    max-width: 450px;
+}

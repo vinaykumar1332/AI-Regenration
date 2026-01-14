@@ -5,55 +5,9 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Progress } from "@/app/components/ui/Progress/progress";
 import { Check, Download, CreditCard } from "lucide-react";
 import { toast } from "sonner";
+import mockData from "./mockData.json";
 
-const plans = [
-  {
-    name: "Starter",
-    price: "$99",
-    period: "per month",
-    features: [
-      "5,000 generations/month",
-      "1080p video quality",
-      "Basic support",
-      "30-day history",
-    ],
-    current: false,
-  },
-  {
-    name: "Professional",
-    price: "$299",
-    period: "per month",
-    features: [
-      "15,000 generations/month",
-      "4K video quality",
-      "Priority support",
-      "90-day history",
-      "Bulk processing",
-    ],
-    current: true,
-  },
-  {
-    name: "Enterprise",
-    price: "Custom",
-    period: "contact sales",
-    features: [
-      "Unlimited generations",
-      "4K video quality",
-      "Dedicated support",
-      "Unlimited history",
-      "Advanced bulk processing",
-      "Custom integrations",
-    ],
-    current: false,
-  },
-];
-
-const invoices = [
-  { id: "INV-2026-001", date: "Jan 1, 2026", amount: "$299.00", status: "paid" },
-  { id: "INV-2025-012", date: "Dec 1, 2025", amount: "$299.00", status: "paid" },
-  { id: "INV-2025-011", date: "Nov 1, 2025", amount: "$299.00", status: "paid" },
-  { id: "INV-2025-010", date: "Oct 1, 2025", amount: "$299.00", status: "paid" },
-];
+const { plans, invoices } = mockData;
 
 export function BillingPage() {
   const currentUsage = 9260;

@@ -6,13 +6,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Badge } from "@/app/components/ui/Badge/badge";
 import { Video, Play, Download, RefreshCw, Loader2 } from "lucide-react";
 import { toast } from "sonner";
+import mockData from "./mockData.json";
 
-const mockVideos = [
-  { id: 1, status: "completed", prompt: "Person walking on runway", duration: "10s", resolution: "1080p" },
-  { id: 2, status: "completed", prompt: "Product showcase rotation", duration: "20s", resolution: "4K" },
-  { id: 3, status: "processing", prompt: "Abstract motion graphics", duration: "10s", resolution: "1080p" },
-  { id: 4, status: "failed", prompt: "Complex animation sequence", duration: "20s", resolution: "4K" },
-];
+const { mockVideos } = mockData;
 
 export function VideoGenerationPage() {
   const [prompt, setPrompt] = useState("");

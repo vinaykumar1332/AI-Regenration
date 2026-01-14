@@ -3,6 +3,8 @@ import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/app/components/ui/Button/button";
 import { Input } from "@/app/components/ui/Input/input";
 import { Avatar, AvatarFallback } from "@/app/components/ui/Avatar/avatar";
+import { ThemeToggle } from "@/app/components/ThemeToggle/ThemeToggle";
+import { Footer } from "@/app/components/Footer/Footer";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -42,12 +44,18 @@ const navItems = [
 
 export function DashboardLayout({ children, onLogout }) {
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [isDark, setIsDark] = useState(true);
   const location = useLocation();
 
   const isActive = (path) => location.pathname === path;
 
+  const toggleTheme = () => {
+    setIsDark(!isDark);
+    document.documentElement.classList.toggle("dark");
+  };
+
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen flex flex-col bg-background">
       {/* Top Navigation */}
       <header className="sticky top-0 z-40 border-b border-border bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/60">
         <div className="flex h-16 items-center gap-4 px-6">
@@ -79,6 +87,8 @@ export function DashboardLayout({ children, onLogout }) {
               <Bell className="w-5 h-5" />
               <span className="absolute top-1 right-1 w-2 h-2 bg-accent rounded-full"></span>
             </Button>
+
+            <ThemeToggle isDark={isDark} onToggle={toggleTheme} />
 
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -149,6 +159,7 @@ export function DashboardLayout({ children, onLogout }) {
         {/* Main Content */}
         <main className="flex-1 overflow-auto">
           {children}
+          <Footer />
         </main>
       </div>
     </div>

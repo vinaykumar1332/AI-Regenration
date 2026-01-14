@@ -6,23 +6,9 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Download, Calendar } from "lucide-react";
 import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
 import { toast } from "sonner";
+import mockData from "./mockData.json";
 
-const dailyUsageData = [
-  { date: "Jan 7", images: 420, videos: 180 },
-  { date: "Jan 8", images: 580, videos: 240 },
-  { date: "Jan 9", images: 650, videos: 310 },
-  { date: "Jan 10", images: 720, videos: 280 },
-  { date: "Jan 11", images: 890, videos: 410 },
-  { date: "Jan 12", images: 1020, videos: 480 },
-  { date: "Jan 13", images: 950, videos: 520 },
-];
-
-const userWiseData = [
-  { user: "john.doe@company.com", images: 3420, videos: 1280, total: 4700 },
-  { user: "jane.smith@company.com", images: 2890, videos: 960, total: 3850 },
-  { user: "bob.wilson@company.com", images: 1540, videos: 820, total: 2360 },
-  { user: "alice.brown@company.com", images: 980, videos: 450, total: 1430 },
-];
+const { dailyUsageData, userWiseData } = mockData;
 
 export function UsageAnalyticsPage() {
   const [timeFilter, setTimeFilter] = useState("monthly");

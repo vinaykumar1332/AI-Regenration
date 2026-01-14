@@ -3,26 +3,9 @@ import { Card } from "@/app/components/ui/Card/card";
 import { Progress } from "@/app/components/ui/Progress/progress";
 import { Image, Video, AlertCircle, Activity } from "lucide-react";
 import { LineChart, Line, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
+import mockData from "./mockData.json";
 
-const dailyData = [
-  { date: "Jan 7", images: 420, videos: 180 },
-  { date: "Jan 8", images: 580, videos: 240 },
-  { date: "Jan 9", images: 650, videos: 310 },
-  { date: "Jan 10", images: 720, videos: 280 },
-  { date: "Jan 11", images: 890, videos: 410 },
-  { date: "Jan 12", images: 1020, videos: 480 },
-  { date: "Jan 13", images: 950, videos: 520 },
-];
-
-const usageData = [
-  { name: "Images", value: 6420, color: "#4F46E5" },
-  { name: "Videos", value: 2840, color: "#06b6d4" },
-];
-
-const statusData = [
-  { name: "Success", value: 8950, color: "#10b981" },
-  { name: "Failed", value: 310, color: "#ef4444" },
-];
+const { dailyData, usageData, statusData } = mockData;
 
 export function DashboardPage() {
   const monthlyUsage = 9260;

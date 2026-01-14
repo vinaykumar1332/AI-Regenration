@@ -7,13 +7,9 @@ import { Badge } from "@/app/components/ui/Badge/badge";
 import { Skeleton } from "@/app/components/ui/Skeleton/skeleton";
 import { Upload, Sparkles, Download, RefreshCw, Loader2 } from "lucide-react";
 import { toast } from "sonner";
+import mockData from "./mockData.json";
 
-const mockImages = [
-  { id: 1, status: "completed", prompt: "Modern office workspace", url: "https://images.unsplash.com/photo-1497366216548-37526070297c?w=400&h=400&fit=crop" },
-  { id: 2, status: "completed", prompt: "Abstract tech background", url: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=400&h=400&fit=crop" },
-  { id: 3, status: "processing", prompt: "Futuristic cityscape", url: "" },
-  { id: 4, status: "completed", prompt: "AI neural network visualization", url: "https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=400&h=400&fit=crop" },
-];
+const { mockImages } = mockData;
 
 export function ImageGenerationPage() {
   const [prompt, setPrompt] = useState("");
