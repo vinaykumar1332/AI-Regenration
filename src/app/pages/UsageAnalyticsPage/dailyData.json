@@ -1,0 +1,46 @@
+{
+  "timeframe": "daily",
+  "summary": {
+    "totalImages": 950,
+    "totalVideos": 520,
+    "activeUsers": 18,
+    "avgPerDay": 950,
+    "imagesTrend": "+8.5%",
+    "videosTrend": "+12.3%"
+  },
+  "dailyUsageData": [
+    { "date": "Today", "images": 350, "videos": 180 },
+    { "date": "Yesterday", "images": 420, "videos": 210 },
+    { "date": "2 days ago", "images": 380, "videos": 195 },
+    { "date": "3 days ago", "images": 290, "videos": 165 },
+    { "date": "4 days ago", "images": 310, "videos": 175 },
+    { "date": "5 days ago", "images": 400, "videos": 220 },
+    { "date": "6 days ago", "images": 450, "videos": 240 }
+  ],
+  "userWiseData": [
+    {
+      "user": "john.doe@company.com",
+      "images": 280,
+      "videos": 95,
+      "total": 375
+    },
+    {
+      "user": "jane.smith@company.com",
+      "images": 210,
+      "videos": 78,
+      "total": 288
+    },
+    {
+      "user": "bob.wilson@company.com",
+      "images": 185,
+      "videos": 65,
+      "total": 250
+    },
+    {
+      "user": "alice.brown@company.com",
+      "images": 275,
+      "videos": 82,
+      "total": 357
+    }
+  ]
+}

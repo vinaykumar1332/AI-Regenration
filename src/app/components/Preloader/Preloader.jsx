@@ -106,7 +106,7 @@ export function Preloader() {
           transition={{ duration: 0.8 }}
         >
           <h1 className="text-4xl font-bold bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent">
-            AI Media Studio
+            venkatTech media studio
           </h1>
         </motion.div>
 

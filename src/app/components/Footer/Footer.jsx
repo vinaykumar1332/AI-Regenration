@@ -9,7 +9,7 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
           {/* Brand */}
           <div>
-            <h3 className="text-lg font-semibold mb-4">AI Media Studio</h3>
+            <h3 className="text-lg font-semibold mb-4">venkatTech media studio</h3>
             <p className="text-sm text-muted-foreground">
               Professional AI-powered image and video generation platform for enterprise teams.
             </p>
@@ -58,7 +58,7 @@ export function Footer() {
         <div className="border-t border-border pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-sm text-muted-foreground">
-              © {currentYear} AI Media Studio. All rights reserved.
+              © {currentYear} venkatTech media studio. All rights reserved.
             </p>
             <p className="text-sm font-medium text-primary">
               Built by{" "}

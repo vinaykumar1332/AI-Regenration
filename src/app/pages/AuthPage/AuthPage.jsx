@@ -32,7 +32,7 @@ export function AuthPage({ onLogin }) {
             <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-accent/20 rounded-3xl blur-3xl"></div>
             <div className="relative bg-card/50 backdrop-blur-sm p-12 rounded-3xl border border-border">
               <Sparkles className="w-20 h-20 text-primary mb-6" />
-              <h1 className="text-4xl font-semibold mb-4">AI Media Studio</h1>
+              <h1 className="text-4xl font-semibold mb-4">venkatTech media studio</h1>
               <p className="text-lg text-muted-foreground mb-6">
                 Professional AI-powered image and video generation platform for enterprise teams
               </p>

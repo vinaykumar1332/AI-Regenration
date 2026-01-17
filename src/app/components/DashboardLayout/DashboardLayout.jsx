@@ -1,18 +1,13 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
+import { motion } from "motion/react";
 import { Button } from "@/app/components/ui/Button/button";
 import { Input } from "@/app/components/ui/Input/input";
 import { Avatar, AvatarFallback } from "@/app/components/ui/Avatar/avatar";
 import { ThemeToggle } from "@/app/components/ThemeToggle/ThemeToggle";
 import { Footer } from "@/app/components/Footer/Footer";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/app/components/ui/DropdownMenu/dropdown-menu";
+import { UserProfileModal } from "@/app/components/UserProfileModal/UserProfileModal";
+import { NotificationPanel } from "@/app/components/NotificationPanel/NotificationPanel";
 import {
   LayoutDashboard,
   Image,
@@ -45,6 +40,9 @@ const navItems = [
 export function DashboardLayout({ children, onLogout }) {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [isDark, setIsDark] = useState(true);
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const [isNotificationOpen, setIsNotificationOpen] = useState(false);
+  const [hasNotifications] = useState(true);
   const location = useLocation();
 
   const isActive = (path) => location.pathname === path;
@@ -52,6 +50,11 @@ export function DashboardLayout({ children, onLogout }) {
   const toggleTheme = () => {
     setIsDark(!isDark);
     document.documentElement.classList.toggle("dark");
+  };
+
+  const handleLogout = () => {
+    setIsProfileOpen(false);
+    onLogout();
   };
 
   return (
@@ -72,7 +75,7 @@ export function DashboardLayout({ children, onLogout }) {
             <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center">
               <Sparkles className="w-6 h-6 text-white" />
             </div>
-            <span className="text-xl font-semibold hidden sm:block">AI Media Studio</span>
+            <span className="text-xl font-semibold hidden sm:block">venkatTech media studio</span>
           </div>
 
           <div className="flex-1 max-w-md mx-auto hidden md:block">
@@ -83,47 +86,39 @@ export function DashboardLayout({ children, onLogout }) {
           </div>
 
           <div className="flex items-center gap-3">
-            <Button variant="ghost" size="icon" className="relative">
-              <Bell className="w-5 h-5" />
-              <span className="absolute top-1 right-1 w-2 h-2 bg-accent rounded-full"></span>
-            </Button>
+            <motion.div
+              animate={hasNotifications ? { rotate: [0, -10, 10, -10, 0] } : {}}
+              transition={hasNotifications ? { duration: 0.5, repeat: Infinity, repeatDelay: 4 } : {}}
+            >
+              <Button
+                variant="ghost"
+                size="icon"
+                className="relative"
+                onClick={() => setIsNotificationOpen(true)}
+              >
+                <Bell className="w-5 h-5" />
+                {hasNotifications && (
+                  <motion.span
+                    className="absolute top-1 right-1 w-2.5 h-2.5 bg-accent rounded-full"
+                    animate={{ scale: [1, 1.2, 1] }}
+                    transition={{ duration: 2, repeat: Infinity }}
+                  />
+                )}
+              </Button>
+            </motion.div>
 
             <ThemeToggle isDark={isDark} onToggle={toggleTheme} />
 
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="gap-2">
-                  <Avatar className="w-8 h-8">
-                    <AvatarFallback className="bg-primary text-white">JD</AvatarFallback>
-                  </Avatar>
-                  <span className="hidden md:block">John Doe</span>
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-56">
-                <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <div className="px-2 py-2 text-sm">
-                  <p className="font-medium">John Doe</p>
-                  <p className="text-muted-foreground text-xs">john.doe@example.com</p>
-                </div>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem>
-                  <User className="w-4 h-4 mr-2" />
-                  Profile
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link to="/settings" className="cursor-pointer">
-                    <Settings className="w-4 h-4 mr-2" />
-                    Settings
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={onLogout}>
-                  <LogOut className="w-4 h-4 mr-2" />
-                  Logout
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            <Button
+              variant="ghost"
+              className="gap-2"
+              onClick={() => setIsProfileOpen(true)}
+            >
+              <Avatar className="w-8 h-8">
+                <AvatarFallback className="bg-primary text-white">JD</AvatarFallback>
+              </Avatar>
+              <span className="hidden md:block">John Doe</span>
+            </Button>
           </div>
         </div>
       </header>
@@ -162,6 +157,19 @@ export function DashboardLayout({ children, onLogout }) {
           <Footer />
         </main>
       </div>
+
+      {/* User Profile Modal */}
+      <UserProfileModal
+        isOpen={isProfileOpen}
+        onClose={() => setIsProfileOpen(false)}
+        onLogout={handleLogout}
+      />
+
+      {/* Notification Panel */}
+      <NotificationPanel
+        isOpen={isNotificationOpen}
+        onClose={() => setIsNotificationOpen(false)}
+      />
     </div>
   );
 }
