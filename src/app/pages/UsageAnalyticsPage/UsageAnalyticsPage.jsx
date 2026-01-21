@@ -20,7 +20,7 @@ export function UsageAnalyticsPage() {
   useEffect(() => {
     setLoading(true);
     setAnimateCards(false);
-    
+
     // Simulate data fetch delay for realistic UX
     const timer = setTimeout(() => {
       if (timeFilter === "daily") {
@@ -183,7 +183,7 @@ export function UsageAnalyticsPage() {
                 {currentData.userWiseData && currentData.userWiseData.map((user) => {
                   const totalUsage = currentData.userWiseData.reduce((sum, u) => sum + u.total, 0);
                   const percentage = ((user.total / totalUsage) * 100).toFixed(1);
-                  
+
                   return (
                     <TableRow key={user.user}>
                       <TableCell className="font-medium">{user.user}</TableCell>

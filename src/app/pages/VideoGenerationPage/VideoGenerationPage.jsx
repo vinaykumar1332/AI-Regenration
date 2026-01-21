@@ -142,8 +142,8 @@ export function VideoGenerationPage() {
                   <Badge
                     variant={
                       video.status === "completed" ? "default" :
-                      video.status === "processing" ? "secondary" :
-                      "destructive"
+                        video.status === "processing" ? "secondary" :
+                          "destructive"
                     }
                   >
                     {video.status.charAt(0).toUpperCase() + video.status.slice(1)}

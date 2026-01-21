@@ -28,12 +28,12 @@ import {
 
 
 const navItems = [
-  { icon: LayoutDashboard, label: "Dashboard", path: "/" },
+  // { icon: LayoutDashboard, label: "Dashboard", path: "/" },
   { icon: Image, label: "Image Generation", path: "/image-generation" },
   { icon: Video, label: "Video Generation", path: "/video-generation" },
   { icon: FolderSync, label: "Bulk Generation", path: "/bulk-generation" },
   { icon: AlertCircle, label: "Failed Jobs", path: "/failed-jobs" },
-  { icon: BarChart3, label: "Usage & Analytics", path: "/usage-analytics" },
+  // { icon: BarChart3, label: "Usage & Analytics", path: "/usage-analytics" },
   { icon: Settings, label: "Settings", path: "/settings" },
 ];
 
@@ -139,8 +139,8 @@ export function DashboardLayout({ children, onLogout }) {
                   key={item.path}
                   to={item.path}
                   className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${active
-                      ? "bg-primary text-white"
-                      : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+                    ? "bg-primary text-white"
+                    : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
                     }`}
                 >
                   <Icon className="w-5 h-5" />
