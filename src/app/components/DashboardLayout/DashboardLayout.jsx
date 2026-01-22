@@ -23,6 +23,7 @@ import {
   Sparkles,
   LogOut,
   User,
+  Users,
 } from "lucide-react";
 
 
@@ -31,6 +32,7 @@ const navItems = [
   // { icon: LayoutDashboard, label: "Dashboard", path: "/" },
   { icon: Image, label: "Image Generation", path: "/image-generation" },
   { icon: Video, label: "Video Generation", path: "/video-generation" },
+  { icon: Users, label: "Avatar Generation", path: "/avatar-generation" },
   { icon: FolderSync, label: "Bulk Generation", path: "/bulk-generation" },
   { icon: AlertCircle, label: "Failed Jobs", path: "/failed-jobs" },
   // { icon: BarChart3, label: "Usage & Analytics", path: "/usage-analytics" },

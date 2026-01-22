@@ -6,6 +6,7 @@ import { AuthPage } from "@/app/pages/AuthPage/AuthPage";
 // import { DashboardPage } from "@/app/pages/DashboardPage/DashboardPage";
 import { ImageGenerationPage } from "@/app/pages/ImageGenerationPage/ImageGenerationPage";
 import { VideoGenerationPage } from "@/app/pages/VideoGenerationPage/VideoGenerationPage";
+import { AvatarGenerationPage } from "@/app/pages/AvatarGenerationPage/AvatarGenerationPage";
 import { BulkGenerationPage } from "@/app/pages/BulkGenerationPage/BulkGenerationPage";
 import { FailedJobsPage } from "@/app/pages/FailedJobsPage/FailedJobsPage";
 // import { UsageAnalyticsPage } from "@/app/pages/UsageAnalyticsPage/UsageAnalyticsPage";
@@ -55,6 +56,7 @@ function App() {
           <Route path="/" element={<ImageGenerationPage />} />
           <Route path="/image-generation" element={<ImageGenerationPage />} />
           <Route path="/video-generation" element={<VideoGenerationPage />} />
+          <Route path="/avatar-generation" element={<AvatarGenerationPage />} />
           <Route path="/bulk-generation" element={<BulkGenerationPage />} />
           <Route path="/failed-jobs" element={<FailedJobsPage />} />
           {/* <Route path="/usage-analytics" element={<UsageAnalyticsPage />} /> */}

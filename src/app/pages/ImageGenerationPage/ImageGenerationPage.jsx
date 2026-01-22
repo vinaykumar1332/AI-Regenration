@@ -8,14 +8,12 @@ import { Skeleton } from "@/app/components/ui/Skeleton/skeleton";
 import { Upload, Sparkles, Download, RefreshCw, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import mockData from "./mockData.json";
-import { AvatarSelector } from "@/app/components/AvatarSelector/AvatarSelector";
 
 const { mockImages } = mockData;
 
 export function ImageGenerationPage() {
   const [prompt, setPrompt] = useState("");
   const [identity, setIdentity] = useState("default");
-  const [selectedAvatar, setSelectedAvatar] = useState(null);
   const [images, setImages] = useState(mockImages);
   const [isGenerating, setIsGenerating] = useState(false);
 
@@ -27,18 +25,13 @@ export function ImageGenerationPage() {
 
     setIsGenerating(true);
 
-    // Build payload with avatar keyword if selected
     const payload = {
       prompt: prompt,
       identity: identity,
-      avatar: selectedAvatar || null,
-      fullPrompt: selectedAvatar
-        ? `${prompt} (${selectedAvatar.keyword})`
-        : prompt,
     };
 
-    toast.success("Image generation started with avatar!");
-    console.log("Generation Payload:", payload); // Debug log
+    toast.success("Image generation started!");
+    console.log("Generation Payload:", payload);
 
     setTimeout(() => {
       setIsGenerating(false);
@@ -123,9 +116,6 @@ export function ImageGenerationPage() {
           </Button>
         </div>
       </Card>
-
-      {/* Avatar Selector */}
-      <AvatarSelector onAvatarSelect={setSelectedAvatar} selectedAvatar={selectedAvatar} />
 
       {/* Generated Images Grid */}
       <div>
