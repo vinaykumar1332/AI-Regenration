@@ -17,20 +17,72 @@ export function VideoGenerationPage() {
   const [resolution, setResolution] = useState("1080p");
   const [videos, setVideos] = useState(mockVideos);
   const [isGenerating, setIsGenerating] = useState(false);
+  const [characterName, setCharacterName] = useState("");
+  const [origin, setOrigin] = useState("Asian");
 
-  const handleGenerate = () => {
+  const handleGenerate = async () => {
     if (!prompt.trim()) {
       toast.error("Please enter a prompt");
       return;
     }
 
     setIsGenerating(true);
-    toast.success("Video generation started!");
 
-    setTimeout(() => {
-      setIsGenerating(false);
+    try {
+      const response = await fetch("/api/generateVideo", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          prompt: prompt,
+          characterName: characterName || undefined,
+          origin: origin,
+          duration: parseInt(duration),
+          motionPreset: motionPreset,
+          resolution: resolution,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to generate video");
+      }
+
+      // Create new video entry
+      const newVideo = {
+        id: data.generationId,
+        prompt: prompt,
+        characterName: characterName,
+        origin: origin,
+        url: `https://via.placeholder.com/1280x720?text=${encodeURIComponent(prompt.substring(0, 30))}`,
+        status: "completed",
+        timestamp: data.timestamp,
+        duration: parseInt(duration),
+        resolution: resolution,
+        storyboard: data.storyboard,
+      };
+
+      // Add to videos array at the beginning
+      setVideos([newVideo, ...videos]);
+
+      // Reset form
+      setPrompt("");
+      setMotionPreset("runway-walk");
+      setDuration("10s");
+      setResolution("1080p");
+      setCharacterName("");
+      setOrigin("Asian");
+
       toast.success("Video generated successfully!");
-    }, 3000);
+      console.log("Video Generation Result:", data);
+    } catch (error) {
+      console.error("Generation error:", error);
+      toast.error(error.message || "Failed to generate video");
+    } finally {
+      setIsGenerating(false);
+    }
   };
 
   return (
@@ -92,6 +144,36 @@ export function VideoGenerationPage() {
                 <SelectContent>
                   <SelectItem value="1080p">1080p (Full HD)</SelectItem>
                   <SelectItem value="4K">4K (Ultra HD)</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="text-sm font-medium mb-2 block">Character Name (Optional)</label>
+              <input
+                type="text"
+                placeholder="e.g., Alex, Sarah, Jordan"
+                value={characterName}
+                onChange={(e) => setCharacterName(e.target.value)}
+                className="w-full px-3 py-2 border border-input rounded-md text-sm"
+              />
+            </div>
+
+            <div>
+              <label className="text-sm font-medium mb-2 block">Character Origin</label>
+              <Select value={origin} onValueChange={setOrigin}>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Asian">Asian</SelectItem>
+                  <SelectItem value="European">European</SelectItem>
+                  <SelectItem value="African">African</SelectItem>
+                  <SelectItem value="Indian">Indian</SelectItem>
+                  <SelectItem value="Middle Eastern">Middle Eastern</SelectItem>
+                  <SelectItem value="Latin American">Latin American</SelectItem>
                 </SelectContent>
               </Select>
             </div>
