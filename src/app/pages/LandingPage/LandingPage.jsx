@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { motion, useScroll, useTransform } from "motion/react";
 import { Button } from "@/app/components/ui/Button/button";
 import { Card } from "@/app/components/ui/Card/card";
+import { Footer } from "@/app/components/Footer/Footer";
 import {
     Sparkles,
     Image,
@@ -467,6 +468,8 @@ export function LandingPage({ onGetStarted, onLogin }) {
                     </div>
                 </div>
             </Section>
+
+            <Footer />
         </div>
     );
 }

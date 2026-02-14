@@ -1,0 +1,17 @@
+{
+    "logoText": "AI Studio",
+    "title": "Create your account",
+    "subtitle": "Sign up with a username and password",
+    "closeAriaLabel": "Close login modal",
+    "fields": {
+        "username": {
+            "label": "Username",
+            "placeholder": "yourname"
+        },
+        "password": {
+            "label": "Password",
+            "placeholder": "password"
+        }
+    },
+    "primaryButton": "Sign Up"
+}

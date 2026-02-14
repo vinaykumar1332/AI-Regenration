@@ -134,6 +134,83 @@
     animation: landing-float 2.4s ease-in-out infinite;
 }
 
+.landing-footer {
+    background: rgba(8, 8, 8, 0.7);
+    backdrop-filter: blur(16px);
+}
+
+.landing-footer__inner {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.landing-footer__title {
+    color: #ffffff;
+    font-size: 1.05rem;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.landing-footer__text {
+    font-size: 0.92rem;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.68);
+}
+
+.landing-footer__heading {
+    color: #ffffff;
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin-bottom: 12px;
+}
+
+.landing-footer__links {
+    display: grid;
+    gap: 10px;
+    font-size: 0.9rem;
+}
+
+.landing-footer__link {
+    color: rgba(255, 255, 255, 0.65);
+    transition: color 0.2s ease;
+}
+
+.landing-footer__link:hover {
+    color: #ffffff;
+}
+
+.landing-footer__socials {
+    display: flex;
+    gap: 12px;
+}
+
+.landing-footer__social {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.08);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255, 255, 255, 0.8);
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+.landing-footer__social:hover {
+    background: rgba(255, 255, 255, 0.18);
+    color: #ffffff;
+}
+
+.landing-footer__divider {
+    height: 1px;
+    background: rgba(255, 255, 255, 0.1);
+    margin: 24px 0 16px;
+}
+
+.landing-footer__copyright {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.6);
+}
+
 @keyframes landing-shimmer {
     0% {
         background-position: 0% 0;
@@ -164,6 +241,14 @@
     .landing-page {
         background: radial-gradient(700px 500px at 50% 0%, rgba(255, 142, 178, 0.18), transparent 60%),
             #0f0f0f;
+    }
+
+    .landing-footer__inner {
+        padding: 32px 20px;
+    }
+
+    .landing-footer__grid {
+        gap: 24px;
     }
 }
 

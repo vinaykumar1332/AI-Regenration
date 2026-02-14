@@ -1,0 +1,39 @@
+{
+    "brand": {
+        "name": "AI Studio",
+        "description": "AI-powered image and video generation for modern teams."
+    },
+    "sections": [
+        {
+            "title": "Product",
+            "links": [
+                {
+                    "label": "Dashboard",
+                    "href": "/"
+                },
+                {
+                    "label": "Image Generation",
+                    "href": "/image-generation"
+                }
+            ]
+        }
+    ],
+    "socials": [
+        {
+            "label": "GitHub",
+            "href": "#",
+            "icon": "Github"
+        },
+        {
+            "label": "LinkedIn",
+            "href": "#",
+            "icon": "Linkedin"
+        },
+        {
+            "label": "Email",
+            "href": "#",
+            "icon": "Mail"
+        }
+    ],
+    "copyright": "© {{year}} AI Studio. All rights reserved."
+}
