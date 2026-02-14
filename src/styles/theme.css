@@ -40,6 +40,17 @@
   --sidebar-accent-foreground: #5b21b6;
   --sidebar-border: #e5e7eb;
   --sidebar-ring: #5b21b6;
+  /* Navigation Variables */
+  --nav-bg-light: rgba(255, 255, 255, 0.7);
+  --nav-bg-dark: rgba(15, 23, 42, 0.7);
+  --nav-bg-scrolled-light: rgba(255, 255, 255, 0.85);
+  --nav-bg-scrolled-dark: rgba(15, 23, 42, 0.85);
+  --nav-border: rgba(255, 255, 255, 0.1);
+  --nav-glow: rgba(139, 92, 246, 0.5);
+  --nav-shadow-light: 0 4px 24px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  --nav-shadow-scrolled: 0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  --nav-animation-duration: 0.4s;
+  --nav-transition-timing: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .dark {
@@ -79,6 +90,10 @@
   --sidebar-accent-foreground: #e0e7ff;
   --sidebar-border: #334155;
   --sidebar-ring: #a78bfa;
+  /* Navigation Variables Dark Mode */
+  --nav-bg-light: rgba(30, 41, 59, 0.7);
+  --nav-bg-scrolled-light: rgba(30, 41, 59, 0.85);
+  --nav-glow: rgba(167, 139, 250, 0.5);
 }
 
 @theme inline {

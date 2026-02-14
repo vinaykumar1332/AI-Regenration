@@ -1,0 +1,427 @@
+/* DynamicIslandNav Styles */
+
+/* Main Navigation Container */
+.dynamic-island-nav {
+    background: var(--nav-bg-light);
+    border-color: var(--nav-border);
+    box-shadow: var(--nav-shadow-light);
+    transition: all var(--nav-animation-duration) var(--nav-transition-timing);
+    backdrop-filter: blur(20px);
+    position: relative;
+}
+
+.dark .dynamic-island-nav {
+    background: var(--nav-bg-dark);
+}
+
+/* Enhanced Glossy Overlay Effect */
+.nav-glossy-overlay {
+    background: linear-gradient(135deg,
+            rgba(255, 255, 255, 0.15) 0%,
+            rgba(255, 255, 255, 0.05) 50%,
+            transparent 100%);
+    backdrop-filter: blur(10px);
+    animation: glossyShimmer 3s ease-in-out infinite;
+}
+
+.dark .nav-glossy-overlay {
+    background: linear-gradient(135deg,
+            rgba(255, 255, 255, 0.08) 0%,
+            rgba(255, 255, 255, 0.02) 50%,
+            transparent 100%);
+}
+
+/* Glossy shimmer animation */
+@keyframes glossyShimmer {
+    0% {
+        opacity: 0.6;
+        transform: translateX(-100%);
+    }
+
+    50% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0.6;
+        transform: translateX(100%);
+    }
+}
+
+/* Modal state - scrolled */
+.dynamic-island-nav.is-scrolled {
+    background: var(--nav-bg-scrolled-light);
+    box-shadow: var(--nav-shadow-scrolled);
+    border-color: rgba(139, 92, 246, 0.2);
+}
+
+.dark .dynamic-island-nav.is-scrolled {
+    background: var(--nav-bg-scrolled-dark);
+    border-color: rgba(167, 139, 250, 0.2);
+}
+
+/* Glow effect on scroll */
+.dynamic-island-nav.is-scrolled::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(135deg,
+            var(--nav-glow),
+            transparent);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0;
+    animation: glowPulse var(--nav-animation-duration) ease-out forwards;
+    pointer-events: none;
+}
+
+@keyframes glowPulse {
+    0% {
+        opacity: 0;
+        box-shadow: 0 0 0 0 var(--nav-glow);
+    }
+
+    100% {
+        opacity: 0.3;
+        box-shadow: 0 0 20px 0 var(--nav-glow);
+    }
+}
+
+/* Main content container */
+.dynamic-island-nav-content {
+    display: flex;
+    align-items: center;
+    height: 60px;
+    padding: 0 24px;
+    position: relative;
+    transition: all var(--nav-animation-duration) var(--nav-transition-timing);
+}
+
+/* Hamburger Menu Button */
+.nav-hamburger-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: white;
+}
+
+.nav-hamburger-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 0 15px rgba(139, 92, 246, 0.3);
+    border-color: rgba(139, 92, 246, 0.3);
+}
+
+.dark .nav-hamburger-btn {
+    background: rgba(167, 139, 250, 0.1);
+    border-color: rgba(167, 139, 250, 0.1);
+}
+
+.dark .nav-hamburger-btn:hover {
+    background: rgba(167, 139, 250, 0.2);
+    box-shadow: 0 0 15px rgba(167, 139, 250, 0.3);
+    border-color: rgba(167, 139, 250, 0.3);
+}
+
+/* Logo Container */
+.nav-logo-container {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    padding: 8px 12px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.nav-logo-container:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(139, 92, 246, 0.2);
+}
+
+.dark .nav-logo-container:hover {
+    background: rgba(167, 139, 250, 0.1);
+    box-shadow: 0 4px 12px rgba(167, 139, 250, 0.2);
+}
+
+/* Logo Image */
+.nav-logo-container img {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    object-fit: cover;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.nav-logo-container:hover img {
+    box-shadow: 0 4px 16px rgba(139, 92, 246, 0.3);
+}
+
+/* Desktop Navigation Items */
+.nav-items {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+}
+
+.nav-items.show {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    border-radius: 50px;
+    color: rgba(255, 255, 255, 0.8);
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    font-size: 14px;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.nav-item:hover {
+    color: white;
+    background: rgba(139, 92, 246, 0.2);
+    border-color: rgba(139, 92, 246, 0.3);
+    box-shadow: 0 4px 16px rgba(139, 92, 246, 0.2);
+    transform: translateY(-2px);
+}
+
+.dark .nav-item {
+    background: rgba(167, 139, 250, 0.05);
+    border-color: rgba(167, 139, 250, 0.1);
+}
+
+.dark .nav-item:hover {
+    background: rgba(167, 139, 250, 0.2);
+    border-color: rgba(167, 139, 250, 0.3);
+    box-shadow: 0 4px 16px rgba(167, 139, 250, 0.2);
+}
+
+.nav-item svg {
+    width: 16px;
+    height: 16px;
+}
+
+/* Authentication Button */
+.nav-auth-btn {
+    padding: 10px 20px;
+    border-radius: 50px;
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
+    box-shadow: 0 4px 16px rgba(139, 92, 246, 0.3);
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.nav-auth-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), transparent);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+}
+
+.nav-auth-btn:hover {
+    box-shadow: 0 6px 24px rgba(139, 92, 246, 0.4);
+    transform: translateY(-2px);
+}
+
+.nav-auth-btn:hover::before {
+    opacity: 1;
+}
+
+/* User Profile Button */
+.nav-profile-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    border: none;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.nav-profile-btn:hover {
+    box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4);
+    transform: scale(1.05);
+}
+
+.nav-profile-btn svg {
+    width: 20px;
+    height: 20px;
+}
+
+/* Expanded Menu */
+.nav-expanded-menu {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 16px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.nav-menu-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    border-radius: 16px;
+    color: rgba(255, 255, 255, 0.8);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 14px;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.nav-menu-item:hover {
+    color: white;
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateX(4px);
+}
+
+.nav-menu-item svg {
+    width: 18px;
+    height: 18px;
+}
+
+.nav-menu-item.logout {
+    color: #f87171;
+}
+
+.nav-menu-item.logout:hover {
+    color: #fca5a5;
+    background: rgba(239, 68, 68, 0.1);
+}
+
+.dark .nav-menu-item.logout:hover {
+    background: rgba(239, 68, 68, 0.15);
+}
+
+/* Scroll Animation Classes */
+.nav-scroll-up {
+    animation: slideUpNav 0.4s ease-out;
+}
+
+@keyframes slideUpNav {
+    from {
+        transform: translateY(0);
+        opacity: 1;
+    }
+
+    to {
+        transform: translateY(-80px);
+        opacity: 0;
+    }
+}
+
+.nav-scroll-down {
+    animation: slideDownNav 0.4s ease-out;
+}
+
+@keyframes slideDownNav {
+    from {
+        transform: translateY(-80px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Smooth scroll behavior */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .nav-items {
+        display: none !important;
+    }
+
+    .dynamic-island-nav-content {
+        padding: 0 16px;
+    }
+
+    .nav-logo-container span:last-child {
+        display: none;
+    }
+}
+
+@media (max-width: 640px) {
+    .dynamic-island-nav-content {
+        height: 50px;
+        padding: 0 12px;
+    }
+
+    .nav-hamburger-btn,
+    .nav-profile-btn {
+        width: 36px;
+        height: 36px;
+    }
+
+    .nav-logo-container {
+        gap: 8px;
+        padding: 6px 10px;
+    }
+
+    .nav-logo-container img {
+        width: 28px;
+        height: 28px;
+    }
+
+    .nav-auth-btn {
+        padding: 8px 16px;
+        font-size: 12px;
+    }
+}
