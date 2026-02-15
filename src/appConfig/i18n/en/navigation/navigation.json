@@ -37,19 +37,22 @@
             "key": "image",
             "label": "Image",
             "icon": "ImageIcon",
-            "path": "/image",
+            "path": "/image-generation",
+            "requiresAuth": true,
             "children": [
                 {
                     "key": "garment",
                     "label": "Garment Try-On",
                     "icon": "ShirtIcon",
-                    "path": "/image/garment"
+                    "path": "/image-generation?module=garment",
+                    "requiresAuth": true
                 },
                 {
                     "key": "single",
                     "label": "Single Dress Flow",
                     "icon": "LayersIcon",
-                    "path": "/image/single"
+                    "path": "/image-generation?module=single",
+                    "requiresAuth": true
                 }
             ]
         },
@@ -57,19 +60,22 @@
             "key": "video",
             "label": "Video",
             "icon": "VideoIcon",
-            "path": "/video",
+            "path": "/video-generation",
+            "requiresAuth": true,
             "children": [
                 {
                     "key": "runway",
                     "label": "Runway Walk",
                     "icon": "ClapperboardIcon",
-                    "path": "/video/runway"
+                    "path": "/video-generation?module=runway",
+                    "requiresAuth": true
                 },
                 {
                     "key": "product",
                     "label": "Product Showcase",
                     "icon": "PackageIcon",
-                    "path": "/video/product"
+                    "path": "/video-generation?module=product",
+                    "requiresAuth": true
                 }
             ]
         },

@@ -174,13 +174,23 @@ export function Navigation({ onMenuClick, onLoginClick, isAuthenticated, onLogou
             return;
         }
 
+        if (item.requiresAuth && !isAuthenticated) {
+            onLoginClick?.();
+            return;
+        }
+
         setActiveDropdownKey(null);
         navigate(getLocalizedPath(item.path));
     };
 
-    const handleChildClick = (path) => {
+    const handleChildClick = (child) => {
+        if (child.requiresAuth && !isAuthenticated) {
+            onLoginClick?.();
+            return;
+        }
+
         setActiveDropdownKey(null);
-        navigate(getLocalizedPath(path));
+        navigate(getLocalizedPath(child.path));
     };
 
     const handleSubmenuAction = (item) => {
@@ -294,7 +304,7 @@ export function Navigation({ onMenuClick, onLoginClick, isAuthenticated, onLogou
                                                         key={child.key}
                                                         type="button"
                                                         className="nav-dropdown-item"
-                                                        onClick={() => handleChildClick(child.path)}
+                                                        onClick={() => handleChildClick(child)}
                                                     >
                                                         <NavIcon iconName={child.icon || "SparklesIcon"} />
                                                         {child.label}
@@ -406,7 +416,7 @@ export function Navigation({ onMenuClick, onLoginClick, isAuthenticated, onLogou
                                     handleSubmenuAction(child);
                                     return;
                                 }
-                                handleChildClick(child.path);
+                                handleChildClick(child);
                             }}
                         >
                             <NavIcon iconName={child.icon || "SparklesIcon"} />

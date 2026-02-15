@@ -3,7 +3,7 @@ import avatars from "@/appConfig/static/avatars.json";
 import poses from "@/appConfig/static/poses.json";
 import routes from "@/appConfig/static/routes.json";
 
-import enNavigation from "@/appConfig/i18n/en/navigation.json";
+import enNavigation from "@/appConfig/i18n/en/navigation/navigation.json";
 import enImageGeneration from "@/appConfig/i18n/en/imageGeneration.json";
 import enCommon from "@/appConfig/i18n/en/common.json";
 

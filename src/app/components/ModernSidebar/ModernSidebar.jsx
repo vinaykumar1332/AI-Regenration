@@ -14,7 +14,7 @@ import {
     Crown,
     ChevronDown,
 } from "lucide-react";
-import sidebarConfig from "@/appConfig/Sidebar/sidebarConfig";
+import sidebarConfig from "@/appConfig/i18n/en/sidebarConfig/sidebarConfig.json";
 import { validateLanguage } from "@/appConfig/AppConfig";
 import companyLogo from "@/images/fav-icon/venkattech_logo.png";
 import { useState } from "react";

@@ -1,4 +1,4 @@
-import { useState, useEffect, lazy, Suspense } from "react";
+import { useState, useEffect, lazy, Suspense, useMemo } from "react";
 import { BrowserRouter, Routes, Route, Navigate, useLocation, useParams } from "react-router-dom";
 import { Toaster } from "@/app/components/ui/Sonner/sonner";
 import { Preloader } from "@/app/components/Preloader/Preloader";
@@ -60,6 +60,16 @@ function LegacyRouteRedirect() {
   );
 }
 
+const MARKETING_PATHS = new Set(["/", "/pricing", "/features", "/contact"]);
+const PROTECTED_PATHS = [
+  "/image-generation",
+  "/video-generation",
+  "/avatar-generation",
+  "/bulk-generation",
+  "/failed-jobs",
+  "/settings",
+];
+
 function LanguageLayout({
   isAuthenticated,
   showLanding,
@@ -77,6 +87,27 @@ function LanguageLayout({
   const location = useLocation();
   const appConfig = useAppConfig();
   const validatedLang = validateLanguage(lang);
+  const normalizedPath = useMemo(() => {
+    const segments = location.pathname.split("/").filter(Boolean);
+    if (segments.length <= 1) {
+      return "/";
+    }
+
+    return `/${segments.slice(1).join("/")}`;
+  }, [location.pathname]);
+
+  const isMarketingRoute = MARKETING_PATHS.has(normalizedPath);
+  const isProtectedRoute = PROTECTED_PATHS.some((path) =>
+    normalizedPath === path || normalizedPath.startsWith(`${path}/`),
+  );
+
+  useEffect(() => {
+    if (isAuthenticated || !isProtectedRoute || isLoginModalOpen) {
+      return;
+    }
+
+    onLoginModalOpen?.();
+  }, [isAuthenticated, isProtectedRoute, isLoginModalOpen, onLoginModalOpen]);
 
   if (lang !== validatedLang) {
     const segments = location.pathname.split("/").filter(Boolean);
@@ -114,7 +145,7 @@ function LanguageLayout({
         onLogin={onLogin}
       />
 
-      {showLanding && !isAuthenticated ? (
+      {isMarketingRoute && showLanding && !isAuthenticated ? (
         <LandingPage
           onGetStarted={onGetStarted}
           onLogin={onLoginModalOpen}
