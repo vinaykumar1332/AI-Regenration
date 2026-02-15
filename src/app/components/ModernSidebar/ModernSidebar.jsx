@@ -12,9 +12,11 @@ import {
     Sparkles,
     Zap,
     Crown,
+    ChevronDown,
 } from "lucide-react";
-import sidebarConfig from "@/appConfig/Sidebar/sidebar.json";
+import sidebarConfig from "@/appConfig/Sidebar/sidebarConfig";
 import companyLogo from "@/images/fav-icon/venkattech_logo.png";
+import { useState } from "react";
 
 const iconMap = {
     Sparkles,
@@ -26,6 +28,7 @@ const iconMap = {
     Settings,
     BarChart3,
     Crown,
+    ChevronDown,
 };
 
 export function ModernSidebar({
@@ -36,6 +39,7 @@ export function ModernSidebar({
     onLoginRequest,
 }) {
     const location = useLocation();
+    const [openKey, setOpenKey] = useState(null);
 
     const isActive = (path) => {
         if (isLandingPage) return false;
@@ -117,8 +121,12 @@ export function ModernSidebar({
                             <nav className="flex-1 overflow-y-auto p-4 space-y-2">
                                 {moduleItems.map((item, index) => {
                                     const Icon = iconMap[item.icon] || Sparkles;
-                                    const active = !isLandingPage && isActive(item.path);
                                     const requiresAuth = item.requiresAuth;
+                                    const hasChildren = Array.isArray(item.children) && item.children.length > 0;
+                                    const open = openKey === item.path;
+
+                                    // item active if path matches or any child path is active
+                                    const itemActive = !isLandingPage && (isActive(item.path) || (hasChildren && item.children.some((c) => location.pathname === c.path)));
 
                                     if (isLandingPage) {
                                         return (
@@ -153,33 +161,65 @@ export function ModernSidebar({
                                             transition={{ delay: index * 0.05 }}
                                             whileHover={{ x: 8 }}
                                         >
-                                            <Link
-                                                to={item.path}
-                                                onClick={onClose}
-                                                className={`flex items-center gap-4 px-4 py-3 rounded-xl transition-all group ${active
-                                                    ? "bg-gradient-to-r from-primary to-accent text-white shadow-lg"
-                                                    : "hover:bg-muted"
-                                                    }`}
-                                            >
-                                                <div
-                                                    className={`w-10 h-10 rounded-lg flex items-center justify-center transition-colors ${active
-                                                        ? "bg-white/20"
-                                                        : "bg-primary/10 group-hover:bg-primary/20"
-                                                        }`}
-                                                >
-                                                    <Icon
-                                                        className={`w-5 h-5 ${active ? "text-white" : "text-primary"
-                                                            }`}
-                                                    />
+                                            {/* Parent item (link or toggle) */}
+                                            <div className={`flex items-center gap-4 px-4 py-3 rounded-xl transition-all group ${itemActive ? "bg-gradient-to-r from-primary to-accent text-white shadow-lg" : "hover:bg-muted"}`}>
+                                                <div className={`w-10 h-10 rounded-lg flex items-center justify-center transition-colors ${itemActive ? "bg-white/20" : "bg-primary/10 group-hover:bg-primary/20"}`}>
+                                                    <Icon className={`w-5 h-5 ${itemActive ? "text-white" : "text-primary"}`} />
                                                 </div>
-                                                <span className="font-medium">{item.label}</span>
-                                                {active && (
-                                                    <motion.div
-                                                        layoutId="activeIndicator"
-                                                        className="ml-auto w-2 h-2 rounded-full bg-white"
-                                                    />
+
+                                                {hasChildren ? (
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => setOpenKey(open ? null : item.path)}
+                                                        className="flex-1 flex items-center gap-3 text-left"
+                                                    >
+                                                        <span className="font-medium">{item.label}</span>
+                                                        <ChevronDown className={`ml-auto w-4 h-4 transition-transform ${open ? "rotate-180" : "rotate-0"}`} />
+                                                    </button>
+                                                ) : (
+                                                    <Link to={item.path} onClick={onClose} className="flex-1">
+                                                        <span className="font-medium">{item.label}</span>
+                                                    </Link>
                                                 )}
-                                            </Link>
+                                            </div>
+
+                                            {/* Children */}
+                                            {hasChildren && (
+                                                <AnimatePresence>
+                                                    {open && (
+                                                        <motion.div
+                                                            initial={{ height: 0, opacity: 0 }}
+                                                            animate={{ height: "auto", opacity: 1 }}
+                                                            exit={{ height: 0, opacity: 0 }}
+                                                            transition={{ duration: 0.28 }}
+                                                            className="overflow-hidden"
+                                                        >
+                                                            <div className="mt-2 space-y-1">
+                                                                {item.children.map((child) => {
+                                                                    const ChildIcon = iconMap[child.icon] || Sparkles;
+                                                                    const childActive = !isLandingPage && location.pathname === child.path;
+                                                                    return (
+                                                                        <Link
+                                                                            key={child.path}
+                                                                            to={child.path}
+                                                                            onClick={() => {
+                                                                                onClose();
+                                                                                setOpenKey(item.path);
+                                                                            }}
+                                                                            className={`flex items-center gap-3 pl-12 pr-4 py-2 rounded-lg transition-all ${childActive ? "bg-white/5 border-l-2 border-primary" : "hover:bg-white/5"}`}
+                                                                        >
+                                                                            <div className="w-7 h-7 rounded-md flex items-center justify-center">
+                                                                                <ChildIcon className={`w-4 h-4 ${childActive ? "text-white" : "text-primary/70"}`} />
+                                                                            </div>
+                                                                            <span className={`sub-navigation-text text-sm ${childActive ? "text-white" : "text-white/80"}`}>{child.label}</span>
+                                                                        </Link>
+                                                                    );
+                                                                })}
+                                                            </div>
+                                                        </motion.div>
+                                                    )}
+                                                </AnimatePresence>
+                                            )}
                                         </motion.div>
                                     );
                                 })}
