@@ -1,0 +1,95 @@
+{
+    "brand": {
+        "label": "Venkat Tech AI Studio"
+    },
+    "user": {
+        "name": "John Dee",
+        "email": "john.dee@aistudio.com",
+        "menu": [
+            {
+                "key": "profile",
+                "label": "Profile",
+                "icon": "UserIcon",
+                "path": "/settings"
+            },
+            {
+                "key": "account",
+                "label": "Account Settings",
+                "icon": "SettingsIcon",
+                "path": "/settings"
+            },
+            {
+                "key": "logout",
+                "label": "Logout",
+                "icon": "LogOutIcon",
+                "action": "logout"
+            }
+        ]
+    },
+    "login": {
+        "key": "login",
+        "label": "Login",
+        "icon": "LogInIcon",
+        "path": "/login"
+    },
+    "items": [
+        {
+            "key": "image",
+            "label": "Image",
+            "icon": "ImageIcon",
+            "path": "/image",
+            "children": [
+                {
+                    "key": "garment",
+                    "label": "Garment Try-On",
+                    "icon": "ShirtIcon",
+                    "path": "/image/garment"
+                },
+                {
+                    "key": "single",
+                    "label": "Single Dress Flow",
+                    "icon": "LayersIcon",
+                    "path": "/image/single"
+                }
+            ]
+        },
+        {
+            "key": "video",
+            "label": "Video",
+            "icon": "VideoIcon",
+            "path": "/video",
+            "children": [
+                {
+                    "key": "runway",
+                    "label": "Runway Walk",
+                    "icon": "ClapperboardIcon",
+                    "path": "/video/runway"
+                },
+                {
+                    "key": "product",
+                    "label": "Product Showcase",
+                    "icon": "PackageIcon",
+                    "path": "/video/product"
+                }
+            ]
+        },
+        {
+            "key": "pricing",
+            "label": "Pricing",
+            "icon": "TagIcon",
+            "path": "/pricing"
+        },
+        {
+            "key": "features",
+            "label": "Features",
+            "icon": "SparklesIcon",
+            "path": "/features"
+        },
+        {
+            "key": "contact",
+            "label": "Contact Us",
+            "icon": "MailIcon",
+            "path": "/contact"
+        }
+    ]
+}

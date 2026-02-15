@@ -41,16 +41,15 @@
   --sidebar-border: #e5e7eb;
   --sidebar-ring: #5b21b6;
   /* Navigation Variables */
-  --nav-bg-light: rgba(255, 255, 255, 0.7);
-  --nav-bg-dark: rgba(15, 23, 42, 0.7);
-  --nav-bg-scrolled-light: rgba(255, 255, 255, 0.85);
-  --nav-bg-scrolled-dark: rgba(15, 23, 42, 0.85);
-  --nav-border: rgba(255, 255, 255, 0.1);
-  --nav-glow: rgba(139, 92, 246, 0.5);
-  --nav-shadow-light: 0 4px 24px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1);
-  --nav-shadow-scrolled: 0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
-  --nav-animation-duration: 0.4s;
-  --nav-transition-timing: cubic-bezier(0.4, 0, 0.2, 1);
+  --nav-bg: rgba(10, 10, 10, 0.78);
+  --nav-border: rgba(255, 255, 255, 0.14);
+  --nav-hover: rgba(255, 255, 255, 0.14);
+  --nav-text: rgba(255, 255, 255, 0.92);
+  --nav-blur: 1.25rem;
+  --nav-shadow: 0 0.375rem 1.5rem rgba(0, 0, 0, 0.34), inset 0 0.0625rem 0.125rem rgba(255, 255, 255, 0.2);
+  --nav-shadow-scrolled: 0 0.5rem 1.85rem rgba(0, 0, 0, 0.45), inset 0 0.0625rem 0.125rem rgba(255, 255, 255, 0.22);
+  --font-nav-size: 0.875rem;
+  --font-nav-weight: 500;
 }
 
 .dark {
@@ -91,9 +90,13 @@
   --sidebar-border: #334155;
   --sidebar-ring: #a78bfa;
   /* Navigation Variables Dark Mode */
-  --nav-bg-light: rgba(30, 41, 59, 0.7);
-  --nav-bg-scrolled-light: rgba(30, 41, 59, 0.85);
-  --nav-glow: rgba(167, 139, 250, 0.5);
+  --nav-bg: rgba(8, 8, 8, 0.8);
+  --nav-border: rgba(255, 255, 255, 0.18);
+  --nav-hover: rgba(255, 255, 255, 0.18);
+  --nav-text: rgba(255, 255, 255, 0.95);
+  --nav-blur: 1.4rem;
+  --nav-shadow: 0 0.375rem 1.5rem rgba(0, 0, 0, 0.45), inset 0 0.0625rem 0.125rem rgba(255, 255, 255, 0.18);
+  --nav-shadow-scrolled: 0 0.5rem 1.95rem rgba(0, 0, 0, 0.55), inset 0 0.0625rem 0.125rem rgba(255, 255, 255, 0.2);
 }
 
 @theme inline {
