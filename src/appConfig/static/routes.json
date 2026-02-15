@@ -1,0 +1,38 @@
+{
+    "public": [
+        {
+            "id": "home",
+            "path": "/"
+        },
+        {
+            "id": "dashboard",
+            "path": "/dashboard"
+        }
+    ],
+    "modules": [
+        {
+            "id": "image-generation",
+            "path": "/image-generation"
+        },
+        {
+            "id": "video-generation",
+            "path": "/video-generation"
+        },
+        {
+            "id": "avatar-generation",
+            "path": "/avatar-generation"
+        },
+        {
+            "id": "bulk-generation",
+            "path": "/bulk-generation"
+        },
+        {
+            "id": "failed-jobs",
+            "path": "/failed-jobs"
+        },
+        {
+            "id": "settings",
+            "path": "/settings"
+        }
+    ]
+}

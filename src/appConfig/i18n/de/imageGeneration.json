@@ -1,0 +1,20 @@
+{
+    "title": "Bildgenerierung",
+    "subtitle": "Erstelle KI-generierte Bilder mit benutzerdefinierter Kleidung, Charakteroptionen und Styling",
+    "uploadDressImage": "Kleidungsbild hochladen",
+    "dressImageLoaded": "Kleidungsbild geladen",
+    "dressImageHint": "Dieses Kleid wird vom generierten Charakter getragen",
+    "removeImage": "Bild entfernen",
+    "uploadPrompt": "Kleidungs-/Outfitbild hochladen",
+    "mainPrompt": "Hauptprompt",
+    "mainPromptHint": "Beschreibe die Umgebung und den Kontext für das generierte Bild",
+    "gender": "Geschlecht",
+    "countryOrigin": "Land/Herkunft",
+    "skinTone": "Hautfarbe",
+    "style": "Stil",
+    "additionalDetails": "Zusätzliche Details (optional)",
+    "additionalDetailsHint": "Füge zusätzliche Styling- oder Ausdrucksdetails hinzu",
+    "generateImage": "Bild generieren",
+    "generatingImage": "Bild wird generiert...",
+    "recentGenerations": "Letzte Generierungen"
+}

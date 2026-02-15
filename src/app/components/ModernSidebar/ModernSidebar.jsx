@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from "motion/react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import {
     X,
     Image,
@@ -15,6 +15,7 @@ import {
     ChevronDown,
 } from "lucide-react";
 import sidebarConfig from "@/appConfig/Sidebar/sidebarConfig";
+import { validateLanguage } from "@/appConfig/AppConfig";
 import companyLogo from "@/images/fav-icon/venkattech_logo.png";
 import { useState } from "react";
 
@@ -39,11 +40,15 @@ export function ModernSidebar({
     onLoginRequest,
 }) {
     const location = useLocation();
+    const { lang } = useParams();
     const [openKey, setOpenKey] = useState(null);
+    const validatedLang = validateLanguage(lang);
+
+    const toLanguagePath = (path) => `/${validatedLang}${path}`;
 
     const isActive = (path) => {
         if (isLandingPage) return false;
-        return location.pathname === path;
+        return location.pathname === toLanguagePath(path);
     };
 
     const moduleItems = sidebarConfig.moduleNav || [];
@@ -126,7 +131,7 @@ export function ModernSidebar({
                                     const open = openKey === item.path;
 
                                     // item active if path matches or any child path is active
-                                    const itemActive = !isLandingPage && (isActive(item.path) || (hasChildren && item.children.some((c) => location.pathname === c.path)));
+                                    const itemActive = !isLandingPage && (isActive(item.path) || (hasChildren && item.children.some((c) => location.pathname === toLanguagePath(c.path))));
 
                                     if (isLandingPage) {
                                         return (
@@ -177,7 +182,7 @@ export function ModernSidebar({
                                                         <ChevronDown className={`ml-auto w-4 h-4 transition-transform ${open ? "rotate-180" : "rotate-0"}`} />
                                                     </button>
                                                 ) : (
-                                                    <Link to={item.path} onClick={onClose} className="flex-1">
+                                                    <Link to={toLanguagePath(item.path)} onClick={onClose} className="flex-1">
                                                         <span className="font-medium">{item.label}</span>
                                                     </Link>
                                                 )}
@@ -197,11 +202,11 @@ export function ModernSidebar({
                                                             <div className="mt-2 space-y-1">
                                                                 {item.children.map((child) => {
                                                                     const ChildIcon = iconMap[child.icon] || Sparkles;
-                                                                    const childActive = !isLandingPage && location.pathname === child.path;
+                                                                    const childActive = !isLandingPage && location.pathname === toLanguagePath(child.path);
                                                                     return (
                                                                         <Link
                                                                             key={child.path}
-                                                                            to={child.path}
+                                                                            to={toLanguagePath(child.path)}
                                                                             onClick={() => {
                                                                                 onClose();
                                                                                 setOpenKey(item.path);

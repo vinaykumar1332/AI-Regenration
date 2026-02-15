@@ -1,0 +1,31 @@
+{
+    "imageGenerationOptions": {
+        "identities": [
+            "default",
+            "photorealistic",
+            "artistic",
+            "minimalist"
+        ],
+        "genders": [
+            "female",
+            "male",
+            "other"
+        ],
+        "countries": [
+            "Asian",
+            "European",
+            "African",
+            "Indian",
+            "Middle Eastern",
+            "Latin American"
+        ],
+        "skinTones": [
+            "fair",
+            "light",
+            "medium",
+            "olive",
+            "tan",
+            "deep"
+        ]
+    }
+}

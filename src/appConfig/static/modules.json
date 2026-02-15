@@ -1,0 +1,36 @@
+{
+    "landingModules": [
+        {
+            "id": "image-generation",
+            "icon": "Image",
+            "image": "https://images.unsplash.com/photo-1547891654-e66ed7ebb968?w=800&q=80",
+            "path": "/image-generation",
+            "requiresAuth": true,
+            "color": "from-blue-500 to-cyan-500"
+        },
+        {
+            "id": "video-generation",
+            "icon": "Video",
+            "image": "https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?w=800&q=80",
+            "path": "/video-generation",
+            "requiresAuth": true,
+            "color": "from-purple-500 to-pink-500"
+        },
+        {
+            "id": "avatar-generation",
+            "icon": "Users",
+            "image": "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=800&q=80",
+            "path": "/avatar-generation",
+            "requiresAuth": true,
+            "color": "from-green-500 to-emerald-500"
+        },
+        {
+            "id": "bulk-generation",
+            "icon": "FolderSync",
+            "image": "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80",
+            "path": "/bulk-generation",
+            "requiresAuth": true,
+            "color": "from-orange-500 to-red-500"
+        }
+    ]
+}

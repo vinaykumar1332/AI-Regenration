@@ -1,0 +1,62 @@
+{
+    "predefinedAvatars": [
+        {
+            "id": "sholi",
+            "originKey": "asian",
+            "skinToneKey": "medium",
+            "imageUrl": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=400&fit=crop&q=80"
+        },
+        {
+            "id": "max",
+            "originKey": "european",
+            "skinToneKey": "pale",
+            "imageUrl": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&q=80"
+        },
+        {
+            "id": "aisha",
+            "originKey": "african",
+            "skinToneKey": "dark",
+            "imageUrl": "https://images.unsplash.com/photo-1507239711619-bd914236b374?w=400&h=400&fit=crop&q=80"
+        },
+        {
+            "id": "kiran",
+            "originKey": "indian",
+            "skinToneKey": "tan",
+            "imageUrl": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=400&fit=crop&q=80"
+        }
+    ],
+    "options": {
+        "genders": [
+            "male",
+            "female"
+        ],
+        "continents": [
+            "european",
+            "african",
+            "asian",
+            "middle_eastern",
+            "latin"
+        ],
+        "skinTones": [
+            "very_pale",
+            "pale",
+            "light",
+            "medium",
+            "tan",
+            "dark",
+            "very_dark"
+        ],
+        "hairStyles": [
+            "straight",
+            "wavy",
+            "curly",
+            "coily"
+        ],
+        "features": [
+            "beard",
+            "glasses",
+            "freckles",
+            "natural"
+        ]
+    }
+}

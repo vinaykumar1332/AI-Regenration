@@ -1,0 +1,20 @@
+{
+    "title": "Image Generation",
+    "subtitle": "Create AI-generated images with custom dress, character options, and styling",
+    "uploadDressImage": "Upload Dress Image",
+    "dressImageLoaded": "Dress Image Loaded",
+    "dressImageHint": "This dress will be worn by the generated character",
+    "removeImage": "Remove Image",
+    "uploadPrompt": "Upload dress/outfit image",
+    "mainPrompt": "Main Prompt",
+    "mainPromptHint": "Describe the setting and context for the generated image",
+    "gender": "Gender",
+    "countryOrigin": "Country/Origin",
+    "skinTone": "Skin Tone",
+    "style": "Style",
+    "additionalDetails": "Additional Details (Optional)",
+    "additionalDetailsHint": "Add any additional styling or expression details",
+    "generateImage": "Generate Image",
+    "generatingImage": "Generating Image...",
+    "recentGenerations": "Recent Generations"
+}

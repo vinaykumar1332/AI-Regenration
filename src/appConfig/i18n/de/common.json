@@ -1,0 +1,13 @@
+{
+    "language": "Deutsch",
+    "profile": "Profil",
+    "settings": "Einstellungen",
+    "logout": "Abmelden",
+    "close": "Schließen",
+    "connect": "Kontakt",
+    "createAccount": "Konto erstellen",
+    "signUpWithCredentials": "Registriere dich mit Benutzername und Passwort",
+    "username": "Benutzername",
+    "password": "Passwort",
+    "signUp": "Registrieren"
+}

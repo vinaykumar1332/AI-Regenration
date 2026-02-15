@@ -1,0 +1,29 @@
+{
+    "brand": {
+        "logoText": "AI Studio",
+        "logoTagline": "Luxury Fashion AI"
+    },
+    "topNav": {
+        "home": "Home",
+        "features": "Features",
+        "models": "Models",
+        "images": "Images",
+        "videos": "Videos",
+        "avatars": "Avatars",
+        "login": "Login"
+    },
+    "sidebar": {
+        "dashboard": "Dashboard",
+        "imageGeneration": "Image Generation",
+        "garmentTryOn": "Garment Try-On",
+        "singleDressFlow": "Single Dress Flow",
+        "videoGeneration": "Video Generation",
+        "avatarStore": "Avatar Store",
+        "bulkProcessing": "Bulk Processing",
+        "analytics": "Analytics",
+        "settings": "Settings",
+        "upgradeToPro": "Upgrade to Pro",
+        "upgradeNow": "Upgrade Now",
+        "unlockUnlimited": "Unlock unlimited generations"
+    }
+}

@@ -1,5 +1,5 @@
 import { useState, useEffect, lazy, Suspense } from "react";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate, useLocation, useParams } from "react-router-dom";
 import { Toaster } from "@/app/components/ui/Sonner/sonner";
 import { Preloader } from "@/app/components/Preloader/Preloader";
 import { LandingPage } from "@/app/pages/LandingPage/LandingPage";
@@ -8,6 +8,8 @@ import { ModernSidebar } from "@/app/components/ModernSidebar/ModernSidebar";
 import { LoginModal } from "@/app/components/LoginModal/LoginModal";
 import { CollapsibleDashboard } from "@/app/pages/DashboardPage/CollapsibleDashboard";
 import { SmoothScrollWrapper } from "@/app/components/SmoothScrollWrapper/SmoothScrollWrapper";
+import { defaultLanguage, validateLanguage } from "@/appConfig/AppConfig";
+import { useAppConfig } from "@/appConfig/useAppConfig";
 
 // Lazy load page components for better code splitting
 const ImageGenerationPage = lazy(() =>
@@ -35,6 +37,109 @@ function LoadingFallback() {
     <div className="flex items-center justify-center min-h-screen">
       <Preloader />
     </div>
+  );
+}
+
+const legacyRedirectPaths = [
+  "/dashboard",
+  "/image-generation",
+  "/video-generation",
+  "/avatar-generation",
+  "/bulk-generation",
+  "/failed-jobs",
+  "/settings",
+];
+
+function LegacyRouteRedirect() {
+  const location = useLocation();
+  return (
+    <Navigate
+      to={`/${defaultLanguage}${location.pathname}${location.search}${location.hash}`}
+      replace
+    />
+  );
+}
+
+function LanguageLayout({
+  isAuthenticated,
+  showLanding,
+  isSidebarOpen,
+  isLoginModalOpen,
+  onMenuOpen,
+  onSidebarClose,
+  onLoginModalOpen,
+  onLoginModalClose,
+  onLogin,
+  onLogout,
+  onGetStarted,
+}) {
+  const { lang } = useParams();
+  const location = useLocation();
+  const appConfig = useAppConfig();
+  const validatedLang = validateLanguage(lang);
+
+  if (lang !== validatedLang) {
+    const segments = location.pathname.split("/").filter(Boolean);
+    const pathWithoutLanguage = segments.length > 1 ? `/${segments.slice(1).join("/")}` : "";
+
+    return (
+      <Navigate
+        to={`/${validatedLang}${pathWithoutLanguage}${location.search}${location.hash}`}
+        replace
+      />
+    );
+  }
+
+  return (
+    <SmoothScrollWrapper>
+      <DynamicIslandNav
+        onMenuClick={onMenuOpen}
+        onLoginClick={onLoginModalOpen}
+        isAuthenticated={isAuthenticated}
+        onLogout={onLogout}
+        isLandingPage={showLanding && !isAuthenticated}
+        currentLanguage={appConfig.language}
+      />
+      <ModernSidebar
+        isOpen={isSidebarOpen}
+        onClose={onSidebarClose}
+        isLandingPage={showLanding && !isAuthenticated}
+        isAuthenticated={isAuthenticated}
+        onLoginRequest={onLoginModalOpen}
+        currentLanguage={appConfig.language}
+      />
+      <LoginModal
+        isOpen={isLoginModalOpen}
+        onClose={onLoginModalClose}
+        onLogin={onLogin}
+      />
+
+      {showLanding && !isAuthenticated ? (
+        <LandingPage
+          onGetStarted={onGetStarted}
+          onLogin={onLoginModalOpen}
+        />
+      ) : (
+        <div className="min-h-screen bg-background">
+          <div className="pt-24">
+            <Suspense fallback={<LoadingFallback />}>
+              <Routes>
+                <Route index element={<CollapsibleDashboard />} />
+                <Route path="dashboard" element={<CollapsibleDashboard />} />
+                <Route path="image-generation" element={<ImageGenerationPage />} />
+                <Route path="video-generation" element={<VideoGenerationPage />} />
+                <Route path="avatar-generation" element={<AvatarGenerationPage />} />
+                <Route path="bulk-generation" element={<BulkGenerationPage />} />
+                <Route path="failed-jobs" element={<FailedJobsPage />} />
+                <Route path="settings" element={<SettingsPage />} />
+                <Route path="*" element={<Navigate to={`/${appConfig.language}`} replace />} />
+              </Routes>
+            </Suspense>
+          </div>
+        </div>
+      )}
+      <Toaster />
+    </SmoothScrollWrapper>
   );
 }
 
@@ -80,55 +185,31 @@ function App() {
 
   return (
     <BrowserRouter>
-      <SmoothScrollWrapper>
-        <DynamicIslandNav
-          onMenuClick={() => setIsSidebarOpen(true)}
-          onLoginClick={() => setIsLoginModalOpen(true)}
-          isAuthenticated={isAuthenticated}
-          onLogout={handleLogout}
-          isLandingPage={showLanding && !isAuthenticated}
+      <Routes>
+        <Route path="/" element={<Navigate to={`/${defaultLanguage}`} replace />} />
+        {legacyRedirectPaths.map((path) => (
+          <Route key={path} path={path} element={<LegacyRouteRedirect />} />
+        ))}
+        <Route
+          path="/:lang/*"
+          element={(
+            <LanguageLayout
+              isAuthenticated={isAuthenticated}
+              showLanding={showLanding}
+              isSidebarOpen={isSidebarOpen}
+              isLoginModalOpen={isLoginModalOpen}
+              onMenuOpen={() => setIsSidebarOpen(true)}
+              onSidebarClose={() => setIsSidebarOpen(false)}
+              onLoginModalOpen={() => setIsLoginModalOpen(true)}
+              onLoginModalClose={() => setIsLoginModalOpen(false)}
+              onLogin={handleLogin}
+              onLogout={handleLogout}
+              onGetStarted={handleGetStarted}
+            />
+          )}
         />
-        <ModernSidebar
-          isOpen={isSidebarOpen}
-          onClose={() => setIsSidebarOpen(false)}
-          isLandingPage={showLanding && !isAuthenticated}
-          isAuthenticated={isAuthenticated}
-          onLoginRequest={() => setIsLoginModalOpen(true)}
-        />
-        <LoginModal
-          isOpen={isLoginModalOpen}
-          onClose={() => setIsLoginModalOpen(false)}
-          onLogin={handleLogin}
-        />
-
-        {/* Show landing page for non-authenticated users or when explicitly shown */}
-        {showLanding && !isAuthenticated ? (
-          <LandingPage
-            onGetStarted={handleGetStarted}
-            onLogin={() => setIsLoginModalOpen(true)}
-          />
-        ) : (
-          <div className="min-h-screen bg-background">
-            {/* Add padding for fixed nav */}
-            <div className="pt-24">
-              <Suspense fallback={<LoadingFallback />}>
-                <Routes>
-                  <Route path="/" element={<CollapsibleDashboard />} />
-                  <Route path="/dashboard" element={<CollapsibleDashboard />} />
-                  <Route path="/image-generation" element={<ImageGenerationPage />} />
-                  <Route path="/video-generation" element={<VideoGenerationPage />} />
-                  <Route path="/avatar-generation" element={<AvatarGenerationPage />} />
-                  <Route path="/bulk-generation" element={<BulkGenerationPage />} />
-                  <Route path="/failed-jobs" element={<FailedJobsPage />} />
-                  <Route path="/settings" element={<SettingsPage />} />
-                  <Route path="*" element={<Navigate to="/" replace />} />
-                </Routes>
-              </Suspense>
-            </div>
-          </div>
-        )}
-        <Toaster />
-      </SmoothScrollWrapper>
+        <Route path="*" element={<LegacyRouteRedirect />} />
+      </Routes>
     </BrowserRouter>
   );
 }

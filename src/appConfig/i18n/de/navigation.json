@@ -1,0 +1,29 @@
+{
+    "brand": {
+        "logoText": "AI Studio",
+        "logoTagline": "Luxus Mode KI"
+    },
+    "topNav": {
+        "home": "Startseite",
+        "features": "Funktionen",
+        "models": "Modelle",
+        "images": "Bilder",
+        "videos": "Videos",
+        "avatars": "Avatare",
+        "login": "Anmelden"
+    },
+    "sidebar": {
+        "dashboard": "Dashboard",
+        "imageGeneration": "Bildgenerierung",
+        "garmentTryOn": "Kleidungs-Try-On",
+        "singleDressFlow": "Einzelkleid-Flow",
+        "videoGeneration": "Videogenerierung",
+        "avatarStore": "Avatar-Store",
+        "bulkProcessing": "Stapelverarbeitung",
+        "analytics": "Analysen",
+        "settings": "Einstellungen",
+        "upgradeToPro": "Auf Pro upgraden",
+        "upgradeNow": "Jetzt upgraden",
+        "unlockUnlimited": "Unbegrenzte Generierungen freischalten"
+    }
+}
