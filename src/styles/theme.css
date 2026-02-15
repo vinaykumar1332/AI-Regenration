@@ -32,6 +32,35 @@
   --chart-4: #06b6d4;
   --chart-5: #10b981;
   --radius: 0.625rem;
+  /* Hero-specific colors (used by GarmentShowcaseHero) */
+  --hero-bg-1: #030712;
+  --hero-bg-2: #080a18;
+  --hero-bg-3: #0f0426;
+  --hero-glow: rgba(236, 73, 153, 0.35);
+  --hero-halo: rgba(236, 73, 153, 0.25);
+  --hero-foreground: #ffffff;
+  --hero-copy-muted: rgba(255, 255, 255, 0.65);
+  --hero-card-bg: rgba(255, 255, 255, 0.04);
+  --hero-card-border: rgba(255, 255, 255, 0.12);
+  --hero-card-border-strong: rgba(255, 255, 255, 0.2);
+  --hero-label: #f7f7f7;
+  --hero-swatch-bg: rgba(255, 255, 255, 0.35);
+  --swatch-active: #f43f86;
+  --connector-start: var(--chart-3);
+  --connector-mid: var(--accent);
+  --connector-end: #fbbf24;
+  --cta-start: #7c3aed;
+  --cta-mid: var(--accent);
+  --cta-end: var(--connector-end);
+  --model-badge-bg: rgba(255, 255, 255, 0.08);
+  --model-badge-border: rgba(255, 255, 255, 0.35);
+  /* Hero shadow tokens */
+  --hero-shadow-1: rgba(0, 0, 0, 0.35);
+  --hero-shadow-2: rgba(3, 3, 8, 0.7);
+  --hero-inner-shadow: rgba(0, 0, 0, 0.32);
+  --hero-model-shadow: rgba(0, 0, 0, 0.5);
+  --hero-swatch-shadow: rgba(0, 0, 0, 0.4);
+  --hero-swatch-active-shadow: rgba(244, 63, 134, 0.9);
   --sidebar: #f9fafb;
   --sidebar-foreground: #0a0a0a;
   --sidebar-primary: #5b21b6;

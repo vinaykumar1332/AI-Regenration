@@ -1,0 +1,31 @@
+{
+    "heroSection": {
+        "heading": "Turn Your Garments Into Real Models Instantly",
+        "subheading": "Upload your designs and see them styled on AI-generated models in high resolution.",
+        "ctaText": "Generate Your First Look",
+        "inputImages": {
+            "top": "/assets/images/shirt.png",
+            "bottom": "/assets/images/pant.png"
+        },
+        "outputModels": [
+            "/assets/images/model1.png",
+            "/assets/images/model2.png",
+            "/assets/images/model3.png"
+        ],
+        "splashImages": {
+            "garment": "/assets/images/garment-splash.png",
+            "output": "/assets/images/output-splash.png"
+        },
+        "floatingHighlights": [
+            "Premium texture capture",
+            "Auto-fit tailoring"
+        ],
+        "garmentLabels": {
+            "top": "Signature Topwear",
+            "bottom": "Precision Trousers"
+        },
+        "connectorCopy": "Live styling pipeline",
+        "mobileArrow": "Swipe to see the line-up",
+        "modelBadge": "AI runways"
+    }
+}
