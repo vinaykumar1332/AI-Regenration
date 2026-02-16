@@ -211,7 +211,9 @@ export function Navigation({ onMenuClick, onLoginClick, isAuthenticated, onLogou
         }
 
         // Don't close dropdown if moving to the dropdown itself
-        if (event.relatedTarget && navRef.current.contains(event.relatedTarget)) {
+        // Guard against relatedTarget not being a DOM Node (prevents "contains" TypeError)
+        const related = event.relatedTarget;
+        if (related && typeof related.nodeType === "number" && navRef.current.contains(related)) {
             return;
         }
 

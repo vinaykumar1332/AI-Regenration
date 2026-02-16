@@ -1,6 +1,7 @@
 .garment-hero {
     position: relative;
     padding: 4.375rem 1rem 2rem;
+    height: 100%;
     min-height: 35rem;
     background: radial-gradient(circle at 20% -10%, var(--hero-glow), transparent 50%),
         linear-gradient(135deg, var(--hero-bg-1) 0%, var(--hero-bg-2) 45%, var(--hero-bg-3) 100%);
@@ -47,10 +48,11 @@
     margin: 0 auto;
     display: flex;
     align-items: center;
+    height: 100%;
     gap: clamp(1.25rem, 1.8vw, 3rem);
     justify-content: center;
     flex-wrap: nowrap;
-    padding: 0 1rem;
+    padding: 2rem 1rem;
 }
 
 .garment-hero__column {
@@ -58,6 +60,7 @@
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
+    height: 100%;
 }
 
 .garment-hero__column--left {
@@ -66,6 +69,7 @@
     max-width: 22.5rem;
     align-items: center;
     justify-content: center;
+    height: 100%;
 }
 
 .garment-hero__column--center {
@@ -74,6 +78,7 @@
     justify-content: center;
     flex: 1.2;
     align-items: center;
+    height: 100%;
 }
 
 .garment-hero__column--right {
@@ -82,6 +87,7 @@
     max-width: 26.25rem;
     align-items: center;
     justify-content: center;
+    height: 100%;
 }
 
 .garment-hero__heading {
@@ -111,11 +117,33 @@
     position: relative;
 }
 
-.garment-hero__connector-copy {
-    font-size: 0.65rem;
-    letter-spacing: 0.35em;
-    text-transform: uppercase;
-    color: var(--hero-copy-muted);
+
+
+.garment-hero__connector-copy-wrap {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+}
+
+.garment-hero__connector-cta {
+    --btn-bg-start: var(--cta-start);
+    --btn-bg-mid: var(--cta-mid);
+    --btn-bg-end: var(--cta-end);
+    border-radius: 62.4375rem;
+    padding: 0.55rem 1.25rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    background: linear-gradient(135deg, var(--btn-bg-start), var(--btn-bg-mid) 55%, var(--btn-bg-end));
+    color: var(--cta-foreground, #fff);
+    border: none;
+    box-shadow: 0 0.75rem 1.5rem rgba(0, 0, 0, 0.12);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+}
+
+.garment-hero__connector-cta:hover {
+    transform: translateY(-0.08rem) scale(1.02);
 }
 
 .garment-hero__connector-line {
@@ -212,25 +240,54 @@
     width: 100%;
 }
 
+.garment-hero__garment-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    width: 100%;
+}
+
+.garment-hero__garment-label-group {
+    display: block;
+    font-size: 0.75rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--hero-label);
+    font-weight: 700;
+    margin-bottom: 0.4rem;
+}
+
+.garment-hero__garment-card.is-offset {
+    transform: translateY(-0.6rem);
+    opacity: 0.98;
+}
+
 .garment-hero__garment-card {
     background: var(--hero-card-bg);
-    border: 0.0625rem solid var(--hero-card-border);
-    border-radius: 1.45rem;
+    border: none;
+    border-radius: 1.6rem;
     padding: 0.75rem 0.85rem;
     min-height: 15rem;
     width: 100%;
-    box-shadow: 0 0.875rem 1.875rem var(--hero-shadow-1);
+    box-shadow: 0 1.5rem 3rem var(--hero-model-shadow);
     backdrop-filter: blur(0.75rem);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    overflow: hidden;
+    height: 100%;
 }
 
 .garment-hero__garment-card:hover {
     transform: translateY(-0.625rem) scale(1.01);
     box-shadow: 0 2.1875rem 3.75rem var(--hero-shadow-2);
+}
+
+.garment-hero__garment-card.is-fading {
+    opacity: 0.7;
+    transform: scale(0.98);
 }
 
 .garment-hero__garment-label {
@@ -245,12 +302,22 @@
 
 .garment-hero__garment-img {
     width: 100%;
-    height: clamp(10rem, 16vw, 13.75rem);
+    height: 100%;
     border-radius: 1rem;
-    object-fit: contain;
-    filter: saturate(1.12);
+    object-fit: cover;
+    object-position: center;
+    display: block;
+    filter: saturate(1.06);
     box-shadow: inset 0 0 1.75rem var(--hero-inner-shadow);
+    transition: transform 0.8s ease, opacity 0.75s cubic-bezier(.2, .9, .3, 1);
 }
+
+.garment-hero__garment-img:hover,
+.garment-hero__garment-card:hover .garment-hero__garment-img {
+    transform: scale(1.02);
+}
+
+/* Thumbnails removed per design — input cards use model-card styling and smooth image transitions */
 
 .garment-hero__mobile-arrow {
     display: none;
@@ -279,6 +346,7 @@
     box-shadow: 0 1.5rem 3rem var(--hero-model-shadow);
     transition: transform 0.6s ease, opacity 0.6s ease;
     margin: 0 auto;
+    height: 100%;
 }
 
 .garment-hero__model-card.is-fading {
@@ -290,7 +358,94 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 1.2s ease;
+    object-position: center;
+    display: block;
+    transition: transform 0.9s cubic-bezier(.2, .9, .3, 1), opacity 0.75s cubic-bezier(.2, .9, .3, 1);
+}
+
+.garment-hero__img-wrap {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.garment-hero__img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 1rem;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+    transition: opacity 0.75s cubic-bezier(.2, .9, .3, 1), transform 0.6s ease;
+}
+
+.garment-hero__img.prev {
+    z-index: 1;
+    opacity: 1;
+}
+
+.garment-hero__img.current {
+    z-index: 2;
+    opacity: 0;
+}
+
+.garment-hero__img.current {
+    animation: fadeIn 0.75s forwards cubic-bezier(.2, .9, .3, 1);
+}
+
+/* Stronger input-specific visibility: ensure top/bottom current images are visible
+   in all builds (dev and UI). This does not affect model/output images. */
+.garment-hero__column--left .garment-hero__img.current {
+    z-index: 2;
+    opacity: 1;
+}
+
+.garment-hero__column--left .garment-hero__img.prev {
+    transition: opacity 0.45s ease;
+}
+
+.garment-hero__column--left .garment-hero__img-wrap .garment-hero__img.prev {
+    z-index: 1;
+    opacity: 1;
+}
+
+.garment-hero__column--left .garment-hero__img-wrap .garment-hero__img.current {
+    z-index: 2;
+    opacity: 1;
+    animation: fadeIn 0.45s forwards cubic-bezier(.2, .9, .3, 1);
+}
+
+/* Keep wrapper positioned but avoid absolute stacking that covers the center title.
+   Make input images positioned relatively inside the left column and ensure
+   the center column stacks above the left column. */
+.garment-hero__column--left {
+    z-index: 1;
+}
+
+.garment-hero__column--center {
+    position: relative;
+    z-index: 10;
+}
+
+.garment-hero__column--left .garment-hero__img-wrap {
+    /* ensure wrapper fills card and clips overflow */
+    height: 100%;
+    overflow: hidden;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(6px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .garment-hero__model-card:hover .garment-hero__model-img {
@@ -310,25 +465,13 @@
     border: 0.0625rem solid var(--model-badge-border);
 }
 
-.garment-hero__model-swatches {
-    position: absolute;
-    bottom: 1.2rem;
-    left: 1.4rem;
-    display: flex;
-    gap: 0.5rem;
-}
+/* model swatches removed — styles intentionally left out */
 
-.garment-hero__model-swatches span {
-    width: 0.65rem;
-    height: 0.65rem;
-    border-radius: 62.4375rem;
-    background: var(--hero-swatch-bg);
-    box-shadow: 0 0 0.625rem var(--hero-swatch-shadow);
-}
-
-.garment-hero__model-swatches span.is-active {
-    background: var(--swatch-active);
-    box-shadow: 0 0 0.9375rem var(--hero-swatch-active-shadow);
+/* animate connector path subtly during transitions */
+.garment-hero__connector-path.is-animating {
+    stroke-width: 4;
+    filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.06));
+    transition: stroke-width 0.4s ease, filter 0.4s ease;
 }
 
 .garment-hero__cta-wrapper {
@@ -446,7 +589,7 @@
 
 @media (max-width: 33.75rem) {
     .garment-hero__garment-img {
-        height: 11.25rem;
+        height: 100%;
     }
 
     .garment-hero__model-card {
@@ -479,7 +622,7 @@
     }
 
     .garment-hero__garment-img {
-        height: clamp(11.25rem, 18vw, 15rem);
+        height: 100%;
     }
 
     .garment-hero__model-card {
