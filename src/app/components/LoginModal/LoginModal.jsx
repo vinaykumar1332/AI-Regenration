@@ -131,6 +131,7 @@ export function LoginModal({ isOpen, onClose, onLogin }) {
                                                     handleFieldChange("password", event.target.value)
                                                 }
                                                 className="login-modal__input login-modal__input--password"
+                                                unstyled
                                             />
                                             <button
                                                 type="button"
