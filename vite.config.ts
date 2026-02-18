@@ -18,9 +18,12 @@ export default defineConfig({
   },
   server: {
     // Dev server proxy for API calls
+    // For local development, ensure Vercel functions are running
+    // Option 1: Run "vercel dev" to start Vercel serverless env locally
+    // Option 2: Set VITE_API_BASE_URL env var to point to your backend
     proxy: {
       '/api': {
-        target: 'http://localhost:3001',
+        target: process.env.VITE_API_PROXY || 'http://localhost:3000',
         changeOrigin: true,
       },
     },
@@ -48,12 +51,12 @@ export default defineConfig({
           if (id.includes('node_modules/clsx')) {
             return 'vendor-utils';
           }
-          
+
           // UI Components chunk
           if (id.includes('/src/app/components/ui/')) {
             return 'ui-components';
           }
-          
+
           // Page chunks
           if (id.includes('/src/app/pages/ImageGenerationPage/')) {
             return 'page-image';
@@ -73,7 +76,7 @@ export default defineConfig({
           if (id.includes('/src/app/pages/SettingsPage/')) {
             return 'page-settings';
           }
-          
+
           // Components chunk
           if (id.includes('/src/app/components/')) {
             return 'components';

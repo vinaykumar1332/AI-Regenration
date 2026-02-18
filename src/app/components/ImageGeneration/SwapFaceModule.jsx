@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import "./SwapFaceModule.css";
 import { Card } from "@/app/components/ui/Card/card";
 import { Button } from "@/app/components/ui/Button/button";
@@ -8,6 +8,7 @@ import { Badge } from "@/app/components/ui/Badge/badge";
 import { Upload, Image as ImageIcon, Loader2, X } from "lucide-react";
 import { toast } from "sonner";
 import { useAppConfig } from "@/appConfig/useAppConfig";
+import { swapFaceApi } from "@/services/api";
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
 const ACCEPTED_TYPES = ["image/jpeg", "image/png"];
@@ -31,6 +32,9 @@ function validateFile(file) {
 }
 
 function MultipleUploadCard({ label, required, hint, files, onFilesChange }) {
+    const [removingIds, setRemovingIds] = useState(new Set());
+    const inputRef = useRef(null);
+
     const handleFiles = async (fileList) => {
         const incoming = Array.from(fileList || []);
         if (!incoming.length) return;
@@ -63,6 +67,11 @@ function MultipleUploadCard({ label, required, hint, files, onFilesChange }) {
         }
 
         onFilesChange(next);
+
+        // Clear input so same file can be selected again
+        if (inputRef.current) {
+            inputRef.current.value = '';
+        }
     };
 
     const onInputChange = async (event) => {
@@ -81,19 +90,31 @@ function MultipleUploadCard({ label, required, hint, files, onFilesChange }) {
     };
 
     const handleRemove = (id) => {
-        onFilesChange(files.filter((f) => f.id !== id));
+        // Add animation class
+        setRemovingIds((prev) => new Set([...prev, id]));
+
+        // Remove after animation completes
+        setTimeout(() => {
+            onFilesChange(files.filter((f) => f.id !== id));
+            setRemovingIds((prev) => {
+                const next = new Set(prev);
+                next.delete(id);
+                return next;
+            });
+        }, 200);
     };
 
     return (
-        <div className="swap-face-upload-section space-y-4">
+        <div className="swap-face-upload-section">
             {/* Input & Dropzone Section */}
-            <div className="swap-face-upload-card p-4 group">
+            <div className="swap-face-upload-card">
                 <div
-                    className="swap-face-upload-inner relative flex flex-col gap-3"
+                    className="swap-face-upload-inner"
                     onDrop={onDrop}
                     onDragOver={onDragOver}
                 >
                     <input
+                        ref={inputRef}
                         type="file"
                         accept="image/jpeg,image/png"
                         multiple
@@ -101,27 +122,27 @@ function MultipleUploadCard({ label, required, hint, files, onFilesChange }) {
                         onChange={onInputChange}
                     />
 
-                    <div className="swap-face-upload-header flex items-center justify-between gap-2">
-                        <div className="swap-face-upload-title space-y-1">
-                            <p className="swap-face-upload-label text-sm font-medium text-foreground flex items-center gap-2">
-                                <ImageIcon className="w-4 h-4 text-primary" />
+                    <div className="swap-face-upload-header">
+                        <div className="swap-face-upload-title">
+                            <p className="swap-face-upload-label">
+                                <ImageIcon className="swap-face-upload-icon" />
                                 {label}
-                                {required && <span className="text-xs text-rose-400">*</span>}
+                                {required && <span className="swap-face-upload-required">*</span>}
                             </p>
                             {hint && (
-                                <p className="swap-face-upload-hint text-[11px] text-muted-foreground">
+                                <p className="swap-face-upload-hint">
                                     {hint}
                                 </p>
                             )}
                         </div>
-                        <span className="swap-face-upload-cta text-[11px] text-muted-foreground hidden sm:inline-flex">
+                        <span className="swap-face-upload-cta">
                             Drag & drop or click
                         </span>
                     </div>
 
-                    <div className="swap-face-upload-dropzone flex h-24 items-center justify-center rounded-lg border border-dashed border-input bg-muted text-xs text-muted-foreground group-hover:border-primary/70 group-hover:text-primary transition-colors">
-                        <div className="swap-face-upload-dropzone-inner flex flex-col items-center gap-1">
-                            <Upload className="w-4 h-4" />
+                    <div className="swap-face-upload-dropzone">
+                        <div className="swap-face-upload-dropzone-inner">
+                            <Upload className="swap-face-upload-dropzone-icon" />
                             <span>JPG / PNG, up to 10MB each</span>
                         </div>
                     </div>
@@ -130,40 +151,40 @@ function MultipleUploadCard({ label, required, hint, files, onFilesChange }) {
 
             {/* Preview Section – Below Input */}
             {files.length > 0 && (
-                <div className="swap-face-upload-selected space-y-2">
-                    <p className="swap-face-upload-selected-label text-[11px] text-muted-foreground">
+                <div className="swap-face-upload-selected">
+                    <p className="swap-face-upload-selected-label">
                         Selected ({files.length})
                     </p>
-                    <div className="swap-face-upload-selected-list flex flex-wrap gap-3">
+                    <div className="swap-face-upload-selected-list">
                         {files.map((item) => (
                             <div
                                 key={item.id}
-                                className="swap-face-upload-pill flex items-center gap-3 rounded-md border border-input bg-card px-3 py-2 text-[11px] text-foreground hover:border-primary/70 hover:text-primary-foreground transition-all duration-150 ease-out"
+                                className={`swap-face-upload-pill ${removingIds.has(item.id) ? 'removing' : ''}`}
                             >
                                 {item.preview ? (
-                                    <span className="swap-face-upload-thumb w-14 h-14 rounded-md overflow-hidden border border-input">
+                                    <span className="swap-face-upload-thumb">
                                         <img
                                             src={item.preview}
                                             alt={item.name}
-                                            className="w-full h-full object-cover"
+                                            className="swap-face-upload-thumb-img"
                                         />
                                     </span>
                                 ) : (
-                                    <span className="swap-face-upload-thumb-fallback w-14 h-14 rounded-md bg-muted flex items-center justify-center text-[10px] text-muted-foreground">
+                                    <span className="swap-face-upload-thumb-fallback">
                                         IMG
                                     </span>
                                 )}
-                                <span className="max-w-[140px] truncate text-left">{item.name}</span>
+                                <span className="swap-face-upload-pill-name">{item.name}</span>
                                 <button
                                     type="button"
                                     aria-label="Remove image"
-                                    className="swap-face-upload-remove ml-1 inline-flex items-center justify-center rounded-full bg-muted/70 hover:bg-destructive hover:text-destructive-foreground transition-all duration-150 ease-out w-6 h-6"
+                                    className="swap-face-upload-remove"
                                     onClick={(e) => {
                                         e.stopPropagation();
                                         handleRemove(item.id);
                                     }}
                                 >
-                                    <X className="w-3 h-3" />
+                                    <X className="swap-face-upload-remove-icon" />
                                 </button>
                             </div>
                         ))}
@@ -236,25 +257,17 @@ export function SwapFaceModule({ onResult }) {
                 // ignore
             }
 
-            const response = await fetch("/api/swap-face", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
+            const response = await swapFaceApi(
+                {
                     inputImages: inputPayload,
                     referenceImages: referencePayload,
                     prompt: swapFacePrompt,
                     userId,
-                }),
-                signal: controller.signal,
-            });
+                },
+                controller.signal
+            );
 
-            clearTimeout(timeoutId);
-            const data = await response.json();
-            if (!response.ok) {
-                throw new Error(data.error || "Failed to generate swapped image");
-            }
+            const data = response;
 
             const generationId = data.generationId || `swap_${Date.now()}`;
             const outputs =
@@ -314,17 +327,17 @@ export function SwapFaceModule({ onResult }) {
 
     return (
         <div className="swap-face-module">
-            <Card className="swap-face-card p-6 lg:p-7 space-y-6">
-                <div className="swap-face-header space-y-2">
-                    <h2 className="swap-face-title text-2xl font-semibold text-foreground">Swap Face Generation</h2>
-                    <p className="swap-face-subtitle text-sm text-muted-foreground">
+            <Card className="swap-face-card">
+                <div className="swap-face-header">
+                    <h2 className="swap-face-title">Swap Face Generation</h2>
+                    <p className="swap-face-subtitle">
                         Upload your input fashion images and reference identity images. We apply a high-quality swap prompt from the backend for consistent, premium results.
                     </p>
                 </div>
 
                 {/* Step 1 – Upload Section */}
-                <div className="swap-face-step swap-face-step-upload space-y-3">
-                    <p className="swap-face-step-label text-xs font-semibold tracking-wide text-muted-foreground uppercase">Step 1 – Upload inputs</p>
+                <div className="swap-face-step swap-face-step-upload">
+                    <p className="swap-face-step-label">Step 1 – Upload inputs</p>
                     <div className="swap-face-upload-grid">
                         <MultipleUploadCard
                             label="Input Images"
@@ -344,18 +357,18 @@ export function SwapFaceModule({ onResult }) {
                 </div>
 
                 {/* Step 2 – Generate */}
-                <div className="swap-face-step swap-face-step-generate space-y-3">
-                    <p className="swap-face-step-label text-xs font-semibold tracking-wide text-muted-foreground uppercase">Step 2 – Generate</p>
-                    <div className="flex justify-center">
+                <div className="swap-face-step swap-face-step-generate">
+                    <p className="swap-face-step-label">Step 2 – Generate</p>
+                    <div className="swap-face-button-wrapper">
                         <Button
                             type="button"
-                            className="swap-face-generate-button h-11 w-full max-w-xs bg-gradient-to-r from-primary to-accent hover:opacity-90 text-primary-foreground shadow-lg shadow-primary/40"
+                            className="swap-face-generate-button"
                             disabled={isSubmitting}
                             onClick={handleGenerate}
                         >
                             {isSubmitting ? (
                                 <>
-                                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                                    <Loader2 className="swap-face-generate-loader" />
                                     Generating swap...
                                 </>
                             ) : (
@@ -363,21 +376,21 @@ export function SwapFaceModule({ onResult }) {
                             )}
                         </Button>
                     </div>
-                    <p className="swap-face-generate-helper text-[11px] text-muted-foreground">
+                    <p className="swap-face-generate-helper">
                         Your images are encoded as base64 and sent with a curated swap prompt from the backend.
                     </p>
                     {showProgress && (
-                        <div className="swap-face-progress mt-4">
-                            <div className="flex items-center gap-3 mb-2">
-                                <Loader2 className="w-5 h-5 animate-spin text-primary" />
-                                <div className="flex-1 flex justify-between text-[12px] text-muted-foreground">
+                        <div className="swap-face-progress">
+                            <div className="swap-face-progress-info">
+                                <Loader2 className="swap-face-progress-loader" />
+                                <div className="swap-face-progress-text">
                                     <span>Processing swaps...</span>
                                     <span>{progress}%</span>
                                 </div>
                             </div>
-                            <div className="h-2.5 rounded-full bg-slate-800 overflow-hidden">
+                            <div className="swap-face-progress-bar-bg">
                                 <div
-                                    className="h-full rounded-full bg-gradient-to-r from-primary to-accent transition-all"
+                                    className="swap-face-progress-bar-fill"
                                     style={{ width: `${progress}%` }}
                                 />
                             </div>
@@ -387,38 +400,38 @@ export function SwapFaceModule({ onResult }) {
             </Card>
 
             {/* Results dashboard */}
-            <div className="swap-face-results space-y-3 mt-6">
-                <h3 className="swap-face-results-title text-xl font-semibold text-foreground mb-1">Recent Swaps</h3>
+            <div className="swap-face-results">
+                <h3 className="swap-face-results-title">Recent Swaps</h3>
                 {results.length === 0 ? (
-                    <Card className="swap-face-results-empty border border-dashed border-input bg-card p-4">
-                        <div className="swap-face-results-empty-inner flex items-center gap-3 text-xs text-muted-foreground">
-                            <Skeleton className="swap-face-results-empty-skeleton w-16 h-16 rounded-lg bg-muted" />
-                            <div className="space-y-1">
-                                <p className="font-medium text-foreground">No swaps yet</p>
+                    <Card className="swap-face-results-empty">
+                        <div className="swap-face-results-empty-inner">
+                            <Skeleton className="swap-face-results-empty-skeleton" />
+                            <div className="swap-face-results-empty-text">
+                                <p className="swap-face-results-empty-title">No swaps yet</p>
                                 <p>Generate a swap to see your outputs appear here.</p>
                             </div>
                         </div>
                     </Card>
                 ) : (
-                    <div className="swap-face-results-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+                    <div className="swap-face-results-grid">
                         {results.map((image) => (
                             <Card
                                 key={image.id}
-                                className="swap-face-result-card overflow-hidden hover:shadow-lg transition-shadow bg-card border border-border"
+                                className="swap-face-result-card"
                             >
-                                <div className="swap-face-result-media aspect-[3/4] bg-muted flex items-center justify-center overflow-hidden">
+                                <div className="swap-face-result-media">
                                     {image.status === "completed" ? (
                                         <img
                                             src={image.url}
                                             alt="Swap result"
-                                            className="w-full h-full object-cover"
+                                            className="swap-face-result-img"
                                         />
                                     ) : (
-                                        <Loader2 className="w-6 h-6 animate-spin text-primary" />
+                                        <Loader2 className="swap-face-result-loader" />
                                     )}
                                 </div>
-                                <div className="swap-face-result-body p-4">
-                                    <div className="swap-face-result-header flex items-center justify-between mb-3">
+                                <div className="swap-face-result-body">
+                                    <div className="swap-face-result-header">
                                         <Badge
                                             variant={
                                                 image.status === "completed"
@@ -430,21 +443,21 @@ export function SwapFaceModule({ onResult }) {
                                         >
                                             {image.status.charAt(0).toUpperCase() + image.status.slice(1)}
                                         </Badge>
-                                        <div className="swap-face-result-meta flex gap-1 text-xs text-muted-foreground">
+                                        <div className="swap-face-result-meta">
                                             <span>Image</span>
                                             <span>•</span>
                                             <span>{new Date(image.timestamp).toLocaleTimeString()}</span>
                                         </div>
                                     </div>
-                                    <p className="swap-face-result-caption text-sm text-muted-foreground mb-3 line-clamp-2">
+                                    <p className="swap-face-result-caption">
                                         Swap result {typeof image.index === "number" ? `#${image.index + 1}` : ""}
                                     </p>
                                     {image.status === "completed" && (
-                                        <div className="swap-face-result-actions flex gap-2">
+                                        <div className="swap-face-result-actions">
                                             <Button
                                                 size="sm"
                                                 variant="outline"
-                                                className="flex-1"
+                                                className="swap-face-result-btn"
                                                 onClick={() => handlePreview(image)}
                                             >
                                                 Preview
@@ -452,7 +465,7 @@ export function SwapFaceModule({ onResult }) {
                                             <Button
                                                 size="sm"
                                                 variant="outline"
-                                                className="flex-1"
+                                                className="swap-face-result-btn"
                                                 onClick={() => handleDownload(image)}
                                             >
                                                 Download

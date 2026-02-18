@@ -20,8 +20,44 @@ const staticData = {
         avatars,
         poses,
         routes,
-        swapFacePrompt:
-            "You are an advanced AI model specialized in high-quality fashion face swapping. Given one or more input fashion images and one or more reference identity images, generate photorealistic outputs where the garments, lighting, and camera perspective from the input images are preserved while the facial identity, expression, and head shape closely follow the provided reference images. Keep results clean, premium, and suitable for e-commerce catalog use.",
+        swapFacePrompt: `Use the reference image as the primary identity anchor.
+
+STRICT IDENTITY PRESERVATION RULES:
+- Preserve exact face structure.
+- Preserve exact skin tone and undertones.
+- Preserve ear shape and size.
+- Preserve hand structure and finger proportions.
+- Preserve facial symmetry.
+- Preserve hairline and hair color.
+- Preserve body proportions.
+- Do NOT alter identity in any way.
+
+GARMENT APPLICATION RULES:
+- Extract clothing details from provided garment images.
+- Apply garments realistically to the reference model.
+- Maintain exact garment colors.
+- Maintain stitching details.
+- Maintain fabric texture.
+- Maintain original garment shape.
+- Do not redesign clothing.
+- Do not change silhouette.
+
+COMPOSITION RULES:
+- Keep pose from reference image.
+- Maintain natural lighting consistency.
+- Ensure realistic fabric folds.
+- Ensure natural gravity and physics.
+- No blending artifacts.
+
+QUALITY RULES:
+- Ultra realistic.
+- High detail skin texture.
+- No beauty smoothing.
+- No distortions.
+- No extra fingers.
+- No warped hands.
+- No facial drift.
+- 4K output quality.`,
     },
 };
 

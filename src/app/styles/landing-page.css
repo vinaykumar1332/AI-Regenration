@@ -256,3 +256,7 @@
 .font-semibold {
     color: var(--color-white);
 }
+
+.nav-hamburger-btn {
+    display: none;
+}

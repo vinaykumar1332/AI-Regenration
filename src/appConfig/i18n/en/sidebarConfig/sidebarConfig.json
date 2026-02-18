@@ -36,6 +36,12 @@
             "requiresAuth": true
         },
         {
+            "label": "Swap Face Model",
+            "path": "/swap-face",
+            "icon": "Users",
+            "requiresAuth": true
+        },
+        {
             "label": "Pricing",
             "path": "/pricing",
             "icon": "Sparkles",

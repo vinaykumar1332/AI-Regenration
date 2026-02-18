@@ -24,6 +24,9 @@ const AvatarGenerationPage = lazy(() =>
 const BulkGenerationPage = lazy(() =>
   import("@/app/pages/BulkGenerationPage/BulkGenerationPage").then(m => ({ default: m.BulkGenerationPage }))
 );
+const SwapFaceGenerationPage = lazy(() =>
+  import("@/app/pages/SwapFaceGenerationPage/SwapFaceGenerationPage").then(m => ({ default: m.SwapFaceGenerationPage }))
+);
 const FailedJobsPage = lazy(() =>
   import("@/app/pages/FailedJobsPage/FailedJobsPage").then(m => ({ default: m.FailedJobsPage }))
 );
@@ -46,6 +49,7 @@ const legacyRedirectPaths = [
   "/video-generation",
   "/avatar-generation",
   "/bulk-generation",
+  "/swap-face",
   "/failed-jobs",
   "/settings",
 ];
@@ -66,6 +70,7 @@ const PROTECTED_PATHS = [
   "/video-generation",
   "/avatar-generation",
   "/bulk-generation",
+  "/swap-face",
   "/failed-jobs",
   "/settings",
 ];
@@ -186,6 +191,7 @@ function LanguageLayout({
                 <Route path="video-generation" element={<VideoGenerationPage />} />
                 <Route path="avatar-generation" element={<AvatarGenerationPage />} />
                 <Route path="bulk-generation" element={<BulkGenerationPage />} />
+                <Route path="swap-face" element={<SwapFaceGenerationPage />} />
                 <Route path="failed-jobs" element={<FailedJobsPage />} />
                 <Route path="settings" element={<SettingsPage />} />
                 <Route path="*" element={<Navigate to={`/${appConfig.language}`} replace />} />

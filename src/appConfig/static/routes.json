@@ -27,6 +27,10 @@
             "path": "/bulk-generation"
         },
         {
+            "id": "swap-face",
+            "path": "/swap-face"
+        },
+        {
             "id": "failed-jobs",
             "path": "/failed-jobs"
         },
