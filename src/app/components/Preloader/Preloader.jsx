@@ -110,6 +110,7 @@ export function Preloader() {
               left: "50%",
               marginTop: "-4px",
               marginLeft: "-4px",
+              transformOrigin: `${Math.cos((i * Math.PI) / 2) * 60}px ${Math.sin((i * Math.PI) / 2) * 60}px`,
             }}
             animate={{
               rotate: 360,
@@ -128,10 +129,6 @@ export function Preloader() {
                 ease: "easeInOut",
                 delay: i * 0.2,
               },
-            }}
-            style={{
-              transformOrigin: `${Math.cos((i * Math.PI) / 2) * 60}px ${Math.sin((i * Math.PI) / 2) * 60
-                }px`,
             }}
           />
         ))}
