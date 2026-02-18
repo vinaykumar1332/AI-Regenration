@@ -16,5 +16,11 @@
     "additionalDetailsHint": "Füge zusätzliche Styling- oder Ausdrucksdetails hinzu",
     "generateImage": "Bild generieren",
     "generatingImage": "Bild wird generiert...",
-    "recentGenerations": "Letzte Generierungen"
+    "recentGenerations": "Letzte Generierungen",
+    "swapTitle": "Gesichts-Tausch Bildgenerierung",
+    "swapSubtitle": "Lade ein Basisporträt, Kleidung und ein optionales Referenzgesicht hoch, um hochwertige Tauschbilder zu erzeugen.",
+    "swapStep1": "Schritt 1 – Uploads",
+    "swapStep2": "Schritt 2 – Optionen",
+    "swapStep3": "Schritt 3 – Generieren",
+    "swapResultPreview": "Ergebnisvorschau"
 }

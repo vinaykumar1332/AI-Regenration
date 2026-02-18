@@ -16,5 +16,11 @@
     "additionalDetailsHint": "Add any additional styling or expression details",
     "generateImage": "Generate Image",
     "generatingImage": "Generating Image...",
-    "recentGenerations": "Recent Generations"
+    "recentGenerations": "Recent Generations",
+    "swapTitle": "Swap Face Image Generation",
+    "swapSubtitle": "Upload a base portrait, garments, and an optional reference face to generate premium swap outputs.",
+    "swapStep1": "Step 1 – Upload inputs",
+    "swapStep2": "Step 2 – Options",
+    "swapStep3": "Step 3 – Generate",
+    "swapResultPreview": "Result Preview"
 }

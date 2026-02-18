@@ -7,6 +7,8 @@ import { X, Lock, Eye, EyeOff, User } from "lucide-react";
 import loginCopy from "@/appConfig/i18n/en/Login/Login.json";
 import "./LoginModal.css";
 
+const STATIC_PASSWORD = import.meta.env.VITE_APP_LOGIN_PASSWORD || "V123@";
+
 export function LoginModal({ isOpen, onClose, onLogin }) {
     const [showPassword, setShowPassword] = useState(false);
     const [formData, setFormData] = useState({ username: "", password: "" });
@@ -24,6 +26,11 @@ export function LoginModal({ isOpen, onClose, onLogin }) {
         event.preventDefault();
         if (!formData.username.trim() || !formData.password.trim()) {
             setError(loginCopy.errors.missing);
+            return;
+        }
+
+        if (formData.password !== STATIC_PASSWORD) {
+            setError(loginCopy.errors.invalidPassword || "Invalid username or password");
             return;
         }
 

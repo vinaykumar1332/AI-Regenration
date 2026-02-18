@@ -144,6 +144,12 @@ export function ModernSidebar({
                                                 whileHover={{ x: 8 }}
                                                 onClick={() => {
                                                     if (requiresAuth && !isAuthenticated) {
+                                                        try {
+                                                            const target = toLanguagePath(item.path);
+                                                            window.sessionStorage.setItem("intendedRoute", target);
+                                                        } catch {
+                                                            // ignore
+                                                        }
                                                         onLoginRequest?.();
                                                     }
                                                     onClose();
@@ -208,6 +214,16 @@ export function ModernSidebar({
                                                                             key={child.path}
                                                                             to={toLanguagePath(child.path)}
                                                                             onClick={() => {
+                                                                                if (child.requiresAuth && !isAuthenticated) {
+                                                                                    try {
+                                                                                        const target = toLanguagePath(child.path);
+                                                                                        window.sessionStorage.setItem("intendedRoute", target);
+                                                                                    } catch {
+                                                                                        // ignore
+                                                                                    }
+                                                                                    onLoginRequest?.();
+                                                                                    return;
+                                                                                }
                                                                                 onClose();
                                                                                 setOpenKey(item.path);
                                                                             }}

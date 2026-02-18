@@ -3,8 +3,8 @@
         "label": "Venkat Tech AI Studio"
     },
     "user": {
-        "name": "John Dee",
-        "email": "john.dee@aistudio.com",
+        "name": "User",
+        "email": "",
         "menu": [
             {
                 "key": "profile",
@@ -41,17 +41,10 @@
             "requiresAuth": true,
             "children": [
                 {
-                    "key": "garment",
-                    "label": "Garment Try-On",
-                    "icon": "ShirtIcon",
-                    "path": "/image-generation?module=garment",
-                    "requiresAuth": true
-                },
-                {
-                    "key": "single",
-                    "label": "Single Dress Flow",
-                    "icon": "LayersIcon",
-                    "path": "/image-generation?module=single",
+                    "key": "swap-face",
+                    "label": "Swap Face",
+                    "icon": "SparklesIcon",
+                    "path": "/image-generation?module=swap-face",
                     "requiresAuth": true
                 }
             ]

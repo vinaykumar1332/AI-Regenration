@@ -20,6 +20,8 @@ const staticData = {
         avatars,
         poses,
         routes,
+        swapFacePrompt:
+            "You are an advanced AI model specialized in high-quality fashion face swapping. Given one or more input fashion images and one or more reference identity images, generate photorealistic outputs where the garments, lighting, and camera perspective from the input images are preserved while the facial identity, expression, and head shape closely follow the provided reference images. Keep results clean, premium, and suitable for e-commerce catalog use.",
     },
 };
 

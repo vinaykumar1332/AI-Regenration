@@ -1,5 +1,5 @@
 import { useState, useEffect, lazy, Suspense, useMemo } from "react";
-import { BrowserRouter, Routes, Route, Navigate, useLocation, useParams } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate, useLocation, useParams, useNavigate } from "react-router-dom";
 import { Toaster } from "@/app/components/ui/Sonner/sonner";
 import { Preloader } from "@/app/components/Preloader/Preloader";
 import { LandingPage } from "@/app/pages/LandingPage/LandingPage";
@@ -72,6 +72,7 @@ const PROTECTED_PATHS = [
 
 function LanguageLayout({
   isAuthenticated,
+  user,
   showLanding,
   isSidebarOpen,
   isLoginModalOpen,
@@ -85,6 +86,7 @@ function LanguageLayout({
 }) {
   const { lang } = useParams();
   const location = useLocation();
+  const navigate = useNavigate();
   const appConfig = useAppConfig();
   const validatedLang = validateLanguage(lang);
   const normalizedPath = useMemo(() => {
@@ -105,7 +107,13 @@ function LanguageLayout({
     if (isAuthenticated || !isProtectedRoute || isLoginModalOpen) {
       return;
     }
-
+    // Store the intended protected route so we can redirect after login
+    try {
+      const intended = `${location.pathname}${location.search}${location.hash}`;
+      window.sessionStorage.setItem("intendedRoute", intended);
+    } catch {
+      // ignore storage errors
+    }
     onLoginModalOpen?.();
   }, [isAuthenticated, isProtectedRoute, isLoginModalOpen, onLoginModalOpen]);
 
@@ -120,6 +128,22 @@ function LanguageLayout({
       />
     );
   }
+  // After a successful login, redirect back to the last intended protected route if any
+  useEffect(() => {
+    if (!isAuthenticated) return;
+    try {
+      const stored = window.sessionStorage.getItem("intendedRoute");
+      if (stored) {
+        window.sessionStorage.removeItem("intendedRoute");
+        const current = `${location.pathname}${location.search}${location.hash}`;
+        if (stored !== current) {
+          navigate(stored, { replace: true });
+        }
+      }
+    } catch {
+      // ignore storage errors
+    }
+  }, [isAuthenticated, location.pathname, location.search, location.hash, navigate]);
 
   return (
     <SmoothScrollWrapper>
@@ -127,6 +151,7 @@ function LanguageLayout({
         onMenuClick={onMenuOpen}
         onLoginClick={onLoginModalOpen}
         isAuthenticated={isAuthenticated}
+        user={user}
         onLogout={onLogout}
         isLandingPage={showLanding && !isAuthenticated}
         currentLanguage={appConfig.language}
@@ -177,29 +202,74 @@ function LanguageLayout({
 function App() {
   const [isLoading, setIsLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [user, setUser] = useState(null);
   const [showLanding, setShowLanding] = useState(true);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
 
   useEffect(() => {
-    // Simulate initial loading
+    // Restore auth session from storage
+    try {
+      const stored = window.localStorage.getItem("aiStudioUser");
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (parsed && parsed.username) {
+          setUser(parsed);
+          setIsAuthenticated(true);
+          setShowLanding(false);
+        }
+      }
+    } catch {
+      // ignore storage errors
+    }
+
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 2000);
+    }, 500);
 
     return () => clearTimeout(timer);
   }, []);
 
   const handleLogin = (userData) => {
     console.log("User logged in:", userData);
+    const normalizedUser = {
+      username: userData.username,
+      rememberMe: Boolean(userData.rememberMe),
+    };
+    setUser(normalizedUser);
     setIsAuthenticated(true);
     setShowLanding(false);
     setIsLoginModalOpen(false);
+
+    try {
+      if (normalizedUser.rememberMe) {
+        window.localStorage.setItem("aiStudioUser", JSON.stringify(normalizedUser));
+      } else {
+        window.localStorage.removeItem("aiStudioUser");
+      }
+    } catch {
+      // ignore storage errors
+    }
   };
 
   const handleLogout = () => {
     setIsAuthenticated(false);
+    setUser(null);
     setShowLanding(true);
+    try {
+      window.localStorage.removeItem("aiStudioUser");
+      window.sessionStorage.removeItem("intendedRoute");
+    } catch {
+      // ignore storage errors
+    }
+
+    // After logout, always send the user back to the landing page
+    // and clear any module/query parameters (e.g. ?module=swap-face).
+    try {
+      window.location.href = `/${defaultLanguage}`;
+    } catch {
+      // fallback: do nothing if navigation fails
+    }
   };
 
   const handleGetStarted = () => {
@@ -226,6 +296,7 @@ function App() {
           element={(
             <LanguageLayout
               isAuthenticated={isAuthenticated}
+              user={user}
               showLanding={showLanding}
               isSidebarOpen={isSidebarOpen}
               isLoginModalOpen={isLoginModalOpen}

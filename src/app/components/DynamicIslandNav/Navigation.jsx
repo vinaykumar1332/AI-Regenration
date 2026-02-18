@@ -43,7 +43,7 @@ function NavIcon({ iconName }) {
     return <Icon className="nav-item-icon" aria-hidden="true" />;
 }
 
-export function Navigation({ onMenuClick, onLoginClick, isAuthenticated, onLogout }) {
+export function Navigation({ onMenuClick, onLoginClick, isAuthenticated, onLogout, user }) {
     const USER_MENU_KEY = "__user_menu__";
     const navigate = useNavigate();
     const location = useLocation();
@@ -67,8 +67,8 @@ export function Navigation({ onMenuClick, onLoginClick, isAuthenticated, onLogou
         ? userConfig.menu || []
         : activeNavItem?.children || [];
 
-    const userName = userConfig.name || "John Dee";
-    const userEmail = userConfig.email || "john.doe@aistudio.com";
+    const userName = user?.username || userConfig.name || "User";
+    const userEmail = userConfig.email || "";
     const userInitials = useMemo(() => {
         const parts = userName
             .split(" ")
@@ -175,6 +175,13 @@ export function Navigation({ onMenuClick, onLoginClick, isAuthenticated, onLogou
         }
 
         if (item.requiresAuth && !isAuthenticated) {
+            // Remember intended route for post-login redirect
+            try {
+                const target = getLocalizedPath(item.path);
+                window.sessionStorage.setItem("intendedRoute", target);
+            } catch {
+                // ignore
+            }
             onLoginClick?.();
             return;
         }
@@ -185,6 +192,12 @@ export function Navigation({ onMenuClick, onLoginClick, isAuthenticated, onLogou
 
     const handleChildClick = (child) => {
         if (child.requiresAuth && !isAuthenticated) {
+            try {
+                const target = getLocalizedPath(child.path);
+                window.sessionStorage.setItem("intendedRoute", target);
+            } catch {
+                // ignore
+            }
             onLoginClick?.();
             return;
         }
@@ -374,6 +387,12 @@ export function Navigation({ onMenuClick, onLoginClick, isAuthenticated, onLogou
                             className="nav-auth-btn nav-login-btn"
                             onClick={() => {
                                 if (onLoginClick) {
+                                    try {
+                                        const target = location.pathname + location.search + location.hash;
+                                        window.sessionStorage.setItem("intendedRoute", target);
+                                    } catch {
+                                        // ignore
+                                    }
                                     onLoginClick();
                                     return;
                                 }

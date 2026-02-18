@@ -19,11 +19,11 @@ export default async function handler(req, res) {
       prompt, 
       identity, 
       characterName,
-      dressImage,        // Base64 dress image
-      gender,            // male, female, or other
-      country,           // country/origin
-      skinTone,          // skin tone description
-      additionalPrompt   // user's additional prompt
+      dressImage,        
+      gender,            
+      country,         
+      skinTone,      
+      additionalPrompt  
     } = req.body;
 
     // Validate inputs
