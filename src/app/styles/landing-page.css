@@ -260,3 +260,8 @@
 .nav-hamburger-btn {
     display: none;
 }
+
+.viewport-height-without-nav {
+    display: flex;
+    justify-content: center;
+}

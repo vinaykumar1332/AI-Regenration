@@ -191,7 +191,7 @@ function LanguageLayout({
         />
       ) : (
         <div className="min-h-screen bg-background">
-          <div className="pt-24">
+          <div className="pt-24 viewport-height-without-nav">
             <Suspense fallback={<LoadingFallback />}>
               <Routes>
                 <Route index element={<CollapsibleDashboard />} />

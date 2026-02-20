@@ -424,11 +424,6 @@ export function Navigation({ onMenuClick, onLoginClick, isAuthenticated, onLogou
 
                     <div
                         className="nav-auth-wrap"
-                        onMouseEnter={() => {
-                            if (!isMobile && isAuthenticated && (activeDropdownKey === null || activeDropdownKey === USER_MENU_KEY)) {
-                                setActiveDropdownKey(USER_MENU_KEY);
-                            }
-                        }}
                     >
                         {isMobile && isAuthenticated ? (
                             <button
@@ -536,6 +531,11 @@ export function Navigation({ onMenuClick, onLoginClick, isAuthenticated, onLogou
                                 <button
                                     type="button"
                                     className="nav-auth-btn nav-user-btn"
+                                    onMouseEnter={() => {
+                                        if (!isMobile) {
+                                            setActiveDropdownKey(USER_MENU_KEY);
+                                        }
+                                    }}
                                     onClick={() =>
                                         setActiveDropdownKey((prev) => (prev === USER_MENU_KEY ? null : USER_MENU_KEY))
                                     }
