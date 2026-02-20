@@ -1,5 +1,6 @@
 import { useSearchParams } from "react-router-dom";
 import { SwapFaceModule } from "@/app/components/ImageGeneration/SwapFaceModule";
+import { VirtualReshootModule } from "@/app/components/ImageGeneration/VirtualReshootModule";
 
 export function ImageGenerationPage() {
   const [searchParams] = useSearchParams();
@@ -11,6 +12,8 @@ export function ImageGenerationPage() {
       case "swap-face":
       default:
         return <SwapFaceModule />;
+      case "virtual-reshoot":
+        return <VirtualReshootModule />;
     }
   };
 

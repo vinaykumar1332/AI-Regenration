@@ -2,7 +2,6 @@ import { useState, useRef } from "react";
 import "./SwapFaceModule.css";
 import { Card } from "@/app/components/ui/Card/card";
 import { Button } from "@/app/components/ui/Button/button";
-import { Label } from "@/app/components/ui/Label/label";
 import { Skeleton } from "@/app/components/ui/Skeleton/skeleton";
 import { Badge } from "@/app/components/ui/Badge/badge";
 import { Upload, Image as ImageIcon, Loader2, X } from "lucide-react";

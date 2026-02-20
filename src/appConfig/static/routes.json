@@ -31,6 +31,10 @@
             "path": "/swap-face"
         },
         {
+            "id": "virtual-reshoot",
+            "path": "/virtual-reshoot"
+        },
+        {
             "id": "failed-jobs",
             "path": "/failed-jobs"
         },

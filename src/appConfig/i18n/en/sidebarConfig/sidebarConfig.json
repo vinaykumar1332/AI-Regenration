@@ -42,6 +42,12 @@
             "requiresAuth": true
         },
         {
+            "label": "Virtual Reshoot Model",
+            "path": "/virtual-reshoot",
+            "icon": "Image",
+            "requiresAuth": true
+        },
+        {
             "label": "Pricing",
             "path": "/pricing",
             "icon": "Sparkles",

@@ -22,7 +22,7 @@ function DialogClose({ ...props }) {
   return <DialogPrimitive.Close data-slot="dialog-close" {...props} />;
 }
 
-function DialogOverlay({ ...props }) {
+function DialogOverlay({ className, ...props }) {
   return (
     <DialogPrimitive.Overlay
       data-slot="dialog-overlay"
@@ -35,7 +35,7 @@ function DialogOverlay({ ...props }) {
   );
 }
 
-function DialogContent({ ...props }) {
+function DialogContent({ className, children, ...props }) {
   return (
     <DialogPortal data-slot="dialog-portal">
       <DialogOverlay />
@@ -57,7 +57,7 @@ function DialogContent({ ...props }) {
   );
 }
 
-function DialogHeader({ ...props }) {
+function DialogHeader({ className, ...props }) {
   return (
     <div
       data-slot="dialog-header"
@@ -67,7 +67,7 @@ function DialogHeader({ ...props }) {
   );
 }
 
-function DialogFooter({ ...props }) {
+function DialogFooter({ className, ...props }) {
   return (
     <div
       data-slot="dialog-footer"
@@ -80,7 +80,7 @@ function DialogFooter({ ...props }) {
   );
 }
 
-function DialogTitle({ ...props }) {
+function DialogTitle({ className, ...props }) {
   return (
     <DialogPrimitive.Title
       data-slot="dialog-title"
@@ -90,7 +90,7 @@ function DialogTitle({ ...props }) {
   );
 }
 
-function DialogDescription({ ...props }) {
+function DialogDescription({ className, ...props }) {
   return (
     <DialogPrimitive.Description
       data-slot="dialog-description"

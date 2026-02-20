@@ -4,6 +4,7 @@ import {
     Clapperboard,
     CreditCard,
     ChevronDown,
+    Bell,
     ImageIcon,
     Layers,
     LogIn,
@@ -14,7 +15,9 @@ import {
     Settings,
     Shirt,
     Sparkles,
+    Sun,
     Tag,
+    Moon,
     UserRound,
     Video,
 } from "lucide-react";
@@ -32,6 +35,7 @@ const iconMap = {
     LayersIcon: Layers,
     ClapperboardIcon: Clapperboard,
     PackageIcon: Package,
+    BellIcon: Bell,
     UserIcon: UserRound,
     SettingsIcon: Settings,
     LogOutIcon: LogOut,
@@ -45,6 +49,7 @@ function NavIcon({ iconName }) {
 
 export function Navigation({ onMenuClick, onLoginClick, isAuthenticated, onLogout, user }) {
     const USER_MENU_KEY = "__user_menu__";
+    const NOTIFICATIONS_KEY = "__notifications__";
     const navigate = useNavigate();
     const location = useLocation();
     const navRef = useRef(null);
@@ -52,6 +57,39 @@ export function Navigation({ onMenuClick, onLoginClick, isAuthenticated, onLogou
     const [activeDropdownKey, setActiveDropdownKey] = useState(null);
     const [isMobile, setIsMobile] = useState(false);
     const [isScrolled, setIsScrolled] = useState(false);
+    const [notifications, setNotifications] = useState([
+        {
+            id: 1,
+            type: "success",
+            title: "Generation Complete",
+            message: "Your image generation completed successfully",
+            timestamp: "2 minutes ago",
+            read: false,
+        },
+        {
+            id: 2,
+            type: "info",
+            title: "New Feature Available",
+            message: "Try our new bulk processing capabilities",
+            timestamp: "1 hour ago",
+            read: false,
+        },
+        {
+            id: 3,
+            type: "alert",
+            title: "Job Failed",
+            message: "Video generation failed due to timeout",
+            timestamp: "3 hours ago",
+            read: true,
+        },
+    ]);
+    const [isDark, setIsDark] = useState(() => {
+        try {
+            return document.documentElement.classList.contains("dark");
+        } catch {
+            return true;
+        }
+    });
 
     const navItems = useMemo(() => navigationConfig.items || [], []);
     const userConfig = navigationConfig.user || {};
@@ -63,9 +101,35 @@ export function Navigation({ onMenuClick, onLoginClick, isAuthenticated, onLogou
         [activeDropdownKey, navItems],
     );
     const isUserMenuOpen = activeDropdownKey === USER_MENU_KEY;
+    const isNotificationsOpen = activeDropdownKey === NOTIFICATIONS_KEY;
+
+    const mobileUserMenuExtras = useMemo(() => {
+        if (!isMobile) return [];
+
+        return [
+            {
+                key: "mobile_theme",
+                icon: isDark ? "SunIcon" : "MoonIcon",
+                label: isDark ? "Light Theme" : "Dark Theme",
+                action: "toggle-theme",
+            },
+        ];
+    }, [isDark, isMobile]);
+
+    const unreadNotificationsCount = useMemo(
+        () => notifications.filter((notif) => !notif.read).length,
+        [notifications],
+    );
+
     const activeSubmenuItems = isUserMenuOpen
-        ? userConfig.menu || []
-        : activeNavItem?.children || [];
+        ? [...(userConfig.menu || []), ...mobileUserMenuExtras]
+        : isNotificationsOpen
+            ? notifications.map((notif) => ({
+                key: `notif_${notif.id}`,
+                icon: "BellIcon",
+                label: notif.title,
+            }))
+            : activeNavItem?.children || [];
 
     const userName = user?.username || userConfig.name || "User";
     const userEmail = userConfig.email || "";
@@ -105,6 +169,26 @@ export function Navigation({ onMenuClick, onLoginClick, isAuthenticated, onLogou
         }
 
         return `${languagePrefix}${path}`;
+    };
+
+    const toggleTheme = () => {
+        setIsDark((prev) => {
+            const next = !prev;
+            try {
+                document.documentElement.classList.toggle("dark", next);
+            } catch {
+                // ignore
+            }
+            return next;
+        });
+    };
+
+    const removeNotification = (id) => {
+        setNotifications((prev) => prev.filter((notif) => notif.id !== id));
+    };
+
+    const clearAllNotifications = () => {
+        setNotifications([]);
     };
 
     useEffect(() => {
@@ -207,6 +291,12 @@ export function Navigation({ onMenuClick, onLoginClick, isAuthenticated, onLogou
     };
 
     const handleSubmenuAction = (item) => {
+        if (item.action === "toggle-theme") {
+            toggleTheme();
+            setActiveDropdownKey(null);
+            return;
+        }
+
         setActiveDropdownKey(null);
         if (item.action === "logout") {
             onLogout?.();
@@ -247,34 +337,38 @@ export function Navigation({ onMenuClick, onLoginClick, isAuthenticated, onLogou
                 <div className="nav-glossy-overlay" />
 
                 <div className="dynamic-island-nav-content">
-                    <button
-                        type="button"
-                        className="nav-hamburger-btn"
-                        onClick={onMenuClick}
-                        aria-label="Open sidebar"
+                    {onMenuClick ? (
+                        <button
+                            type="button"
+                            className="nav-hamburger-btn"
+                            onClick={onMenuClick}
+                            aria-label="Open sidebar"
+                        >
+                            <Menu className="nav-item-icon" aria-hidden="true" />
+                        </button>
+                    ) : (
+                        <div className="nav-hamburger-btn" aria-hidden="true" />
+                    )}
+
+                    <div
+                        className="nav-brand"
+                        role="button"
+                        tabIndex={0}
+                        onClick={() => navigate(languagePrefix || "/")}
+                        onKeyDown={(event) => {
+                            if (event.key === "Enter" || event.key === " ") {
+                                event.preventDefault();
+                                navigate(languagePrefix || "/");
+                            }
+                        }}
                     >
-                        <Menu className="nav-item-icon" aria-hidden="true" />
-                    </button>
+                        <span className="nav-brand-mark" aria-hidden="true">
+                            <Sparkles className="nav-item-icon" aria-hidden="true" />
+                        </span>
+                        <span className="nav-brand-label">{brandLabel}</span>
+                    </div>
 
                     <div className="nav-center-wrap">
-                        <div
-                            className="nav-brand"
-                            role="button"
-                            tabIndex={0}
-                            onClick={() => navigate(languagePrefix || "/")}
-                            onKeyDown={(event) => {
-                                if (event.key === "Enter" || event.key === " ") {
-                                    event.preventDefault();
-                                    navigate(languagePrefix || "/");
-                                }
-                            }}
-                        >
-                            <span className="nav-brand-mark" aria-hidden="true">
-                                <Sparkles className="nav-item-icon" aria-hidden="true" />
-                            </span>
-                            <span className="nav-brand-label">{brandLabel}</span>
-                        </div>
-
                         <nav className="nav-scroll-track" aria-label="Primary Navigation">
                             {navItems.map((item) => {
                                 const hasChildren = Boolean(item.children?.length);
@@ -287,11 +381,6 @@ export function Navigation({ onMenuClick, onLoginClick, isAuthenticated, onLogou
                                         onMouseEnter={() => {
                                             if (!isMobile && hasChildren) {
                                                 setActiveDropdownKey(item.key);
-                                            }
-                                        }}
-                                        onMouseLeave={() => {
-                                            if (!isMobile && hasChildren && activeDropdownKey === item.key) {
-                                                // Keep dropdown open for a brief moment to allow hover bridge transition
                                             }
                                         }}
                                     >
@@ -333,77 +422,181 @@ export function Navigation({ onMenuClick, onLoginClick, isAuthenticated, onLogou
                         </nav>
                     </div>
 
-                    {isAuthenticated ? (
-                        <div
-                            className="nav-auth-wrap"
-                            onMouseEnter={() => {
-                                if (!isMobile) {
-                                    setActiveDropdownKey(USER_MENU_KEY);
-                                }
-                            }}
-                        >
+                    <div
+                        className="nav-auth-wrap"
+                        onMouseEnter={() => {
+                            if (!isMobile && isAuthenticated && (activeDropdownKey === null || activeDropdownKey === USER_MENU_KEY)) {
+                                setActiveDropdownKey(USER_MENU_KEY);
+                            }
+                        }}
+                    >
+                        {isMobile && isAuthenticated ? (
                             <button
                                 type="button"
-                                className="nav-auth-btn nav-user-btn"
+                                className="nav-auth-btn nav-mobile-notif-btn"
+                                aria-label={
+                                    unreadNotificationsCount
+                                        ? `Notifications (${unreadNotificationsCount} unread)`
+                                        : "Notifications"
+                                }
+                                aria-expanded={isNotificationsOpen}
                                 onClick={() =>
-                                    setActiveDropdownKey((prev) => (prev === USER_MENU_KEY ? null : USER_MENU_KEY))
+                                    setActiveDropdownKey((prev) => (prev === NOTIFICATIONS_KEY ? null : NOTIFICATIONS_KEY))
                                 }
-                                aria-label="Open user menu"
                             >
-                                <span className="nav-user-initials" aria-hidden="true">
-                                    {userInitials}
-                                </span>
-                                <span className="nav-auth-label">{userName}</span>
-                                <ChevronDown className={`nav-chevron ${isUserMenuOpen ? "is-open" : ""}`} />
+                                <Bell className="nav-item-icon" aria-hidden="true" />
+                                {unreadNotificationsCount ? (
+                                    <span className="nav-notif-dot" aria-hidden="true" />
+                                ) : null}
                             </button>
-                            {isUserMenuOpen && !isMobile ? (
-                                <div className="nav-dropdown nav-dropdown-user is-open" role="menu" aria-hidden={!isUserMenuOpen}>
-                                    <div className="nav-user-card">
-                                        <span className="nav-user-card-initials" aria-hidden="true">
-                                            {userInitials}
-                                        </span>
-                                        <div className="nav-user-card-text">
-                                            <p className="nav-user-card-name">{userName}</p>
-                                            <p className="nav-user-card-email">{userEmail}</p>
-                                        </div>
-                                    </div>
-                                    {userConfig.menu?.map((child) => (
-                                        <button
-                                            key={child.key}
-                                            type="button"
-                                            className="nav-dropdown-item"
-                                            onClick={() => handleSubmenuAction(child)}
-                                        >
-                                            <NavIcon iconName={child.icon || "UserIcon"} />
-                                            {child.label}
-                                        </button>
-                                    ))}
-                                </div>
-                            ) : null}
-                        </div>
-                    ) : (
-                        <button
-                            type="button"
-                            className="nav-auth-btn nav-login-btn"
-                            onClick={() => {
-                                if (onLoginClick) {
-                                    try {
-                                        const target = location.pathname + location.search + location.hash;
-                                        window.sessionStorage.setItem("intendedRoute", target);
-                                    } catch {
-                                        // ignore
+                        ) : null}
+
+                        {!isMobile && isAuthenticated ? (
+                            <>
+                                <button
+                                    type="button"
+                                    className="nav-auth-btn"
+                                    aria-label="Notifications"
+                                    aria-expanded={isNotificationsOpen}
+                                    onClick={() =>
+                                        setActiveDropdownKey((prev) => (prev === NOTIFICATIONS_KEY ? null : NOTIFICATIONS_KEY))
                                     }
-                                    onLoginClick();
-                                    return;
-                                }
-                                navigate(getLocalizedPath(loginItem?.path || "/login"));
-                            }}
-                            aria-label={loginItem?.label || "Login"}
-                        >
-                            <NavIcon iconName={loginItem?.icon || "LogInIcon"} />
-                            <span className="nav-auth-label">{loginItem?.label || "Login"}</span>
-                        </button>
-                    )}
+                                >
+                                    <Bell className="nav-item-icon" aria-hidden="true" />
+                                </button>
+
+                                {isNotificationsOpen && !isMobile ? (
+                                    <div
+                                        className="nav-dropdown nav-dropdown-notifications is-open"
+                                        role="menu"
+                                        aria-hidden={!isNotificationsOpen}
+                                    >
+                                        <div className="nav-dropdown-section">
+                                            <p className="nav-dropdown-title">Notifications</p>
+                                            <p className="nav-dropdown-subtitle">
+                                                {notifications.length} notification{notifications.length === 1 ? "" : "s"}
+                                            </p>
+                                        </div>
+
+                                        {notifications.length ? (
+                                            <div className="nav-dropdown-notifications-list">
+                                                {notifications.map((notif) => (
+                                                    <div key={notif.id} className="nav-notification-item">
+                                                        <div className="nav-notification-text">
+                                                            <p className="nav-notification-title">{notif.title}</p>
+                                                            <p className="nav-notification-message">{notif.message}</p>
+                                                            <p className="nav-notification-time">{notif.timestamp}</p>
+                                                        </div>
+                                                        <button
+                                                            type="button"
+                                                            className="nav-notification-remove"
+                                                            onClick={() => removeNotification(notif.id)}
+                                                            aria-label="Remove notification"
+                                                        >
+                                                            ×
+                                                        </button>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        ) : (
+                                            <div className="nav-dropdown-empty">All caught up!</div>
+                                        )}
+
+                                        {notifications.length ? (
+                                            <button
+                                                type="button"
+                                                className="nav-dropdown-item"
+                                                onClick={clearAllNotifications}
+                                            >
+                                                Clear All
+                                            </button>
+                                        ) : null}
+                                    </div>
+                                ) : null}
+                            </>
+                        ) : null}
+
+                        {!isMobile ? (
+                            <button
+                                type="button"
+                                className="nav-auth-btn"
+                                aria-label={isDark ? "Switch to light theme" : "Switch to dark theme"}
+                                onClick={toggleTheme}
+                            >
+                                {isDark ? (
+                                    <Sun className="nav-item-icon" aria-hidden="true" />
+                                ) : (
+                                    <Moon className="nav-item-icon" aria-hidden="true" />
+                                )}
+                            </button>
+                        ) : null}
+
+                        {isAuthenticated ? (
+                            <>
+                                <button
+                                    type="button"
+                                    className="nav-auth-btn nav-user-btn"
+                                    onClick={() =>
+                                        setActiveDropdownKey((prev) => (prev === USER_MENU_KEY ? null : USER_MENU_KEY))
+                                    }
+                                    aria-label="Open user menu"
+                                >
+                                    <span className="nav-user-initials" aria-hidden="true">
+                                        {userInitials}
+                                    </span>
+                                    <span className="nav-auth-label">{userName}</span>
+                                    <ChevronDown className={`nav-chevron ${isUserMenuOpen ? "is-open" : ""}`} />
+                                </button>
+
+                                {isUserMenuOpen && !isMobile ? (
+                                    <div className="nav-dropdown nav-dropdown-user is-open" role="menu" aria-hidden={!isUserMenuOpen}>
+                                        <div className="nav-user-card">
+                                            <span className="nav-user-card-initials" aria-hidden="true">
+                                                {userInitials}
+                                            </span>
+                                            <div className="nav-user-card-text">
+                                                <p className="nav-user-card-name">{userName}</p>
+                                                <p className="nav-user-card-email">{userEmail}</p>
+                                            </div>
+                                        </div>
+                                        {userConfig.menu?.map((child) => (
+                                            <button
+                                                key={child.key}
+                                                type="button"
+                                                className="nav-dropdown-item"
+                                                onClick={() => handleSubmenuAction(child)}
+                                            >
+                                                <NavIcon iconName={child.icon || "UserIcon"} />
+                                                {child.label}
+                                            </button>
+                                        ))}
+                                    </div>
+                                ) : null}
+                            </>
+                        ) : (
+                            <button
+                                type="button"
+                                className="nav-auth-btn nav-login-btn"
+                                onClick={() => {
+                                    if (onLoginClick) {
+                                        try {
+                                            const target = location.pathname + location.search + location.hash;
+                                            window.sessionStorage.setItem("intendedRoute", target);
+                                        } catch {
+                                            // ignore
+                                        }
+                                        onLoginClick();
+                                        return;
+                                    }
+                                    navigate(getLocalizedPath(loginItem?.path || "/login"));
+                                }}
+                                aria-label={loginItem?.label || "Login"}
+                            >
+                                <NavIcon iconName={loginItem?.icon || "LogInIcon"} />
+                                <span className="nav-auth-label">{loginItem?.label || "Login"}</span>
+                            </button>
+                        )}
+                    </div>
                 </div>
             </div>
 
@@ -435,6 +628,10 @@ export function Navigation({ onMenuClick, onLoginClick, isAuthenticated, onLogou
                             onClick={() => {
                                 if (isUserMenuOpen) {
                                     handleSubmenuAction(child);
+                                    return;
+                                }
+                                if (isNotificationsOpen) {
+                                    setActiveDropdownKey(null);
                                     return;
                                 }
                                 handleChildClick(child);

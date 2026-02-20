@@ -11,9 +11,9 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "./dialog";
+} from "../Dialog/dialog";
 
-function Command({ ...props }) {
+function Command({ className, ...props }) {
   return (
     <CommandPrimitive
       data-slot="command"
@@ -47,7 +47,7 @@ function CommandDialog({
   );
 }
 
-function CommandInput({ ...props }) {
+function CommandInput({ className, ...props }) {
   return (
     <div
       data-slot="command-input-wrapper"
@@ -66,7 +66,7 @@ function CommandInput({ ...props }) {
   );
 }
 
-function CommandList({ ...props }) {
+function CommandList({ className, ...props }) {
   return (
     <CommandPrimitive.List
       data-slot="command-list"
@@ -89,7 +89,7 @@ function CommandEmpty({ ...props }) {
   );
 }
 
-function CommandGroup({ ...props }) {
+function CommandGroup({ className, ...props }) {
   return (
     <CommandPrimitive.Group
       data-slot="command-group"
@@ -102,7 +102,7 @@ function CommandGroup({ ...props }) {
   );
 }
 
-function CommandSeparator({ ...props }) {
+function CommandSeparator({ className, ...props }) {
   return (
     <CommandPrimitive.Separator
       data-slot="command-separator"
@@ -112,7 +112,7 @@ function CommandSeparator({ ...props }) {
   );
 }
 
-function CommandItem({ ...props }) {
+function CommandItem({ className, ...props }) {
   return (
     <CommandPrimitive.Item
       data-slot="command-item"
@@ -125,7 +125,7 @@ function CommandItem({ ...props }) {
   );
 }
 
-function CommandShortcut({ ...props }) {
+function CommandShortcut({ className, ...props }) {
   return (
     <span
       data-slot="command-shortcut"

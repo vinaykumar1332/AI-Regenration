@@ -51,6 +51,24 @@
     align-items: center;
     gap: 0.75rem;
     padding: 0 0.75rem;
+    position: relative;
+
+
+    .nav-auth-wrap {
+        display: inline-flex;
+        justify-content: end;
+    }
+
+    .nav-hamburger-btn {
+        /* keep the element in flow but hide visually so layout spacing remains */
+        visibility: hidden;
+        opacity: 0;
+        pointer-events: none;
+        width: 2.5rem;
+        min-width: 2.5rem;
+        height: 2.5rem;
+        display: none;
+    }
 }
 
 .nav-hamburger-btn,
@@ -79,10 +97,14 @@
 }
 
 .nav-auth-btn {
-    min-width: 7.5rem;
-    padding: 0 0.9rem;
+    /* keep the auth/login button compact by default */
+    min-width: 2.5rem;
+    padding: 0 0.5rem;
     flex-shrink: 0;
     white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
 }
 
 .nav-hamburger-btn:hover,
@@ -95,6 +117,9 @@
     background: linear-gradient(135deg, var(--primary), var(--accent));
     color: var(--primary-foreground);
     box-shadow: 0 0.35rem 1.25rem color-mix(in srgb, var(--primary), transparent 65%);
+    /* make login button wider so it's easier to click and matches earlier layout */
+    min-width: 7rem;
+    padding: 0 0.9rem;
 }
 
 .nav-login-btn:hover {
@@ -107,34 +132,61 @@
 }
 
 .nav-auth-wrap {
-    position: relative;
+    /* position the auth block at the right corner of the nav */
+    position: absolute;
+    right: 1.1rem;
+    top: 50%;
+    transform: translateY(-50%);
     display: inline-flex;
     align-items: center;
+    gap: 0.45rem;
+    flex-wrap: nowrap;
     flex-shrink: 0;
+    white-space: nowrap;
 }
 
 .nav-user-btn {
-    min-width: 8.25rem;
+    /* make user button compact; let name truncate */
+    min-width: 2.5rem;
+    max-width: 9.5rem;
 }
 
 .nav-user-initials {
-    width: 1.5rem;
-    height: 1.5rem;
+    /* Prevent stretching: fixed square, no flex grow */
+    width: 1.6rem;
+    height: 1.6rem;
+    min-width: 1.6rem;
+    min-height: 1.6rem;
     border-radius: 999rem;
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    flex: 0 0 auto;
+    padding: 0;
+    box-sizing: border-box;
     background: linear-gradient(135deg, var(--primary), var(--accent));
     color: var(--primary-foreground);
     font-size: 0.72rem;
     font-weight: 600;
+    line-height: 1;
 }
+
+/* Keep auth label compact and truncated so it doesn't stretch the nav */
+.nav-auth-label {
+    display: inline-block;
+    max-width: 6.5rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+
 
 .nav-center-wrap {
     min-width: 0;
     display: flex;
-    align-items: center;
-    justify-content: center;
+    align-items: flex-start;
+    justify-content: flex-start;
     gap: 0.75rem;
 }
 
@@ -183,7 +235,7 @@
     scroll-behavior: smooth;
     scrollbar-width: none;
     -ms-overflow-style: none;
-    padding: 0.25rem 0;
+    padding: 0.25rem 0.5rem;
     position: relative;
     z-index: 1;
 }
@@ -228,6 +280,126 @@
     white-space: nowrap;
 }
 
+/* Right-align the user dropdown so logout sits near the nav corner */
+.nav-dropdown-user {
+    left: auto;
+    right: 0.6rem;
+    transform: translateX(0) translateY(-0.2rem) scale(0.96);
+    transform-origin: top right;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+    gap: 0.35rem;
+}
+
+/* Notifications dropdown: same dropdown pattern, right-aligned like user menu */
+.nav-dropdown-notifications {
+    left: auto;
+    right: 0.6rem;
+    transform: translateX(0) translateY(-0.2rem) scale(0.96);
+    transform-origin: top right;
+    width: min(24rem, 92vw);
+    max-width: min(24rem, 92vw);
+    white-space: normal;
+}
+
+.nav-dropdown-section {
+    padding: 0.35rem 0.5rem 0.15rem;
+}
+
+.nav-dropdown-title {
+    margin: 0;
+    font-size: 0.9rem;
+    font-weight: 650;
+    color: var(--nav-text);
+}
+
+.nav-dropdown-subtitle {
+    margin: 0.15rem 0 0;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: color-mix(in srgb, var(--nav-text), transparent 35%);
+}
+
+.nav-dropdown-empty {
+    padding: 0.8rem 0.75rem;
+    border-radius: 0.65rem;
+    color: color-mix(in srgb, var(--nav-text), transparent 35%);
+    background: color-mix(in srgb, var(--nav-hover), transparent 55%);
+    text-align: center;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.nav-dropdown-notifications-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    padding: 0.25rem;
+    max-height: min(18rem, 60vh);
+    overflow: auto;
+}
+
+.nav-notification-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    padding: 0.6rem 0.65rem;
+    border-radius: 0.65rem;
+    background: color-mix(in srgb, var(--nav-hover), transparent 55%);
+    border: 0.0625rem solid color-mix(in srgb, var(--nav-border), var(--nav-text) 10%);
+}
+
+.nav-notification-text {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+}
+
+.nav-notification-title {
+    margin: 0;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--nav-text);
+}
+
+.nav-notification-message {
+    margin: 0;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: color-mix(in srgb, var(--nav-text), transparent 30%);
+}
+
+.nav-notification-time {
+    margin: 0.2rem 0 0;
+    font-size: 0.72rem;
+    font-weight: 500;
+    color: color-mix(in srgb, var(--nav-text), transparent 45%);
+}
+
+.nav-notification-remove {
+    border: 0;
+    background: transparent;
+    color: color-mix(in srgb, var(--nav-text), transparent 35%);
+    font: inherit;
+    line-height: 1;
+    width: 1.75rem;
+    height: 1.75rem;
+    border-radius: 0.5rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    flex: 0 0 auto;
+}
+
+.nav-notification-remove:hover {
+    background: var(--nav-hover);
+    color: var(--nav-text);
+}
+
 /* Hover bridge: ensures the mouse doesn't "leave" the nav when moving from button to dropdown */
 .nav-dropdown::before {
     content: "";
@@ -249,12 +421,10 @@
     z-index: 1000;
 }
 
-.nav-dropdown-user {
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    justify-content: flex-start;
-    gap: 0.35rem;
+/* Smooth open for user dropdown (right aligned) */
+.nav-dropdown-user.is-open {
+    transform: translateX(0) translateY(0) scale(1);
+    transition: opacity 0.32s cubic-bezier(.2, .9, .3, 1), transform 0.32s cubic-bezier(.2, .9, .3, 1);
 }
 
 .nav-item {
@@ -443,13 +613,15 @@
         width: min(88vw, 50rem);
     }
 
+    /* Keep right-side action buttons compact at this breakpoint.
+       Only the login/user button should carry width via its own rules. */
     .nav-auth-btn {
-        min-width: 6.5rem;
-        padding: 0 0.75rem;
+        min-width: 2.5rem;
+        padding: 0 0.5rem;
     }
 
     .nav-user-btn {
-        min-width: 6.75rem;
+        min-width: 2.5rem;
     }
 
     .nav-item {
@@ -458,6 +630,19 @@
 
     .nav-brand-label {
         display: none;
+    }
+}
+
+/* Larger-screen overrides for the login button */
+@media (min-width: 90rem) {
+    .nav-login-btn {
+        min-width: 8.5rem;
+        padding: 0 1rem;
+        font-size: 1rem;
+    }
+
+    .nav-scroll-track {
+        padding-left: 15rem;
     }
 }
 
@@ -516,8 +701,18 @@
     }
 
     .nav-item-label,
-    .nav-auth-label,
     .nav-chevron {
+        display: none;
+    }
+
+    /* Hide labels by default on mobile, but keep username visible */
+    .nav-auth-label {
+        display: none;
+    }
+
+    .nav-user-btn .nav-auth-label {
+        display: inline-block;
+        max-width: 5.75rem;
         display: none;
     }
 
@@ -525,6 +720,56 @@
         display: none;
     }
 
+}
+
+/* Mobile notifications icon (no background, tiny) + unread dot */
+.nav-mobile-notif-btn {
+    background: transparent;
+    box-shadow: none;
+    min-width: 2rem;
+    width: 2rem;
+    height: 2rem;
+    padding: 0;
+    position: relative;
+}
+
+.nav-mobile-notif-btn:hover {
+    background: transparent;
+    transform: none;
+}
+
+.nav-mobile-notif-btn .nav-item-icon {
+    width: 1.05rem;
+    height: 1.05rem;
+}
+
+.nav-notif-dot {
+    position: absolute;
+    top: 0.3rem;
+    right: 0.35rem;
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 999rem;
+    background: var(--destructive);
+    box-shadow: 0 0 0 0.12rem color-mix(in srgb, var(--destructive), transparent 55%);
+    animation: nav-notif-pulse 1.4s ease-in-out infinite;
+}
+
+@keyframes nav-notif-pulse {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    60% {
+        transform: scale(1.25);
+        opacity: 0.85;
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
 }
 
 @media (max-width: 30rem) {
@@ -599,6 +844,7 @@
     .nav-scroll-track {
         gap: 0.35rem;
     }
+
 }
 
 /* High Resolution: 1440px and above */
@@ -647,13 +893,14 @@
     }
 
     .nav-auth-btn {
-        min-width: 8.5rem;
-        padding: 0 1rem;
-        font-size: 1rem;
+        /* keep auth button compact on large screens to avoid layout break */
+        min-width: 3.5rem;
+        padding: 0 0.75rem;
+        font-size: 0.98rem;
     }
 
     .nav-user-btn {
-        min-width: 9rem;
+        min-width: 3.75rem;
     }
 
     .nav-brand {
@@ -740,16 +987,44 @@
         height: 1.2rem;
     }
 
+    /* Custom: hide hamburger button and place brand/logo at left where hamburger was */
+    .nav-hamburger-btn {
+        display: none;
+    }
+
+    .dynamic-island-nav-content .nav-brand {
+        position: absolute;
+        left: 0.6rem;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
+    @media (max-width: 48rem) {
+
+        /* ensure brand remains visible on small screens */
+        .dynamic-island-nav-content .nav-brand {
+            left: 0.45rem;
+        }
+    }
+
     .nav-auth-btn {
-        min-width: 10rem;
+        min-width: 3.75rem;
         height: 3rem;
-        padding: 0 1.25rem;
-        font-size: 1.05rem;
+        padding: 0 0.9rem;
+        font-size: 1.02rem;
         gap: 0.65rem;
     }
 
     .nav-user-btn {
-        min-width: 10.5rem;
+        min-width: 4rem;
+    }
+
+    .nav-login-btn {
+        /* keep login button prominent on ultra-wide displays */
+        min-width: 10rem;
+        padding: 0 1.25rem;
+        height: 3rem;
+        font-size: 1.05rem;
     }
 
     .nav-user-initials {
@@ -759,6 +1034,10 @@
     }
 
     .nav-hamburger-btn {
+        /* keep hidden visually but reserve space on ultra-wide */
+        visibility: hidden;
+        opacity: 0;
+        pointer-events: none;
         width: 3rem;
         height: 3rem;
     }

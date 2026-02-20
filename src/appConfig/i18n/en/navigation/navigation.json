@@ -46,6 +46,13 @@
                     "icon": "SparklesIcon",
                     "path": "/image-generation?module=swap-face",
                     "requiresAuth": true
+                },
+                {
+                    "key": "virtual-reshoot",
+                    "label": "Virtual Reshoot",
+                    "icon": "SparklesIcon",
+                    "path": "/virtual-reshoot",
+                    "requiresAuth": true
                 }
             ]
         },

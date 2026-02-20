@@ -34,32 +34,103 @@ function initializeVertexAI() {
 	return vertexAI;
 }
 
+function normalizeInlineDataPart(part) {
+	if (!part || typeof part !== "object") return part;
+	if (!part.inlineData || typeof part.inlineData !== "object") return part;
+
+	const mimeType = part.inlineData.mimeType || "image/jpeg";
+	const data = part.inlineData.data;
+	if (typeof data !== "string") {
+		return { ...part, inlineData: { mimeType, data: "" } };
+	}
+
+	const match = data.match(/^data:([^;]+);base64,(.*)$/);
+	if (match) {
+		return {
+			...part,
+			inlineData: {
+				mimeType: match[1] || mimeType,
+				data: match[2] || "",
+			},
+		};
+	}
+
+	return {
+		...part,
+		inlineData: {
+			mimeType,
+			data,
+		},
+	};
+}
+
+function dataUrlToInlineDataPart(imgData) {
+	if (typeof imgData !== "string") {
+		return {
+			inlineData: {
+				mimeType: "image/jpeg",
+				data: "",
+			},
+		};
+	}
+
+	const match = imgData.match(/^data:([^;]+);base64,(.*)$/);
+	if (match) {
+		return {
+			inlineData: {
+				mimeType: match[1] || "image/jpeg",
+				data: match[2] || "",
+			},
+		};
+	}
+
+	// Assume raw base64
+	return {
+		inlineData: {
+			mimeType: "image/jpeg",
+			data: imgData,
+		},
+	};
+}
+
 export default async function handler(req, res) {
 	if (req.method !== "POST") {
 		return res.status(405).json({ error: "Method not allowed" });
 	}
 
 	try {
-		const { inputImages, referenceImages, prompt, userId, model = "gemini-2.0-flash" } =
-			req.body || {};
+		const {
+			inputImages,
+			referenceImages,
+			prompt,
+			userId,
+			model = "gemini-2.0-flash",
+			// Optional: allow callers to send the raw Gemini/Vertex payload directly
+			contents,
+			generationConfig,
+			generation_config,
+		} = req.body || {};
 
-		// Validate inputs
-		if (!Array.isArray(inputImages) || inputImages.length === 0) {
-			return res.status(400).json({
-				error: "Missing input images",
-				details: { inputImages: false },
-			});
-		}
+		const usingRawContents = Array.isArray(contents) && contents.length > 0;
+		if (!usingRawContents) {
+			// Validate legacy inputs
+			if (!Array.isArray(inputImages) || inputImages.length === 0) {
+				return res.status(400).json({
+					error: "Missing input images",
+					details: { inputImages: false },
+				});
+			}
 
-		if (!Array.isArray(referenceImages) || referenceImages.length === 0) {
-			return res.status(400).json({
-				error: "Missing reference images",
-				details: { referenceImages: false },
-			});
-		}
+			if (!Array.isArray(referenceImages) || referenceImages.length === 0) {
+				return res.status(400).json({
+					error: "Missing reference images",
+					details: { referenceImages: false },
+				});
+			}
 
-		if (!prompt || !prompt.trim()) {
-			return res.status(400).json({ error: "Prompt is required" });
+			if (!prompt || !prompt.trim()) {
+				return res.status(400).json({ error: "Prompt is required" });
+			}
 		}
 
 		// Initialize Vertex AI
@@ -77,23 +148,25 @@ export default async function handler(req, res) {
 			model,
 		});
 
-		// Convert all images to inline data format for Vertex AI
-		const imagePartsInput = inputImages.map((imgData) => ({
-			inlineData: {
-				mimeType: "image/jpeg",
-				data: imgData.replace(/^data:image\/[a-z]+;base64,/, ""),
-			},
-		}));
+		let requestContents;
+		if (usingRawContents) {
+			// Normalize any accidental data URLs inside inlineData.data
+			requestContents = contents.map((content) => {
+				const role = content?.role || "user";
+				const parts = Array.isArray(content?.parts) ? content.parts : [];
+				return {
+					...content,
+					role,
+					parts: parts.map((part) => normalizeInlineDataPart(part)),
+				};
+			});
+		} else {
+			// Convert all images to inline data format
+			const imagePartsInput = inputImages.map((imgData) => dataUrlToInlineDataPart(imgData));
+			const imagePartsReference = referenceImages.map((imgData) => dataUrlToInlineDataPart(imgData));
 
-		const imagePartsReference = referenceImages.map((imgData) => ({
-			inlineData: {
-				mimeType: "image/jpeg",
-				data: imgData.replace(/^data:image\/[a-z]+;base64,/, ""),
-			},
-		}));
-
-		// Build the full prompt with reference images context
-		const fullPrompt = `
+			// Build the full prompt with reference images context
+			const fullPrompt = `
 You are an expert at realistic face and identity swapping while preserving clothing and style.
 
 Reference Identity Images (to swap FROM):
@@ -107,32 +180,36 @@ ${prompt}
 Generate transformed images where the reference identity is applied to the target pose/clothing.
 `;
 
-		const requestPayload = {
-			contents: [
+			// Match the payload shape you shared: role + parts with text + inlineData
+			requestContents = [
 				{
-					parts: [
-						// Reference images
-						...imagePartsReference,
-						// Target/input images
-						...imagePartsInput,
-						// Prompt
-						{ text: fullPrompt },
-					],
+					role: "user",
+					parts: [{ text: fullPrompt }, ...imagePartsReference, ...imagePartsInput],
 				},
-			],
-			generation_config: {
+			];
+		}
+
+		const finalGenerationConfig =
+			generationConfig ||
+			generation_config || {
 				temperature: 0.8,
-				top_p: 0.9,
-				top_k: 40,
-				max_output_tokens: 4096,
-			},
+				topP: 0.9,
+				topK: 40,
+				maxOutputTokens: 4096,
+			};
+
+		const requestPayload = {
+			contents: requestContents,
+			generationConfig: finalGenerationConfig,
 		};
 
 		// Call Vertex AI API
 		const response = await generativeModel.generateContent(requestPayload);
 
 		// Extract response content
-		const responseContent = response.response.candidates[0].content.parts[0].text;
+		const candidateParts = response?.response?.candidates?.[0]?.content?.parts || [];
+		const firstTextPart = candidateParts.find((part) => typeof part?.text === "string" && part.text.trim());
+		const responseContent = firstTextPart?.text || "";
 
 		// Since Gemini returns text/analysis, we need to inform the user
 		// In a production setup, you would:

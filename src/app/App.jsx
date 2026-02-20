@@ -27,6 +27,9 @@ const BulkGenerationPage = lazy(() =>
 const SwapFaceGenerationPage = lazy(() =>
   import("@/app/pages/SwapFaceGenerationPage/SwapFaceGenerationPage").then(m => ({ default: m.SwapFaceGenerationPage }))
 );
+const VirtualReshootGenerationPage = lazy(() =>
+  import("@/app/pages/VirtualReshootGenerationPage/VirtualReshootGenerationPage").then(m => ({ default: m.VirtualReshootGenerationPage }))
+);
 const FailedJobsPage = lazy(() =>
   import("@/app/pages/FailedJobsPage/FailedJobsPage").then(m => ({ default: m.FailedJobsPage }))
 );
@@ -50,6 +53,7 @@ const legacyRedirectPaths = [
   "/avatar-generation",
   "/bulk-generation",
   "/swap-face",
+  "/virtual-reshoot",
   "/failed-jobs",
   "/settings",
 ];
@@ -71,6 +75,7 @@ const PROTECTED_PATHS = [
   "/avatar-generation",
   "/bulk-generation",
   "/swap-face",
+  "/virtual-reshoot",
   "/failed-jobs",
   "/settings",
 ];
@@ -107,6 +112,8 @@ function LanguageLayout({
   const isProtectedRoute = PROTECTED_PATHS.some((path) =>
     normalizedPath === path || normalizedPath.startsWith(`${path}/`),
   );
+
+  const hideSidebar = normalizedPath === "/virtual-reshoot";
 
   useEffect(() => {
     if (isAuthenticated || !isProtectedRoute || isLoginModalOpen) {
@@ -153,7 +160,7 @@ function LanguageLayout({
   return (
     <SmoothScrollWrapper>
       <DynamicIslandNav
-        onMenuClick={onMenuOpen}
+        onMenuClick={hideSidebar ? undefined : onMenuOpen}
         onLoginClick={onLoginModalOpen}
         isAuthenticated={isAuthenticated}
         user={user}
@@ -161,14 +168,16 @@ function LanguageLayout({
         isLandingPage={showLanding && !isAuthenticated}
         currentLanguage={appConfig.language}
       />
-      <ModernSidebar
-        isOpen={isSidebarOpen}
-        onClose={onSidebarClose}
-        isLandingPage={showLanding && !isAuthenticated}
-        isAuthenticated={isAuthenticated}
-        onLoginRequest={onLoginModalOpen}
-        currentLanguage={appConfig.language}
-      />
+      {hideSidebar ? null : (
+        <ModernSidebar
+          isOpen={isSidebarOpen}
+          onClose={onSidebarClose}
+          isLandingPage={showLanding && !isAuthenticated}
+          isAuthenticated={isAuthenticated}
+          onLoginRequest={onLoginModalOpen}
+          currentLanguage={appConfig.language}
+        />
+      )}
       <LoginModal
         isOpen={isLoginModalOpen}
         onClose={onLoginModalClose}
@@ -192,6 +201,7 @@ function LanguageLayout({
                 <Route path="avatar-generation" element={<AvatarGenerationPage />} />
                 <Route path="bulk-generation" element={<BulkGenerationPage />} />
                 <Route path="swap-face" element={<SwapFaceGenerationPage />} />
+                <Route path="virtual-reshoot" element={<VirtualReshootGenerationPage />} />
                 <Route path="failed-jobs" element={<FailedJobsPage />} />
                 <Route path="settings" element={<SettingsPage />} />
                 <Route path="*" element={<Navigate to={`/${appConfig.language}`} replace />} />
