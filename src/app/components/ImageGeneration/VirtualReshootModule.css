@@ -962,6 +962,17 @@
     color: var(--foreground);
 }
 
+.virtual-reshoot-result-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    margin-top: 0.15rem;
+}
+
+.virtual-reshoot-result-btn {
+    min-width: 6.5rem;
+}
+
 .virtual-reshoot-result-text {
     font-size: 0.8rem;
     line-height: 1.4;

@@ -5,6 +5,106 @@ export const getApiBaseUrl = () => {
     return import.meta.env.VITE_API_BASE_URL || '';
 };
 
+const bytesToBase64 = (bytes) => {
+    let binary = '';
+    const chunkSize = 0x8000;
+    for (let i = 0; i < bytes.length; i += chunkSize) {
+        const chunk = bytes.subarray(i, i + chunkSize);
+        binary += String.fromCharCode(...chunk);
+    }
+    return btoa(binary);
+};
+
+const inferMimeTypeFromBytes = (bytes, fallback = 'image/jpeg') => {
+    if (!bytes || bytes.length < 4) return fallback;
+
+    if (bytes[0] === 0xff && bytes[1] === 0xd8 && bytes[2] === 0xff) {
+        return 'image/jpeg';
+    }
+
+    if (
+        bytes[0] === 0x89 &&
+        bytes[1] === 0x50 &&
+        bytes[2] === 0x4e &&
+        bytes[3] === 0x47
+    ) {
+        return 'image/png';
+    }
+
+    if (
+        bytes[0] === 0x47 &&
+        bytes[1] === 0x49 &&
+        bytes[2] === 0x46
+    ) {
+        return 'image/gif';
+    }
+
+    if (
+        bytes[0] === 0x52 &&
+        bytes[1] === 0x49 &&
+        bytes[2] === 0x46 &&
+        bytes[3] === 0x46
+    ) {
+        return 'image/webp';
+    }
+
+    return fallback;
+};
+
+const buildDataUrlFromBytes = (bytes, mimeType = 'image/jpeg') => {
+    const base64 = bytesToBase64(bytes);
+    return `data:${mimeType};base64,${base64}`;
+};
+
+const parseJsonSafely = (text) => {
+    try {
+        return JSON.parse(text);
+    } catch {
+        return null;
+    }
+};
+
+const extractImageUrlFromResult = (result) => {
+    if (!result || typeof result !== 'object') return null;
+
+    if (result.status === 'success' && result.data?.bytesBase64Encoded) {
+        const mimeType = result.data.mimeType || 'image/jpeg';
+        return `data:${mimeType};base64,${result.data.bytesBase64Encoded}`;
+    }
+
+    if (result.imageUrl || result.image) {
+        return result.imageUrl || result.image;
+    }
+
+    const candidateBytes =
+        result.data?.bytes ||
+        result.data?.imageBytes ||
+        result.bytes ||
+        result.imageBytes;
+
+    if (Array.isArray(candidateBytes) && candidateBytes.length > 0) {
+        const bytes = Uint8Array.from(candidateBytes);
+        const fallbackMime =
+            result.data?.mimeType ||
+            result.mimeType ||
+            inferMimeTypeFromBytes(bytes, 'image/jpeg');
+        return buildDataUrlFromBytes(bytes, fallbackMime);
+    }
+
+    const candidateBase64 =
+        result.data?.base64 ||
+        result.data?.imageBase64 ||
+        result.base64 ||
+        result.imageBase64;
+
+    if (typeof candidateBase64 === 'string' && candidateBase64.trim()) {
+        const mimeType = result.data?.mimeType || result.mimeType || 'image/jpeg';
+        return `data:${mimeType};base64,${candidateBase64}`;
+    }
+
+    return null;
+};
+
 export const apiCall = async (endpoint, options = {}) => {
     const baseUrl = getApiBaseUrl();
     const url = `${baseUrl}${endpoint}`;
@@ -31,10 +131,14 @@ export const apiCall = async (endpoint, options = {}) => {
             ...options,
         });
 
-        const data = await response.json();
+        const contentType = (response.headers.get('content-type') || '').toLowerCase();
+        const rawText = await response.text();
+        const data = contentType.includes('application/json')
+            ? parseJsonSafely(rawText)
+            : parseJsonSafely(rawText) || { raw: rawText };
 
         if (!response.ok) {
-            throw new Error(data.error || `API Error: ${response.status}`);
+            throw new Error(data?.error || data?.message || `API Error: ${response.status}`);
         }
 
         return data;
@@ -122,11 +226,12 @@ export const virtualReshootApi = async (payload, signal = null) => {
         throw new Error(`API Error: ${response.status} - ${errText}`);
     }
 
-    const result = await response.json();
+    const contentType = (response.headers.get('content-type') || '').toLowerCase();
 
-    // Handle the backend response format: { status: "success", data: { mimeType, bytesBase64Encoded } }
-    if (result.status === "success" && result.data?.bytesBase64Encoded) {
-        const imageUrl = `data:${result.data.mimeType};base64,${result.data.bytesBase64Encoded}`;
+    if (contentType.startsWith('image/') || contentType.includes('application/octet-stream')) {
+        const bytes = new Uint8Array(await response.arrayBuffer());
+        const mimeType = inferMimeTypeFromBytes(bytes, contentType.split(';')[0] || 'image/jpeg');
+        const imageUrl = buildDataUrlFromBytes(bytes, mimeType);
         return {
             success: true,
             imageUrl,
@@ -134,12 +239,19 @@ export const virtualReshootApi = async (payload, signal = null) => {
         };
     }
 
-    // Fallback for other response formats
-    if (result.imageUrl || result.image) {
+    const rawText = await response.text();
+    const result = parseJsonSafely(rawText);
+
+    if (!result) {
+        throw new Error('Unexpected non-JSON response from face swap service');
+    }
+
+    const extractedImageUrl = extractImageUrlFromResult(result);
+    if (extractedImageUrl) {
         return {
             success: true,
-            imageUrl: result.imageUrl || result.image,
-            outputs: [result.imageUrl || result.image],
+            imageUrl: extractedImageUrl,
+            outputs: [extractedImageUrl],
         };
     }
 

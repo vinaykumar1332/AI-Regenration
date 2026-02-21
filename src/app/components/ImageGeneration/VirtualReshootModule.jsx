@@ -357,6 +357,39 @@ export function VirtualReshootModule({ onResult }) {
         }, 220);
     };
 
+    const getDownloadExtension = (url) => {
+        if (typeof url !== "string" || !url) return "png";
+
+        if (url.startsWith("data:")) {
+            const mimeMatch = url.match(/^data:([^;]+);/i);
+            const mime = (mimeMatch?.[1] || "").toLowerCase();
+            if (mime.includes("jpeg") || mime.includes("jpg")) return "jpg";
+            if (mime.includes("png")) return "png";
+            if (mime.includes("webp")) return "webp";
+            if (mime.includes("gif")) return "gif";
+        }
+
+        const cleanUrl = url.split("?")[0].toLowerCase();
+        if (cleanUrl.endsWith(".jpg") || cleanUrl.endsWith(".jpeg")) return "jpg";
+        if (cleanUrl.endsWith(".png")) return "png";
+        if (cleanUrl.endsWith(".webp")) return "webp";
+        if (cleanUrl.endsWith(".gif")) return "gif";
+
+        return "png";
+    };
+
+    const handleDownloadResult = (item) => {
+        if (!item?.url) return;
+
+        const link = document.createElement("a");
+        link.href = item.url;
+        const extension = getDownloadExtension(item.url);
+        link.download = `${item.id || `virtual_reshoot_${Date.now()}`}.${extension}`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    };
+
     const genderOptions = useMemo(() => {
         if (!avatarsDb) return [];
         return Object.keys(avatarsDb);
@@ -892,6 +925,17 @@ export function VirtualReshootModule({ onResult }) {
                                             <span>{new Date(item.timestamp).toLocaleTimeString()}</span>
                                         </div>
                                         <p className="virtual-reshoot-result-caption">{copy?.resultCaption || "Reshoot output"}</p>
+                                        <div className="virtual-reshoot-result-actions">
+                                            <Button
+                                                type="button"
+                                                size="sm"
+                                                variant="outline"
+                                                className="virtual-reshoot-result-btn"
+                                                onClick={() => handleDownloadResult(item)}
+                                            >
+                                                {copy?.download || "Download"}
+                                            </Button>
+                                        </div>
                                     </div>
                                 )}
                             </Card>

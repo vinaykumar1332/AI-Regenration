@@ -92,12 +92,20 @@ export default async function handler(req, res) {
       body: formData,
     });
 
-    const upstreamText = await upstreamResp.text();
+    const contentType = upstreamResp.headers.get('content-type') || 'application/octet-stream';
 
-    // Pass through status + body (JSON or HTML)
     res.status(upstreamResp.status);
-    res.setHeader('Content-Type', upstreamResp.headers.get('content-type') || 'text/plain');
-    res.end(upstreamText);
+    res.setHeader('Content-Type', contentType);
+
+    if (contentType.includes('application/json') || contentType.startsWith('text/')) {
+      const upstreamText = await upstreamResp.text();
+      res.end(upstreamText);
+      return;
+    }
+
+    const arrayBuffer = await upstreamResp.arrayBuffer();
+    const buffer = Buffer.from(arrayBuffer);
+    res.end(buffer);
   } catch (error) {
     console.error('external-faceswap proxy error:', error);
     res.status(500).json({
