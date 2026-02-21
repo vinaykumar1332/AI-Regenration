@@ -47,7 +47,7 @@ function NavIcon({ iconName }) {
     return <Icon className="nav-item-icon" aria-hidden="true" />;
 }
 
-export function Navigation({ onMenuClick, onLoginClick, isAuthenticated, onLogout, user }) {
+export function Navigation({ onMenuClick, onLoginClick, isAuthenticated, isLandingPage, onLogout, user }) {
     const USER_MENU_KEY = "__user_menu__";
     const NOTIFICATIONS_KEY = "__notifications__";
     const navigate = useNavigate();
@@ -91,6 +91,8 @@ export function Navigation({ onMenuClick, onLoginClick, isAuthenticated, onLogou
         }
     });
 
+    const shouldShowThemeToggle = Boolean(isAuthenticated) && !Boolean(isLandingPage);
+
     const navItems = useMemo(() => navigationConfig.items || [], []);
     const userConfig = navigationConfig.user || {};
     const loginItem = navigationConfig.login;
@@ -104,7 +106,7 @@ export function Navigation({ onMenuClick, onLoginClick, isAuthenticated, onLogou
     const isNotificationsOpen = activeDropdownKey === NOTIFICATIONS_KEY;
 
     const mobileUserMenuExtras = useMemo(() => {
-        if (!isMobile) return [];
+        if (!isMobile || !shouldShowThemeToggle) return [];
 
         return [
             {
@@ -114,7 +116,7 @@ export function Navigation({ onMenuClick, onLoginClick, isAuthenticated, onLogou
                 action: "toggle-theme",
             },
         ];
-    }, [isDark, isMobile]);
+    }, [isDark, isMobile, shouldShowThemeToggle]);
 
     const unreadNotificationsCount = useMemo(
         () => notifications.filter((notif) => !notif.read).length,
@@ -511,7 +513,7 @@ export function Navigation({ onMenuClick, onLoginClick, isAuthenticated, onLogou
                             </>
                         ) : null}
 
-                        {!isMobile ? (
+                        {!isMobile && shouldShowThemeToggle ? (
                             <button
                                 type="button"
                                 className="nav-auth-btn"
