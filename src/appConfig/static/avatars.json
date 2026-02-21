@@ -4,37 +4,37 @@
             "id": "himari",
             "originKey": "asian",
             "skinToneKey": "medium",
-            "imageUrl": "https://res.cloudinary.com/dqy6ux1fa/image/upload/v1771661478/himari_fhptaf.png"
+            "imageUrl": "/assests/Avatars/himari.png"
         },
         {
             "id": "seo-jun",
             "originKey": "asian",
             "skinToneKey": "light",
-            "imageUrl": "https://res.cloudinary.com/dqy6ux1fa/image/upload/v1771661474/seo-jun_zmtffm.png"
+            "imageUrl": "/assests/Avatars/seo-jun.png"
         },
         {
             "id": "henry",
             "originKey": "european",
             "skinToneKey": "pale",
-            "imageUrl": "https://res.cloudinary.com/dqy6ux1fa/image/upload/v1771661472/henry_fdl90e.png"
+            "imageUrl": "/assests/Avatars/henry.png"
         },
         {
             "id": "lora",
             "originKey": "european",
             "skinToneKey": "light",
-            "imageUrl": "https://res.cloudinary.com/dqy6ux1fa/image/upload/v1771660793/Lora_ghytpr.png"
+            "imageUrl": "/assests/Avatars/Lora.png"
         },
         {
             "id": "zola",
             "originKey": "african",
             "skinToneKey": "dark",
-            "imageUrl": "https://res.cloudinary.com/dqy6ux1fa/image/upload/v1771661474/zola_xyp2j9.png"
+            "imageUrl": "/assests/Avatars/zola.png"
         },
         {
             "id": "kwane",
             "originKey": "african",
             "skinToneKey": "dark",
-            "imageUrl": "https://res.cloudinary.com/dqy6ux1fa/image/upload/v1771661473/kwame_cvwyiv.png"
+            "imageUrl": "/assests/Avatars/kwame.png"
         }
     ],
     "options": {

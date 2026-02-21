@@ -5,7 +5,7 @@
                 "id": "m_as_seo_jun",
                 "name": "seo-jun",
                 "images": [
-                    "https://res.cloudinary.com/dqy6ux1fa/image/upload/v1771661474/seo-jun_zmtffm.png"
+                    "/assests/Avatars/seo-jun.png"
                 ]
             }
         ],
@@ -14,7 +14,7 @@
                 "id": "m_eu_henry",
                 "name": "henry",
                 "images": [
-                    "https://res.cloudinary.com/dqy6ux1fa/image/upload/v1771661472/henry_fdl90e.png"
+                    "/assests/Avatars/henry.png"
                 ]
             }
         ],
@@ -23,7 +23,7 @@
                 "id": "m_af_kwane",
                 "name": "kwane",
                 "images": [
-                    "https://res.cloudinary.com/dqy6ux1fa/image/upload/v1771661473/kwame_cvwyiv.png"
+                    "/assests/Avatars/kwame.png"
                 ]
             }
         ]
@@ -34,7 +34,7 @@
                 "id": "f_as_himari",
                 "name": "himari",
                 "images": [
-                    "https://res.cloudinary.com/dqy6ux1fa/image/upload/v1771661478/himari_fhptaf.png"
+                    "/assests/Avatars/himari.png"
                 ]
             }
         ],
@@ -43,7 +43,7 @@
                 "id": "f_eu_lora",
                 "name": "lora",
                 "images": [
-                    "https://res.cloudinary.com/dqy6ux1fa/image/upload/v1771660793/Lora_ghytpr.png"
+                    "/assests/Avatars/Lora.png"
                 ]
             }
         ],
@@ -52,7 +52,7 @@
                 "id": "f_af_zola",
                 "name": "zola",
                 "images": [
-                    "https://res.cloudinary.com/dqy6ux1fa/image/upload/v1771661474/zola_xyp2j9.png"
+                    "/assests/Avatars/zola.png"
                 ]
             }
         ]

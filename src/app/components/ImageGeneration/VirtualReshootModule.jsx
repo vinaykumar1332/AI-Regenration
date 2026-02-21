@@ -385,10 +385,26 @@ export function VirtualReshootModule({ onResult }) {
         setSelectedAvatarImageUrl("");
     }, [origin]);
 
-    const handleSelectAvatar = (avatar) => {
+    const handleSelectAvatar = async (avatar) => {
         setSelectedAvatarId(avatar.id);
-        const first = normalizeImageUrl(avatar?.images?.[0] || "");
-        setSelectedAvatarImageUrl(first);
+        const firstUrl = normalizeImageUrl(avatar?.images?.[0] || "");
+        // if it's a local asset path, fetch and convert to base64
+        if (firstUrl.startsWith("/")) {
+            try {
+                const resp = await fetch(firstUrl);
+                const blob = await resp.blob();
+                const reader = new FileReader();
+                reader.onloadend = () => {
+                    setSelectedAvatarImageUrl(reader.result);
+                };
+                reader.readAsDataURL(blob);
+            } catch (err) {
+                console.error("Failed to load avatar image", err);
+                setSelectedAvatarImageUrl(firstUrl);
+            }
+        } else {
+            setSelectedAvatarImageUrl(firstUrl);
+        }
     };
 
     const handleGenerate = async () => {
