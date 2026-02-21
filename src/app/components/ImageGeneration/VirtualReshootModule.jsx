@@ -35,6 +35,26 @@ function readFilePreview(file) {
     });
 }
 
+function dataUrlToFile(dataUrl, filename = "avatar.jpg") {
+    if (typeof dataUrl !== "string" || !dataUrl.startsWith("data:")) {
+        throw new Error("Invalid data URL");
+    }
+
+    const match = dataUrl.match(/^data:([^;]+);base64,(.*)$/);
+    if (!match) {
+        throw new Error("Invalid data URL format");
+    }
+
+    const mimeType = match[1] || "image/jpeg";
+    const base64Data = match[2] || "";
+    const binary = atob(base64Data);
+    const bytes = new Uint8Array(binary.length);
+    for (let i = 0; i < binary.length; i += 1) {
+        bytes[i] = binary.charCodeAt(i);
+    }
+    return new File([bytes], filename, { type: mimeType });
+}
+
 function validateFile(file, copy) {
     if (!file) return copy?.errors?.fileRequired || "File is required";
     if (file.size > MAX_FILE_SIZE) return copy?.errors?.fileTooLarge || "File size must be under 25MB";
@@ -388,21 +408,17 @@ export function VirtualReshootModule({ onResult }) {
     const handleSelectAvatar = async (avatar) => {
         setSelectedAvatarId(avatar.id);
         const firstUrl = normalizeImageUrl(avatar?.images?.[0] || "");
-        // if it's a local asset path, fetch and convert to base64
-        if (firstUrl.startsWith("/")) {
-            try {
-                const resp = await fetch(firstUrl);
-                const blob = await resp.blob();
-                const reader = new FileReader();
-                reader.onloadend = () => {
-                    setSelectedAvatarImageUrl(reader.result);
-                };
-                reader.readAsDataURL(blob);
-            } catch (err) {
-                console.error("Failed to load avatar image", err);
-                setSelectedAvatarImageUrl(firstUrl);
-            }
-        } else {
+        // Prefer converting to data URL so we can POST as multipart without CORS issues.
+        try {
+            const resp = await fetch(firstUrl);
+            const blob = await resp.blob();
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setSelectedAvatarImageUrl(reader.result);
+            };
+            reader.readAsDataURL(blob);
+        } catch (err) {
+            console.error("Failed to load avatar image", err);
             setSelectedAvatarImageUrl(firstUrl);
         }
     };
@@ -425,17 +441,37 @@ export function VirtualReshootModule({ onResult }) {
         const timeoutId = setTimeout(() => controller.abort(), 90000);
 
         try {
-            const basePayload = await Promise.all(
-                baseFiles.map((item) => {
-                    if (item.preview) return item.preview;
-                    return readFilePreview(item.file);
-                })
-            );
+            const firstBase = baseFiles[0];
+            if (!firstBase?.file) {
+                throw new Error(copy?.errors?.uploadBase || "Please upload a base image");
+            }
+            if (!firstBase.file.type?.startsWith("image/")) {
+                throw new Error(copy?.errors?.invalidFileType || "Please upload a JPG or PNG base image");
+            }
+
+            if (typeof selectedAvatarImageUrl !== "string" || !selectedAvatarImageUrl) {
+                throw new Error(copy?.errors?.selectAvatar || "Please select an avatar");
+            }
+
+            let avatarFileToSend = null;
+            if (selectedAvatarImageUrl.startsWith("data:")) {
+                avatarFileToSend = dataUrlToFile(selectedAvatarImageUrl, "avatar.jpg");
+            } else if (selectedAvatarImageUrl.startsWith("http")) {
+                // Best-effort fetch to blob; will fail if remote server blocks CORS.
+                const resp = await fetch(selectedAvatarImageUrl);
+                if (!resp.ok) {
+                    throw new Error(`Failed to fetch avatar image (${resp.status})`);
+                }
+                const blob = await resp.blob();
+                avatarFileToSend = new File([blob], "avatar.jpg", { type: blob.type || "image/jpeg" });
+            } else {
+                throw new Error(copy?.errors?.selectAvatar || "Please select an avatar");
+            }
 
             const response = await virtualReshootApi(
                 {
-                    baseImages: basePayload,
-                    avatarImageUrl: selectedAvatarImageUrl,
+                    modelImageFile: firstBase.file,
+                    avatarImageFile: avatarFileToSend,
                 },
                 controller.signal
             );
