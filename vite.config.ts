@@ -17,11 +17,15 @@ export default defineConfig({
     },
   },
   server: {
-    // Dev server proxy for API calls
-    // For local development, ensure Vercel functions are running
-    // Option 1: Run "vercel dev" to start Vercel serverless env locally
-    // Option 2: Set VITE_API_BASE_URL env var to point to your backend
+
     proxy: {
+      // Specific route first so it doesn't get swallowed by the generic '/api' proxy.
+      '/api/external-faceswap': {
+        target: 'https://model-osprey-487816-m4.uc.r.appspot.com',
+        changeOrigin: true,
+        secure: true,
+        rewrite: () => '/api/v1/faceswap',
+      },
       '/api': {
         target: process.env.VITE_API_PROXY || 'http://localhost:3000',
         changeOrigin: true,
