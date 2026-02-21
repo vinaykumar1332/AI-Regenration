@@ -3,15 +3,14 @@ import avatars from "@/appConfig/static/avatars.json";
 import poses from "@/appConfig/static/poses.json";
 import routes from "@/appConfig/static/routes.json";
 
-import enNavigation from "@/appConfig/i18n/en/navigation/navigation.json";
-import enImageGeneration from "@/appConfig/i18n/en/imageGeneration.json";
-import enCommon from "@/appConfig/i18n/en/common.json";
+import enApp from "@/appConfig/i18n/en/app.json";
+import geApp from "@/appConfig/i18n/ge/app.json";
+import enDashboard from "@/appConfig/i18n/en/dashboard.json";
+import geDashboard from "@/appConfig/i18n/ge/dashboard.json";
+import enLoginPage from "@/appConfig/i18n/en/loginPage.json";
+import geLoginPage from "@/appConfig/i18n/ge/loginPage.json";
 
-import deNavigation from "@/appConfig/i18n/de/navigation.json";
-import deImageGeneration from "@/appConfig/i18n/de/imageGeneration.json";
-import deCommon from "@/appConfig/i18n/de/common.json";
-
-export const supportedLanguages = ["en", "de"];
+export const supportedLanguages = ["en", "ge"];
 export const defaultLanguage = "en";
 
 const staticData = {
@@ -63,21 +62,28 @@ QUALITY RULES:
 
 const languages = {
     en: {
-        navigation: enNavigation,
-        imageGeneration: enImageGeneration,
-        common: enCommon,
+        ...enApp,
+        dashboardData: enDashboard,
+        loginPage: enLoginPage,
     },
-    de: {
-        navigation: deNavigation,
-        imageGeneration: deImageGeneration,
-        common: deCommon,
+    ge: {
+        ...geApp,
+        dashboardData: geDashboard,
+        loginPage: geLoginPage,
     },
 };
 
-export const isSupportedLanguage = (language) => supportedLanguages.includes(language);
+const languageAliases = {
+    de: "ge",
+};
+
+const normalizeLanguage = (language) => languageAliases[language] || language;
+
+export const isSupportedLanguage = (language) =>
+    supportedLanguages.includes(normalizeLanguage(language));
 
 export const validateLanguage = (language) =>
-    isSupportedLanguage(language) ? language : defaultLanguage;
+    isSupportedLanguage(language) ? normalizeLanguage(language) : defaultLanguage;
 
 export const getAppConfig = (language = defaultLanguage) => {
     const validatedLanguage = validateLanguage(language);

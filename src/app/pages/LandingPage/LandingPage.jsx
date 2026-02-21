@@ -18,7 +18,7 @@ import {
     Crown,
     BookOpen,
 } from "lucide-react";
-import dashboardData from "@/appConfig/LandingPage.json/Dashbord.json";
+import { useAppConfig } from "@/appConfig/useAppConfig";
 import GarmentShowcaseHero from "./components/GarmentShowcaseHero";
 import "@/app/styles/landing-page.css";
 
@@ -39,13 +39,22 @@ function Section({ id, className = "", children }) {
 }
 
 export function LandingPage({ onGetStarted, onLogin }) {
-    const landingCopy = dashboardData.landingPage;
+    const { text } = useAppConfig();
+    const dashboardData = text?.dashboardData || {};
+    const landingCopy = dashboardData?.landingPage || {};
+    const landingFeatures = dashboardData?.landingFeatures || [];
+    const quickTemplates = dashboardData?.quickTemplates || [];
+    const fashionStats = dashboardData?.fashionAnalytics?.stats || [];
+    const baseModel = dashboardData?.virtualTryOn?.baseModel || "";
+    const shirts = dashboardData?.virtualTryOn?.garments?.shirts || [];
+    const pants = dashboardData?.virtualTryOn?.garments?.pants || [];
+    const shoes = dashboardData?.virtualTryOn?.garments?.shoes || [];
     const previewImage =
         dashboardData.heroGallery?.[1]?.url || dashboardData.heroGallery?.[0]?.url;
     const tryOnItems = [
-        dashboardData.virtualTryOn.garments.shirts[0],
-        dashboardData.virtualTryOn.garments.pants[0],
-        dashboardData.virtualTryOn.garments.shoes[0],
+        shirts[0],
+        pants[0],
+        shoes[0],
     ].filter(Boolean);
 
     return (
@@ -66,15 +75,15 @@ export function LandingPage({ onGetStarted, onLogin }) {
                     className="text-center mb-16"
                 >
                     <h2 className="landing-section-title text-4xl md:text-6xl font-semibold mb-4">
-                        {landingCopy.features.title}
+                        {landingCopy?.features?.title}
                     </h2>
                     <p className="landing-section-subtitle text-lg md:text-xl text-white/70">
-                        {landingCopy.features.subtitle}
+                        {landingCopy?.features?.subtitle}
                     </p>
                 </motion.div>
 
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6 md:gap-8">
-                    {dashboardData.landingFeatures.map((feature, index) => {
+                    {landingFeatures.map((feature, index) => {
                         const iconMap = {
                             Sparkles,
                             Shirt,
@@ -120,10 +129,10 @@ export function LandingPage({ onGetStarted, onLogin }) {
                         className="space-y-6"
                     >
                         <h2 className="landing-section-title text-4xl md:text-5xl font-semibold">
-                            {landingCopy.preview.title}
+                            {landingCopy?.preview?.title}
                         </h2>
                         <p className="text-lg text-white/70">
-                            {landingCopy.preview.description}
+                            {landingCopy?.preview?.description}
                         </p>
                     </motion.div>
                     <motion.div
@@ -135,7 +144,7 @@ export function LandingPage({ onGetStarted, onLogin }) {
                             <div className="landing-image-wrapper landing-preview-media aspect-[16/9]">
                                 <img
                                     src={previewImage}
-                                    alt={landingCopy.preview.imageAlt}
+                                    alt={landingCopy?.preview?.imageAlt}
                                     className="landing-image w-full h-full object-cover"
                                     loading="lazy"
                                     decoding="async"
@@ -156,10 +165,10 @@ export function LandingPage({ onGetStarted, onLogin }) {
                         className="space-y-6"
                     >
                         <h2 className="landing-section-title text-4xl md:text-5xl font-semibold">
-                            {landingCopy.tryOn.title}
+                            {landingCopy?.tryOn?.title}
                         </h2>
                         <p className="text-lg text-white/70">
-                            {landingCopy.tryOn.description}
+                            {landingCopy?.tryOn?.description}
                         </p>
                         <div className="grid grid-cols-3 gap-4">
                             {tryOnItems.map((item) => (
@@ -189,8 +198,8 @@ export function LandingPage({ onGetStarted, onLogin }) {
                         <Card className="landing-card overflow-hidden border border-white/15 backdrop-blur-xl">
                             <div className="landing-image-wrapper aspect-[3/4]">
                                 <img
-                                    src={dashboardData.virtualTryOn.baseModel}
-                                    alt={landingCopy.tryOn.imageAlt}
+                                    src={baseModel}
+                                    alt={landingCopy?.tryOn?.imageAlt}
                                     className="landing-image w-full h-full object-cover"
                                     loading="lazy"
                                     decoding="async"
@@ -210,15 +219,15 @@ export function LandingPage({ onGetStarted, onLogin }) {
                     className="text-center mb-16"
                 >
                     <h2 className="landing-section-title text-4xl md:text-6xl font-semibold mb-4">
-                        {landingCopy.analytics.title}
+                        {landingCopy?.analytics?.title}
                     </h2>
                     <p className="text-lg md:text-xl text-white/70">
-                        {landingCopy.analytics.subtitle}
+                        {landingCopy?.analytics?.subtitle}
                     </p>
                 </motion.div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {dashboardData.fashionAnalytics.stats.slice(0, 6).map((stat) => (
+                    {fashionStats.slice(0, 6).map((stat) => (
                         <Card
                             key={stat.label}
                             className="landing-card p-8 border border-white/15 backdrop-blur-xl"
@@ -246,15 +255,15 @@ export function LandingPage({ onGetStarted, onLogin }) {
                     className="text-center mb-16"
                 >
                     <h2 className="landing-section-title text-4xl md:text-6xl font-semibold mb-4">
-                        {landingCopy.templates.title}
+                        {landingCopy?.templates?.title}
                     </h2>
                     <p className="text-lg md:text-xl text-white/70">
-                        {landingCopy.templates.subtitle}
+                        {landingCopy?.templates?.subtitle}
                     </p>
                 </motion.div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {dashboardData.quickTemplates.map((template, index) => {
+                    {quickTemplates.map((template, index) => {
                         const iconMap = {
                             Camera,
                             ShoppingBag,
@@ -301,7 +310,7 @@ export function LandingPage({ onGetStarted, onLogin }) {
                                             variant="outline"
                                             className="landing-secondary-button mt-2"
                                         >
-                                            {landingCopy.templates.buttonText}
+                                            {landingCopy?.templates?.buttonText}
                                         </Button>
                                     </div>
                                 </Card>
@@ -315,10 +324,10 @@ export function LandingPage({ onGetStarted, onLogin }) {
             <Section className="landing-section landing-final-cta pt-0">
                 <div className="text-center space-y-8">
                     <h2 className="landing-section-title text-4xl md:text-6xl font-semibold">
-                        {landingCopy.finalCta.title}
+                        {landingCopy?.finalCta?.title}
                     </h2>
                     <p className="text-lg md:text-xl text-white/70">
-                        {landingCopy.finalCta.subtitle}
+                        {landingCopy?.finalCta?.subtitle}
                     </p>
                     <div className="flex flex-wrap gap-4 justify-center">
                         <Button
@@ -326,7 +335,7 @@ export function LandingPage({ onGetStarted, onLogin }) {
                             className="landing-primary-button text-base md:text-lg px-8 py-6"
                             onClick={onGetStarted}
                         >
-                            {landingCopy.finalCta.primary}
+                            {landingCopy?.finalCta?.primary}
                         </Button>
                         <Button
                             size="lg"
@@ -334,7 +343,7 @@ export function LandingPage({ onGetStarted, onLogin }) {
                             className="landing-secondary-button text-base md:text-lg px-8 py-6"
                             onClick={onLogin}
                         >
-                            {landingCopy.finalCta.secondary}
+                            {landingCopy?.finalCta?.secondary}
                         </Button>
                     </div>
                 </div>

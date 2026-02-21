@@ -1,8 +1,4 @@
-/**
- * Local Development Server for API Routes
- * This runs alongside Vite dev server
- * Handles API requests during development
- */
+
 
 import http from 'http';
 import { GoogleGenerativeAI } from '@google/generative-ai';
@@ -10,24 +6,20 @@ import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
-// Load environment variables from .env.local
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 dotenv.config({ path: path.join(__dirname, '.env.local') });
 
 const PORT = 3001;
-
-// Get API key from environment
 const API_KEY = process.env.AI_KEY;
 
 if (!API_KEY) {
-  console.error('❌ ERROR: AI_KEY environment variable not set!');
+  console.error(' ERROR: AI_KEY environment variable not set!');
   console.error('Add AI_KEY to your .env.local file');
   process.exit(1);
 }
 
 const genAI = new GoogleGenerativeAI(API_KEY);
 
-// Utility to parse JSON request body
 async function parseBody(req) {
   return new Promise((resolve, reject) => {
     let body = '';

@@ -20,6 +20,7 @@ import {
 import { ImageWithFallback } from "@/app/components/ImageWithFallback/ImageWithFallback";
 import { Upload, Image as ImageIcon, Loader2, X } from "lucide-react";
 import { toast } from "sonner";
+import { useAppConfig } from "@/appConfig/useAppConfig";
 import { virtualReshootApi } from "@/services/api";
 
 const MAX_FILE_SIZE = 25 * 1024 * 1024; // 25MB (images or zip)
@@ -34,11 +35,11 @@ function readFilePreview(file) {
     });
 }
 
-function validateFile(file) {
-    if (!file) return "File is required";
-    if (file.size > MAX_FILE_SIZE) return "File size must be under 25MB";
+function validateFile(file, copy) {
+    if (!file) return copy?.errors?.fileRequired || "File is required";
+    if (file.size > MAX_FILE_SIZE) return copy?.errors?.fileTooLarge || "File size must be under 25MB";
     if (!ACCEPTED_TYPES.includes(file.type)) {
-        return "Only JPG, PNG, or ZIP files are allowed";
+        return copy?.errors?.invalidFileType || "Only JPG, PNG, or ZIP files are allowed";
     }
     return null;
 }
@@ -66,7 +67,7 @@ function FadeInImage({ src, alt, className }) {
     );
 }
 
-function MultipleUploadCard({ label, required, hint, files, onFilesChange }) {
+function MultipleUploadCard({ label, required, hint, files, onFilesChange, copy }) {
     const [removingIds, setRemovingIds] = useState(new Set());
     const inputRef = useRef(null);
 
@@ -77,7 +78,7 @@ function MultipleUploadCard({ label, required, hint, files, onFilesChange }) {
         const next = [...files];
 
         for (const file of incoming) {
-            const error = validateFile(file);
+            const error = validateFile(file, copy);
             if (error) {
                 toast.error(`${file.name}: ${error}`);
                 continue;
@@ -89,7 +90,7 @@ function MultipleUploadCard({ label, required, hint, files, onFilesChange }) {
                     preview = await readFilePreview(file);
                 } catch (err) {
                     console.error("Failed to read file", err);
-                    toast.error(`Failed to read ${file.name}`);
+                    toast.error(`${copy?.errors?.readFileFailed || "Failed to read"} ${file.name}`);
                 }
             } else {
                 // zip: still encode as data URL for backend; no thumbnail
@@ -97,7 +98,7 @@ function MultipleUploadCard({ label, required, hint, files, onFilesChange }) {
                     preview = await readFilePreview(file);
                 } catch (err) {
                     console.error("Failed to read file", err);
-                    toast.error(`Failed to read ${file.name}`);
+                    toast.error(`${copy?.errors?.readFileFailed || "Failed to read"} ${file.name}`);
                 }
             }
 
@@ -173,14 +174,14 @@ function MultipleUploadCard({ label, required, hint, files, onFilesChange }) {
                             {hint && <p className="virtual-reshoot-upload-hint">{hint}</p>}
                         </div>
                         <span className="virtual-reshoot-upload-cta">
-                            Drag & drop or click
+                            {copy?.dragDrop || "Drag & drop or click"}
                         </span>
                     </div>
 
                     <div className="virtual-reshoot-upload-dropzone">
                         <div className="virtual-reshoot-upload-dropzone-inner">
                             <Upload className="virtual-reshoot-upload-dropzone-icon" />
-                            <span>JPG / PNG / ZIP, up to 25MB each</span>
+                            <span>{copy?.fileTypes || "JPG / PNG / ZIP, up to 25MB each"}</span>
                         </div>
                     </div>
                 </div>
@@ -189,7 +190,7 @@ function MultipleUploadCard({ label, required, hint, files, onFilesChange }) {
             {files.length > 0 && (
                 <div className="virtual-reshoot-upload-selected">
                     <p className="virtual-reshoot-upload-selected-label">
-                        Selected ({files.length})
+                        {(copy?.selected || "Selected")} ({files.length})
                     </p>
                     <div className="virtual-reshoot-upload-selected-list">
                         {files.map((item) => (
@@ -216,7 +217,7 @@ function MultipleUploadCard({ label, required, hint, files, onFilesChange }) {
                                 </span>
                                 <button
                                     type="button"
-                                    aria-label="Remove file"
+                                    aria-label={copy?.removeFile || "Remove file"}
                                     className="virtual-reshoot-upload-remove"
                                     onClick={(e) => {
                                         e.stopPropagation();
@@ -235,6 +236,8 @@ function MultipleUploadCard({ label, required, hint, files, onFilesChange }) {
 }
 
 export function VirtualReshootModule({ onResult }) {
+    const { text } = useAppConfig();
+    const copy = text?.imageGeneration?.virtualReshoot || {};
     const [baseFiles, setBaseFiles] = useState([]);
     const [avatarsDb, setAvatarsDb] = useState(null);
     const [isLoadingAvatars, setIsLoadingAvatars] = useState(true);
@@ -255,40 +258,6 @@ export function VirtualReshootModule({ onResult }) {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [results, setResults] = useState([]);
 
-    const [uiText, setUiText] = useState({
-        title: "Virtual Reshoot",
-        description: "Upload your image and transform it using AI-powered avatar selection.",
-        genderLabel: "Select Gender",
-        originLabel: "Select Origin",
-        avatarLabel: "Select Avatar",
-        generateButton: "Generate Reshoot",
-        showAllImages: "Show All Images",
-        uploadGuide: {
-            title: "Before you upload: best results tips",
-            subtitle:
-                "Your base image controls body, clothing, pose, and background. A clean, high-quality photo produces the best reshoot.",
-            doTitle: "Recommended",
-            dontTitle: "Avoid",
-            do: [
-                "Clear, sharp photo (not pixelated)",
-                "Good lighting with minimal shadows",
-                "Single person in frame",
-                "Face visible (no heavy occlusion)",
-                "Full body or at least upper body in frame",
-            ],
-            dont: [
-                "Blurry / low-resolution images",
-                "Multiple people in the same photo",
-                "Extreme angles or heavy motion blur",
-                "Very dark photos or harsh backlight",
-                "Large face occlusions (mask/hand covering)",
-            ],
-            examplesTitle: "Example base images",
-            exampleImages: [],
-            closeButton: "Close",
-        },
-    });
-
     useEffect(() => {
         const id = setTimeout(() => setShowUploadGuide(true), 300);
         return () => clearTimeout(id);
@@ -300,32 +269,18 @@ export function VirtualReshootModule({ onResult }) {
         const load = async () => {
             setIsLoadingAvatars(true);
             try {
-                const [avatarsRes, textRes] = await Promise.all([
-                    fetch("/data/avatars.json"),
-                    fetch("/en/ImageGeneration/VirtualReshoot.json"),
-                ]);
+                const avatarsRes = await fetch("/data/avatars.json");
 
                 if (!avatarsRes.ok) {
                     throw new Error(`Failed to load avatars.json (${avatarsRes.status})`);
                 }
-                if (!textRes.ok) {
-                    throw new Error(`Failed to load VirtualReshoot.json (${textRes.status})`);
-                }
-
-                const [avatarsJson, textJson] = await Promise.all([
-                    avatarsRes.json(),
-                    textRes.json(),
-                ]);
+                const avatarsJson = await avatarsRes.json();
 
                 if (!isMounted) return;
                 setAvatarsDb(avatarsJson);
-                setUiText((prev) => ({
-                    ...prev,
-                    ...textJson,
-                }));
             } catch (err) {
                 console.error("Failed to load virtual reshoot config", err);
-                toast.error("Failed to load avatars database");
+                toast.error(copy?.errors?.configFailed || "Failed to load avatars database");
             } finally {
                 if (isMounted) setIsLoadingAvatars(false);
             }
@@ -335,7 +290,7 @@ export function VirtualReshootModule({ onResult }) {
         return () => {
             isMounted = false;
         };
-    }, []);
+    }, [copy?.errors?.configFailed]);
 
     useEffect(() => {
         if (!showUploadGuide) return;
@@ -438,22 +393,22 @@ export function VirtualReshootModule({ onResult }) {
 
     const handleGenerate = async () => {
         if (baseFiles.length === 0) {
-            toast.error("Please upload at least one base image or zip");
+            toast.error(copy?.errors?.uploadBase || "Please upload at least one base image or zip");
             return;
         }
 
         if (!gender) {
-            toast.error("Please select a gender");
+            toast.error(copy?.errors?.selectGender || "Please select a gender");
             return;
         }
 
         if (!origin) {
-            toast.error("Please select an origin");
+            toast.error(copy?.errors?.selectOrigin || "Please select an origin");
             return;
         }
 
         if (!selectedAvatarImageUrl) {
-            toast.error("Please select an avatar");
+            toast.error(copy?.errors?.selectAvatar || "Please select an avatar");
             return;
         }
 
@@ -505,7 +460,7 @@ export function VirtualReshootModule({ onResult }) {
             if (normalized.length > 0) {
                 setResults((prev) => [...normalized, ...prev]);
                 normalized.forEach((r) => onResult?.(r));
-                toast.success("Virtual reshoot generated");
+                toast.success(copy?.success?.generated || "Virtual reshoot generated");
                 return;
             }
 
@@ -516,17 +471,17 @@ export function VirtualReshootModule({ onResult }) {
                 kind: "text",
                 status: "completed",
                 timestamp,
-                text: analysis || "Generation completed, but no images were returned.",
+                text: analysis || copy?.fallbackTextResult || "Generation completed, but no images were returned.",
             };
             setResults((prev) => [textResult, ...prev]);
             onResult?.(textResult);
-            toast.success("Virtual reshoot processed");
+            toast.success(copy?.success?.processed || "Virtual reshoot processed");
         } catch (error) {
             console.error("Virtual reshoot error", error);
             if (error.name === "AbortError") {
-                toast.error("Request timed out. Please try again.");
+                toast.error(copy?.errors?.timeout || "Request timed out. Please try again.");
             } else {
-                toast.error(error.message || "Failed to generate virtual reshoot");
+                toast.error(error.message || copy?.errors?.generationFailed || "Failed to generate virtual reshoot");
             }
         } finally {
             clearTimeout(timeoutId);
@@ -536,7 +491,7 @@ export function VirtualReshootModule({ onResult }) {
 
     const canShowAll = (selectedAvatar?.images?.length || 0) > 1;
     const modalImages = (selectedAvatar?.images || []).map((u) => normalizeImageUrl(u));
-    const uploadGuide = uiText?.uploadGuide || {};
+    const uploadGuide = copy?.uploadGuide || {};
     const uploadGuideExamples = Array.isArray(uploadGuide?.exampleImages)
         ? uploadGuide.exampleImages
         : [];
@@ -548,7 +503,7 @@ export function VirtualReshootModule({ onResult }) {
                     className={`virtual-reshoot-modal-overlay ${isUploadGuideClosing ? "is-closing" : ""}`}
                     role="dialog"
                     aria-modal="true"
-                    aria-label="Upload guidelines"
+                    aria-label={copy?.uploadGuideAria || "Upload guidelines"}
                     onClick={() => closeUploadGuide()}
                 >
                     <div
@@ -659,23 +614,24 @@ export function VirtualReshootModule({ onResult }) {
 
             <Card className="virtual-reshoot-card">
                 <div className="virtual-reshoot-header">
-                    <h2 className="virtual-reshoot-title">{uiText.title}</h2>
-                    <p className="virtual-reshoot-subtitle">{uiText.description}</p>
+                    <h2 className="virtual-reshoot-title">{copy?.title || "Virtual Reshoot"}</h2>
+                    <p className="virtual-reshoot-subtitle">{copy?.description || "Upload your image and transform it using AI-powered avatar selection."}</p>
                 </div>
 
                 <div className="virtual-reshoot-step">
-                    <p className="virtual-reshoot-step-label">Step 1 – Upload base image</p>
+                    <p className="virtual-reshoot-step-label">{copy?.step1 || "Step 1 – Upload base image"}</p>
                     <MultipleUploadCard
-                        label="Base Image(s)"
+                        label={copy?.baseImages || "Base Image(s)"}
                         required
-                        hint="Upload one or multiple base images (or a ZIP). Body, clothing, pose, and background are preserved from these."
+                        hint={copy?.baseImagesHint || "Upload one or multiple base images (or a ZIP). Body, clothing, pose, and background are preserved from these."}
                         files={baseFiles}
                         onFilesChange={setBaseFiles}
+                        copy={copy}
                     />
                 </div>
 
                 <div className="virtual-reshoot-step">
-                    <p className="virtual-reshoot-step-label">Step 2 – Select avatar</p>
+                    <p className="virtual-reshoot-step-label">{copy?.step2 || "Step 2 – Select avatar"}</p>
 
                     {isLoadingAvatars ? (
                         <div className="virtual-reshoot-options-grid">
@@ -691,7 +647,7 @@ export function VirtualReshootModule({ onResult }) {
                     ) : (
                         <div className="virtual-reshoot-options-grid">
                             <div className="virtual-reshoot-field">
-                                <label className="virtual-reshoot-field-label">{uiText.genderLabel}</label>
+                                <label className="virtual-reshoot-field-label">{copy?.genderLabel || "Select Gender"}</label>
                                 <Select value={gender} onValueChange={setGender}>
                                     <SelectTrigger>
                                         <SelectValue />
@@ -707,7 +663,7 @@ export function VirtualReshootModule({ onResult }) {
                             </div>
 
                             <div className="virtual-reshoot-field">
-                                <label className="virtual-reshoot-field-label">{uiText.originLabel}</label>
+                                <label className="virtual-reshoot-field-label">{copy?.originLabel || "Select Origin"}</label>
                                 <Select
                                     value={origin}
                                     onValueChange={setOrigin}
@@ -730,7 +686,7 @@ export function VirtualReshootModule({ onResult }) {
 
                     <div className="virtual-reshoot-avatars">
                         <div className="virtual-reshoot-avatars-header">
-                            <p className="virtual-reshoot-avatars-title">{uiText.avatarLabel}</p>
+                            <p className="virtual-reshoot-avatars-title">{copy?.avatarLabel || "Select Avatar"}</p>
                         </div>
 
                         {isLoadingAvatars ? (
@@ -742,7 +698,7 @@ export function VirtualReshootModule({ onResult }) {
                         ) : avatarList.length === 0 ? (
                             <Card className="p-4">
                                 <p className="text-sm text-muted-foreground">
-                                    No avatars found for the selected gender/origin.
+                                    {copy?.noAvatars || "No avatars found for the selected gender/origin."}
                                 </p>
                             </Card>
                         ) : (
@@ -775,7 +731,7 @@ export function VirtualReshootModule({ onResult }) {
                                             <div>
                                                 <p className="virtual-reshoot-avatar-name">{avatar.name}</p>
                                                 <p className="virtual-reshoot-avatar-meta">
-                                                    {avatar.images?.length || 0} image(s)
+                                                    {avatar.images?.length || 0} {copy?.imageCountSuffix || "image(s)"}
                                                 </p>
                                             </div>
                                         </div>
@@ -796,10 +752,10 @@ export function VirtualReshootModule({ onResult }) {
                                     </div>
                                     <div className="virtual-reshoot-selected-body">
                                         <p className="virtual-reshoot-selected-title">
-                                            Selected: {selectedAvatar.name}
+                                            {(copy?.selectedAvatar || "Selected")}: {selectedAvatar.name}
                                         </p>
                                         <p className="virtual-reshoot-selected-subtitle">
-                                            Identity anchor image will be used for the face only.
+                                            {copy?.selectedAvatarSubtitle || "Identity anchor image will be used for the face only."}
                                         </p>
                                         <div className="virtual-reshoot-selected-actions">
                                             {canShowAll && (
@@ -808,7 +764,7 @@ export function VirtualReshootModule({ onResult }) {
                                                     variant="outline"
                                                     onClick={() => setShowAllImages(true)}
                                                 >
-                                                    {uiText.showAllImages}
+                                                    {copy?.showAllImages || "Show All Images"}
                                                 </Button>
                                             )}
                                             <Badge variant="secondary">
@@ -823,7 +779,7 @@ export function VirtualReshootModule({ onResult }) {
                 </div>
 
                 <div className="virtual-reshoot-step">
-                    <p className="virtual-reshoot-step-label">Step 3 – Generate</p>
+                    <p className="virtual-reshoot-step-label">{copy?.step3 || "Step 3 – Generate"}</p>
                     <div className="virtual-reshoot-button-wrapper">
                         <Button
                             type="button"
@@ -834,29 +790,29 @@ export function VirtualReshootModule({ onResult }) {
                             {isSubmitting ? (
                                 <>
                                     <Loader2 className="virtual-reshoot-generate-loader" />
-                                    Generating...
+                                    {copy?.generatingButton || "Generating..."}
                                 </>
                             ) : (
-                                <>{uiText.generateButton}</>
+                                <>{copy?.generateButton || "Generate Reshoot"}</>
                             )}
                         </Button>
                     </div>
                     <p className="text-xs text-muted-foreground">
-                        Sends base images + selected avatar URL to the backend. The AI prompt is hardcoded server-side.
+                        {copy?.backendHint || "Sends base images + selected avatar URL to the backend. The AI prompt is hardcoded server-side."}
                     </p>
                 </div>
             </Card>
 
             <div className="virtual-reshoot-results">
-                <h3 className="virtual-reshoot-results-title">Recent Reshoots</h3>
+                <h3 className="virtual-reshoot-results-title">{copy?.recentTitle || "Recent Reshoots"}</h3>
                 {results.length === 0 ? (
                     <Card className="p-4">
                         <div className="flex items-center gap-3">
                             <Skeleton className="h-12 w-12 rounded-xl" />
                             <div className="space-y-1">
-                                <p className="text-sm font-medium">No reshoots yet</p>
+                                <p className="text-sm font-medium">{copy?.emptyTitle || "No reshoots yet"}</p>
                                 <p className="text-sm text-muted-foreground">
-                                    Generate a reshoot to see outputs here.
+                                    {copy?.emptySubtitle || "Generate a reshoot to see outputs here."}
                                 </p>
                             </div>
                         </div>
@@ -876,12 +832,12 @@ export function VirtualReshootModule({ onResult }) {
                                 ) : (
                                     <div className="virtual-reshoot-result-body">
                                         <div className="virtual-reshoot-result-meta">
-                                            <Badge variant="secondary">Text</Badge>
+                                            <Badge variant="secondary">{copy?.textBadge || "Text"}</Badge>
                                             <span>•</span>
                                             <span>{new Date(item.timestamp).toLocaleTimeString()}</span>
                                         </div>
                                         <p className="virtual-reshoot-result-caption">
-                                            Result {index + 1}
+                                            {copy?.resultTextCaption || "Result"} {index + 1}
                                         </p>
                                         <p className="virtual-reshoot-result-text">{item.text}</p>
                                     </div>
@@ -890,11 +846,11 @@ export function VirtualReshootModule({ onResult }) {
                                 {item.kind === "image" && (
                                     <div className="virtual-reshoot-result-body">
                                         <div className="virtual-reshoot-result-meta">
-                                            <Badge variant="default">Completed</Badge>
+                                            <Badge variant="default">{copy?.statusCompleted || "Completed"}</Badge>
                                             <span>•</span>
                                             <span>{new Date(item.timestamp).toLocaleTimeString()}</span>
                                         </div>
-                                        <p className="virtual-reshoot-result-caption">Reshoot output</p>
+                                        <p className="virtual-reshoot-result-caption">{copy?.resultCaption || "Reshoot output"}</p>
                                     </div>
                                 )}
                             </Card>
@@ -908,7 +864,7 @@ export function VirtualReshootModule({ onResult }) {
                     className="virtual-reshoot-modal-overlay"
                     role="dialog"
                     aria-modal="true"
-                    aria-label="Avatar images"
+                    aria-label={copy?.avatarImagesAria || "Avatar images"}
                     onClick={() => setShowAllImages(false)}
                 >
                     <div
@@ -917,14 +873,14 @@ export function VirtualReshootModule({ onResult }) {
                     >
                         <div className="virtual-reshoot-modal-header">
                             <p className="virtual-reshoot-modal-title">
-                                {selectedAvatar.name} — {modalImages.length} image(s)
+                                {selectedAvatar.name} — {modalImages.length} {copy?.imageCountSuffix || "image(s)"}
                             </p>
                             <Button
                                 type="button"
                                 variant="outline"
                                 onClick={() => setShowAllImages(false)}
                             >
-                                Close
+                                {copy?.close || "Close"}
                             </Button>
                         </div>
                         <div className="virtual-reshoot-modal-grid">

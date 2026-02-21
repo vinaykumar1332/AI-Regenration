@@ -1,12 +1,12 @@
 import { useEffect, useState, useRef } from "react";
 import { motion } from "motion/react";
 import { Button } from "@/app/components/ui/Button/button";
-import content from "@/appConfig/i18n/en/LandingPage/LandingPage.json";
+import { useAppConfig } from "@/appConfig/useAppConfig";
 import "./GarmentShowcaseHero.css";
 
-const heroSection = content?.heroSection ?? {};
-
 export default function GarmentShowcaseHero({ onGetStarted }) {
+    const { text } = useAppConfig();
+    const heroSection = text?.landing?.heroSection ?? {};
     const {
         heading = "",
         subheading = "",

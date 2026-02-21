@@ -14,10 +14,11 @@ import {
     Crown,
     ChevronDown,
 } from "lucide-react";
-import sidebarConfig from "@/appConfig/i18n/en/sidebarConfig/sidebarConfig.json";
 import { validateLanguage } from "@/appConfig/AppConfig";
-import companyLogo from "@/images/fav-icon/venkattech_logo.png";
+import { useAppConfig } from "@/appConfig/useAppConfig";
 import { useState } from "react";
+
+const companyLogo = "/assests/fav-icon/venkattech_logo.png";
 
 const iconMap = {
     Sparkles,
@@ -40,6 +41,8 @@ export function ModernSidebar({
     onLoginRequest,
 }) {
     const location = useLocation();
+    const { text } = useAppConfig();
+    const sidebarConfig = text?.sidebar || {};
     const { lang } = useParams();
     const [openKey, setOpenKey] = useState(null);
     const validatedLang = validateLanguage(lang);
@@ -53,9 +56,10 @@ export function ModernSidebar({
 
     const moduleItems = sidebarConfig.moduleNav || [];
     const logoImage =
-        (sidebarConfig.branding.logoImage === "venkattech_logo.png"
+        (sidebarConfig?.branding?.logoImage === "venkattech_logo.png"
             ? companyLogo
-            : sidebarConfig.branding.logoImage) || null;
+            : sidebarConfig?.branding?.logoImage) || null;
+    const upgradeCopy = sidebarConfig.upgrade || {};
 
     return (
         <AnimatePresence>
@@ -105,10 +109,10 @@ export function ModernSidebar({
                                     </div>
                                     <div>
                                         <h2 className="text-lg font-bold">
-                                            {sidebarConfig.branding.logoText}
+                                            {sidebarConfig?.branding?.logoText}
                                         </h2>
                                         <p className="text-xs text-muted-foreground">
-                                            {sidebarConfig.branding.logoTagline}
+                                            {sidebarConfig?.branding?.logoTagline}
                                         </p>
                                     </div>
                                 </div>
@@ -260,10 +264,10 @@ export function ModernSidebar({
                                         </div>
                                         <div className="flex-1">
                                             <h3 className="font-bold text-sm mb-1">
-                                                Upgrade to Pro
+                                                {upgradeCopy.title || "Upgrade to Pro"}
                                             </h3>
                                             <p className="text-xs text-muted-foreground">
-                                                Unlock unlimited generations
+                                                {upgradeCopy.subtitle || "Unlock unlimited generations"}
                                             </p>
                                         </div>
                                     </div>
@@ -273,7 +277,7 @@ export function ModernSidebar({
                                         className="w-full py-2 px-4 rounded-lg bg-gradient-to-r from-primary to-accent text-white text-sm font-medium shadow-lg"
                                     >
                                         <Zap className="w-4 h-4 inline mr-2" />
-                                        Upgrade Now
+                                        {upgradeCopy.button || "Upgrade Now"}
                                     </motion.button>
                                 </div>
                             </motion.div>

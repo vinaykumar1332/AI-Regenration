@@ -1,0 +1,569 @@
+{
+    "common": {
+        "language": "English",
+        "profile": "Profile",
+        "settings": "Settings",
+        "logout": "Logout",
+        "close": "Close",
+        "connect": "Connect",
+        "createAccount": "Create your account",
+        "signUpWithCredentials": "Sign up with a username and password",
+        "username": "Username",
+        "password": "Password",
+        "signUp": "Sign Up"
+    },
+    "navigation": {
+        "brand": {
+            "label": "Venkat Tech AI Studio"
+        },
+        "user": {
+            "name": "User",
+            "email": "",
+            "menu": [
+                {
+                    "key": "profile",
+                    "label": "Profile",
+                    "icon": "UserIcon",
+                    "path": "/settings"
+                },
+                {
+                    "key": "account",
+                    "label": "Account Settings",
+                    "icon": "SettingsIcon",
+                    "path": "/settings"
+                },
+                {
+                    "key": "logout",
+                    "label": "Logout",
+                    "icon": "LogOutIcon",
+                    "action": "logout"
+                }
+            ]
+        },
+        "login": {
+            "key": "login",
+            "label": "Login",
+            "icon": "LogInIcon",
+            "path": "/login"
+        },
+        "items": [
+            {
+                "key": "image",
+                "label": "Image",
+                "icon": "ImageIcon",
+                "path": "/image-generation",
+                "requiresAuth": true,
+                "children": [
+                    {
+                        "key": "swap-face",
+                        "label": "Swap Face",
+                        "icon": "SparklesIcon",
+                        "path": "/image-generation?module=swap-face",
+                        "requiresAuth": true
+                    },
+                    {
+                        "key": "virtual-reshoot",
+                        "label": "Virtual Reshoot",
+                        "icon": "SparklesIcon",
+                        "path": "/virtual-reshoot",
+                        "requiresAuth": true
+                    }
+                ]
+            },
+            {
+                "key": "video",
+                "label": "Video",
+                "icon": "VideoIcon",
+                "path": "/video-generation",
+                "requiresAuth": true,
+                "children": [
+                    {
+                        "key": "runway",
+                        "label": "Runway Walk",
+                        "icon": "ClapperboardIcon",
+                        "path": "/video-generation?module=runway",
+                        "requiresAuth": true
+                    },
+                    {
+                        "key": "product",
+                        "label": "Product Showcase",
+                        "icon": "PackageIcon",
+                        "path": "/video-generation?module=product",
+                        "requiresAuth": true
+                    }
+                ]
+            },
+            {
+                "key": "pricing",
+                "label": "Pricing",
+                "icon": "TagIcon",
+                "path": "/pricing"
+            },
+            {
+                "key": "features",
+                "label": "Features",
+                "icon": "SparklesIcon",
+                "path": "/features"
+            },
+            {
+                "key": "contact",
+                "label": "Contact Us",
+                "icon": "MailIcon",
+                "path": "/contact"
+            }
+        ],
+        "ui": {
+            "openSidebar": "Open sidebar",
+            "primaryNavigation": "Primary Navigation",
+            "notifications": "Notifications",
+            "removeNotification": "Remove notification",
+            "allCaughtUp": "All caught up!",
+            "clearAll": "Clear All",
+            "switchToLightTheme": "Switch to light theme",
+            "switchToDarkTheme": "Switch to dark theme",
+            "openUserMenu": "Open user menu",
+            "login": "Login",
+            "themeLight": "Light Theme",
+            "themeDark": "Dark Theme"
+        },
+        "defaultNotifications": [
+            {
+                "id": 1,
+                "type": "success",
+                "title": "Generation Complete",
+                "message": "Your image generation completed successfully",
+                "timestamp": "2 minutes ago",
+                "read": false
+            },
+            {
+                "id": 2,
+                "type": "info",
+                "title": "New Feature Available",
+                "message": "Try our new bulk processing capabilities",
+                "timestamp": "1 hour ago",
+                "read": false
+            },
+            {
+                "id": 3,
+                "type": "alert",
+                "title": "Job Failed",
+                "message": "Video generation failed due to timeout",
+                "timestamp": "3 hours ago",
+                "read": true
+            }
+        ]
+    },
+    "sidebar": {
+        "branding": {
+            "logoText": "AI Studio",
+            "logoTagline": "Luxury Fashion AI",
+            "logoImage": "venkattech_logo.png"
+        },
+        "moduleNav": [
+            {
+                "label": "Dashboard",
+                "path": "/",
+                "icon": "Sparkles",
+                "requiresAuth": false
+            },
+            {
+                "label": "Image Generation",
+                "path": "/image-generation",
+                "icon": "Image",
+                "requiresAuth": true,
+                "children": [
+                    {
+                        "label": "Garment Try-On",
+                        "path": "/image-generation/garment-tryon",
+                        "icon": "Image"
+                    },
+                    {
+                        "label": "Single Dress Flow",
+                        "path": "/image-generation/single-dress",
+                        "icon": "Image"
+                    }
+                ]
+            },
+            {
+                "label": "Video Generation",
+                "path": "/video-generation",
+                "icon": "Video",
+                "requiresAuth": true
+            },
+            {
+                "label": "Swap Face Model",
+                "path": "/swap-face",
+                "icon": "Users",
+                "requiresAuth": true
+            },
+            {
+                "label": "Virtual Reshoot Model",
+                "path": "/virtual-reshoot",
+                "icon": "Image",
+                "requiresAuth": true
+            },
+            {
+                "label": "Pricing",
+                "path": "/pricing",
+                "icon": "Sparkles",
+                "requiresAuth": false
+            },
+            {
+                "label": "Settings",
+                "path": "/settings",
+                "icon": "Settings",
+                "requiresAuth": true
+            }
+        ],
+        "upgrade": {
+            "title": "Upgrade to Pro",
+            "subtitle": "Unlock unlimited generations",
+            "button": "Upgrade Now"
+        }
+    },
+    "login": {
+        "logoText": "Venkat Tech AI Studio",
+        "title": "Secure login",
+        "subtitle": "Access your AI workspace",
+        "helperText": "Use your account credentials to continue",
+        "closeAriaLabel": "Close login dialog",
+        "showPassword": "Show password",
+        "hidePassword": "Hide password",
+        "fields": {
+            "username": {
+                "label": "Email or username",
+                "placeholder": "you@venkattech.ai"
+            },
+            "password": {
+                "label": "Password",
+                "placeholder": "Enter your secure password"
+            }
+        },
+        "primaryButton": "Sign in securely",
+        "rememberMe": "Keep me signed in",
+        "supportLink": {
+            "label": "Need help?",
+            "href": "/contact"
+        },
+        "errors": {
+            "missing": "Enter both username and password to continue.",
+            "invalidPassword": "Invalid username or password"
+        }
+    },
+    "imageGeneration": {
+        "swapFace": {
+            "title": "Swap Face Generation",
+            "subtitle": "Upload your input fashion images and reference identity images. We apply a high-quality swap prompt from the backend for consistent, premium results.",
+            "step1": "Step 1 – Upload inputs",
+            "step2": "Step 2 – Generate",
+            "inputImagesLabel": "Input Images",
+            "inputImagesHint": "Upload one or multiple fashion images that should be used as the base.",
+            "referenceLabel": "Reference Identity",
+            "referenceHint": "Upload one or more face images whose identity should be transferred.",
+            "dragDrop": "Drag & drop or click",
+            "fileTypes": "JPG / PNG, up to 10MB each",
+            "selected": "Selected",
+            "removeImage": "Remove image",
+            "generate": "Generate Swap",
+            "generating": "Generating swap...",
+            "generateHelper": "Your images are encoded as base64 and sent with a curated swap prompt from the backend.",
+            "processing": "Processing swaps...",
+            "recentTitle": "Recent Swaps",
+            "emptyTitle": "No swaps yet",
+            "emptySubtitle": "Generate a swap to see your outputs appear here.",
+            "errors": {
+                "uploadInput": "Please upload at least one input image",
+                "uploadReference": "Please upload at least one reference image",
+                "promptMissing": "Swap-face prompt is not configured",
+                "timeout": "Request timed out. Please try again.",
+                "generationFailed": "Failed to generate swapped image",
+                "fileRequired": "File is required",
+                "fileTooLarge": "File size must be under 10MB",
+                "invalidFileType": "Only JPG or PNG files are allowed",
+                "readFileFailed": "Failed to read"
+            },
+            "success": {
+                "generated": "Swap face images generated"
+            }
+        },
+        "virtualReshoot": {
+            "title": "Virtual Reshoot",
+            "description": "Upload your image and transform it using AI-powered avatar selection.",
+            "step1": "Step 1 – Upload base image",
+            "step2": "Step 2 – Select avatar",
+            "step3": "Step 3 – Generate",
+            "baseImages": "Base Image(s)",
+            "baseImagesHint": "Upload one or multiple base images (or a ZIP). Body, clothing, pose, and background are preserved from these.",
+            "genderLabel": "Select Gender",
+            "originLabel": "Select Origin",
+            "avatarLabel": "Select Avatar",
+            "selectedAvatar": "Selected",
+            "selectedAvatarSubtitle": "Identity anchor image will be used for the face only.",
+            "showAllImages": "Show All Images",
+            "generateButton": "Generate Reshoot",
+            "generatingButton": "Generating...",
+            "backendHint": "Sends base images + selected avatar URL to the backend. The AI prompt is hardcoded server-side.",
+            "recentTitle": "Recent Reshoots",
+            "emptyTitle": "No reshoots yet",
+            "emptySubtitle": "Generate a reshoot to see outputs here.",
+            "resultCaption": "Reshoot output",
+            "resultTextCaption": "Result",
+            "statusCompleted": "Completed",
+            "textBadge": "Text",
+            "close": "Close",
+            "avatarImagesAria": "Avatar images",
+            "uploadGuideAria": "Upload guidelines",
+            "noAvatars": "No avatars found for the selected gender/origin.",
+            "imageCountSuffix": "image(s)",
+            "uploadGuide": {
+                "title": "Before you upload: best results tips",
+                "subtitle": "Your base image controls body, clothing, pose, and background. A clean, high-quality photo produces the best reshoot.",
+                "doTitle": "Recommended",
+                "dontTitle": "Avoid",
+                "do": [
+                    "Clear, sharp photo (not pixelated)",
+                    "Good lighting with minimal shadows",
+                    "Single person in frame",
+                    "Face visible (no heavy occlusion)",
+                    "Full body or at least upper body in frame"
+                ],
+                "dont": [
+                    "Blurry / low-resolution images",
+                    "Multiple people in the same photo",
+                    "Extreme angles or heavy motion blur",
+                    "Very dark photos or harsh backlight",
+                    "Large face occlusions (mask/hand covering)"
+                ],
+                "examplesTitle": "Example base images",
+                "exampleImages": [
+                    {
+                        "src": "/assests/LandingPage/PROTOTYPE%20DEMO/MODEL/82470831010303_21938_M1_1.jpg",
+                        "label": "Good lighting + clear subject"
+                    },
+                    {
+                        "src": "/assests/LandingPage/PROTOTYPE%20DEMO/MODEL/82433411010308_22969.jpg",
+                        "label": "Single person in frame"
+                    },
+                    {
+                        "src": "/assests/LandingPage/PROTOTYPE%20DEMO/MODEL/82432081020303_22296.jpg",
+                        "label": "Sharp image with visible face"
+                    }
+                ],
+                "closeButton": "Close"
+            },
+            "errors": {
+                "uploadBase": "Please upload at least one base image or zip",
+                "selectGender": "Please select a gender",
+                "selectOrigin": "Please select an origin",
+                "selectAvatar": "Please select an avatar",
+                "timeout": "Request timed out. Please try again.",
+                "generationFailed": "Failed to generate virtual reshoot",
+                "configFailed": "Failed to load avatars database",
+                "fileRequired": "File is required",
+                "fileTooLarge": "File size must be under 25MB",
+                "invalidFileType": "Only JPG, PNG, or ZIP files are allowed",
+                "readFileFailed": "Failed to read"
+            },
+            "success": {
+                "generated": "Virtual reshoot generated",
+                "processed": "Virtual reshoot processed"
+            },
+            "fallbackTextResult": "Generation completed, but no images were returned."
+        }
+    },
+    "settingsPage": {
+        "toasts": {
+            "settingUpdated": "Setting updated",
+            "saveSuccess": "All settings saved successfully"
+        },
+        "header": {
+            "title": "Settings",
+            "subtitle": "Manage your account preferences and settings"
+        },
+        "sections": {
+            "account": "Account Settings",
+            "notifications": "Notification Settings",
+            "privacy": "Privacy & Security",
+            "display": "Display Settings",
+            "api": "API & Integration",
+            "danger": "Danger Zone"
+        },
+        "fields": {
+            "firstName": "First Name",
+            "lastName": "Last Name",
+            "emailAddress": "Email Address",
+            "phoneNumber": "Phone Number",
+            "profileVisibility": "Profile Visibility",
+            "theme": "Theme",
+            "language": "Language"
+        },
+        "placeholders": {
+            "firstName": "First name",
+            "lastName": "Last name",
+            "emailAddress": "Email address",
+            "phoneNumber": "Phone number"
+        },
+        "notifications": {
+            "email": {
+                "title": "Email Notifications",
+                "description": "Receive email updates about your account"
+            },
+            "jobComplete": {
+                "title": "Job Completion Alerts",
+                "description": "Get notified when generation jobs complete"
+            },
+            "jobFailed": {
+                "title": "Job Failure Alerts",
+                "description": "Get notified when generation jobs fail"
+            },
+            "weeklyReport": {
+                "title": "Weekly Reports",
+                "description": "Receive weekly usage and analytics reports"
+            },
+            "promotional": {
+                "title": "Promotional Emails",
+                "description": "Receive news about new features and promotions"
+            }
+        },
+        "privacy": {
+            "options": {
+                "private": "Private (Only you can see)",
+                "friends": "Friends Only",
+                "public": "Public"
+            },
+            "dataCollectionTitle": "Data Collection",
+            "dataCollectionDescription": "Allow usage data collection to improve the platform"
+        },
+        "display": {
+            "themeOptions": {
+                "light": "Light",
+                "dark": "Dark",
+                "auto": "Auto (System preference)"
+            },
+            "languageOptions": {
+                "en": "English",
+                "ge": "German"
+            }
+        },
+        "api": {
+            "accessTitle": "API Access",
+            "accessDescription": "Enable API access for programmatic usage"
+        },
+        "danger": {
+            "description": "These actions are permanent and cannot be undone. Please proceed with caution."
+        },
+        "buttons": {
+            "saveAccount": "Save Account Settings",
+            "saveNotifications": "Save Notification Settings",
+            "changePassword": "Change Password",
+            "twoFactor": "Two-Factor Authentication",
+            "saveDisplay": "Save Display Settings",
+            "regenerateApiKey": "Regenerate API Key",
+            "viewDocumentation": "View Documentation",
+            "downloadData": "Download My Data",
+            "deleteAccount": "Delete My Account"
+        }
+    },
+    "usageAnalyticsPage": {
+        "title": "Usage & Analytics",
+        "subtitle": "Track consumption and analyze usage patterns",
+        "filters": {
+            "daily": "Daily",
+            "weekly": "Weekly",
+            "monthly": "Monthly"
+        },
+        "buttons": {
+            "exportReport": "Export Report"
+        },
+        "loading": {
+            "fetchingData": "Fetching data..."
+        },
+        "summary": {
+            "totalImages": "Total Images",
+            "totalVideos": "Total Videos",
+            "activeUsers": "Active Users",
+            "avgPerDay": "Avg per Day",
+            "vsLastPeriod": "vs last period",
+            "thisPeriod": "This",
+            "generations": "Generations"
+        },
+        "charts": {
+            "breakdownSuffix": "Breakdown",
+            "userWiseConsumption": "User-Wise Consumption",
+            "lineImages": "Images",
+            "lineVideos": "Videos"
+        },
+        "table": {
+            "user": "User",
+            "images": "Images",
+            "videos": "Videos",
+            "total": "Total",
+            "percentOfTotal": "% of Total"
+        },
+        "toasts": {
+            "exportSuccessSuffix": "usage report exported successfully"
+        }
+    },
+    "dashboardUi": {
+        "overviewImageAlt": "Welcome",
+        "moduleStatsGenerated": "Generated:",
+        "moduleStatsTime": "Time:",
+        "upgradeToPro": "Upgrade to Pro"
+    },
+    "landing": {
+        "heroSection": {
+            "heading": "Turn Your Garments Into Real Models Instantly",
+            "subheading": "Upload your designs and see them styled on AI-generated models in high resolution.",
+            "ctaText": "Generate Your First Look",
+            "inputImages": {
+                "top": [
+                    "/assests/LandingPage/PROTOTYPE%20DEMO/TOPS/82432081020303_F_color_ref.jpg",
+                    "/assests/LandingPage/PROTOTYPE%20DEMO/TOPS/82433411010308_F_color_ref.jpg",
+                    "/assests/LandingPage/PROTOTYPE%20DEMO/TOPS/82470831010303_F_color_ref.jpg"
+                ],
+                "bottom": [
+                    "/assests/LandingPage/PROTOTYPE%20DEMO/BOTTOMS/82438781000300_F_color_ref.jpg",
+                    "/assests/LandingPage/PROTOTYPE%20DEMO/BOTTOMS/82459421000306_F_color_ref.jpg",
+                    "/assests/LandingPage/PROTOTYPE%20DEMO/BOTTOMS/82459441020407_F_color_ref.jpg"
+                ]
+            },
+            "outputModels": [
+                "/assests/LandingPage/PROTOTYPE%20DEMO/MODEL/82432081020303_22296.jpg",
+                "/assests/LandingPage/PROTOTYPE%20DEMO/MODEL/82433411010308_22969.jpg",
+                "/assests/LandingPage/PROTOTYPE%20DEMO/MODEL/82470831010303_21938_M1_1.jpg"
+            ],
+            "pairs": [
+                {
+                    "top": 0,
+                    "bottom": 0,
+                    "output": 0
+                },
+                {
+                    "top": 1,
+                    "bottom": 1,
+                    "output": 1
+                },
+                {
+                    "top": 2,
+                    "bottom": 2,
+                    "output": 2
+                }
+            ],
+            "splashImages": {
+                "garment": "/assets/images/garment-splash.png",
+                "output": "/assets/images/output-splash.png"
+            },
+            "floatingHighlights": [
+                "Premium texture capture",
+                "Auto-fit tailoring"
+            ],
+            "garmentLabels": {
+                "top": "Signature Topwear",
+                "bottom": "Precision Trousers"
+            },
+            "connectorCopy": "Live styling pipeline",
+            "mobileArrow": "Swipe to see the line-up",
+            "modelBadge": "AI runways"
+        }
+    }
+}

@@ -1,0 +1,610 @@
+{
+    "modules": [
+        {
+            "id": "image-generation",
+            "title": "Bildgenerierung",
+            "description": "Erstelle beeindruckende KI-generierte Bilder aus Textvorgaben",
+            "icon": "Image",
+            "image": "https://images.unsplash.com/photo-1547891654-e66ed7ebb968?w=800&q=80",
+            "features": [
+                "Text-zu-Bild-Generierung",
+                "Stilübertragung",
+                "Bild-Upscaling",
+                "Batch-Verarbeitung"
+            ],
+            "stats": {
+                "generated": "2.5M+",
+                "avgTime": "3-5 sec",
+                "quality": "4K"
+            },
+            "path": "/image-generation",
+            "color": "from-blue-500 to-cyan-500",
+            "requiresAuth": true
+        },
+        {
+            "id": "video-generation",
+            "title": "Videogenerierung",
+            "description": "Erzeuge dynamische Videos aus Texten oder Bildern",
+            "icon": "Video",
+            "image": "https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?w=800&q=80",
+            "features": [
+                "Text-zu-Video-Synthese",
+                "Bild-zu-Video-Animation",
+                "3D-Bewegungseffekte",
+                "HD-Rendering"
+            ],
+            "stats": {
+                "generated": "500K+",
+                "avgTime": "10-15 sec",
+                "quality": "1080p"
+            },
+            "path": "/video-generation",
+            "color": "from-purple-500 to-pink-500",
+            "requiresAuth": true
+        },
+        {
+            "id": "avatar-generation",
+            "title": "Avatar-Generierung",
+            "description": "Designe einzigartige 3D-Avatare und Charaktere",
+            "icon": "Users",
+            "image": "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=800&q=80",
+            "features": [
+                "3D-Charaktererstellung",
+                "Gesichts-Anpassung",
+                "Animations-Export",
+                "Mehrere Stile"
+            ],
+            "stats": {
+                "generated": "856K+",
+                "avgTime": "5-8 sec",
+                "quality": "3D"
+            },
+            "path": "/avatar-generation",
+            "color": "from-green-500 to-emerald-500",
+            "requiresAuth": true
+        },
+        {
+            "id": "bulk-generation",
+            "title": "Massen-Generierung",
+            "description": "Verarbeite Tausende Generierungen gleichzeitig",
+            "icon": "FolderSync",
+            "image": "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80",
+            "features": [
+                "Batch-Verarbeitung",
+                "CSV-Import",
+                "Warteschlangen-Management",
+                "Automatischer Retry bei fehlgeschlagenen Jobs"
+            ],
+            "stats": {
+                "capacity": "10K/batch",
+                "avgTime": "Parallel",
+                "success": "99.8%"
+            },
+            "path": "/bulk-generation",
+            "color": "from-orange-500 to-red-500",
+            "requiresAuth": true
+        }
+    ],
+    "dashboardSections": [
+        {
+            "id": "overview",
+            "title": "Willkommen im AI Studio",
+            "subtitle": "Deine kreative KI-Plattform",
+            "description": "Nutze leistungsstarke KI-Tools, um Bilder, Videos, Avatare und mehr zu erstellen. Starte jetzt und entdecke unsere Funktionen unten.",
+            "image": "https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=1200&q=80",
+            "cta": {
+                "text": "Funktionen entdecken",
+                "action": "scroll"
+            }
+        },
+        {
+            "id": "quick-stats",
+            "title": "Deine Statistiken",
+            "cards": [
+                {
+                    "title": "Generierungen gesamt",
+                    "value": "12,847",
+                    "change": "+23.5%",
+                    "icon": "Activity"
+                },
+                {
+                    "title": "Verbleibende Credits",
+                    "value": "8,250",
+                    "change": "-12%",
+                    "icon": "Zap"
+                },
+                {
+                    "title": "Erfolgsrate",
+                    "value": "98.5%",
+                    "change": "+2.1%",
+                    "icon": "CheckCircle"
+                }
+            ]
+        },
+        {
+            "id": "featured-modules",
+            "title": "KI-Generierungs-Module",
+            "subtitle": "Wähle dein Kreativ-Tool",
+            "layout": "grid"
+        },
+        {
+            "id": "recent-activity",
+            "title": "Recent Generations",
+            "subtitle": "Your latest creations",
+            "items": [
+                {
+                    "type": "image",
+                    "title": "Fashion Model Portrait",
+                    "timestamp": "2 min ago",
+                    "status": "completed",
+                    "thumbnail": "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=400&q=80"
+                },
+                {
+                    "type": "video",
+                    "title": "Product Showcase Video",
+                    "timestamp": "15 min ago",
+                    "status": "completed",
+                    "thumbnail": "https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?w=400&q=80"
+                },
+                {
+                    "type": "avatar",
+                    "title": "3D Character Design",
+                    "timestamp": "1 hour ago",
+                    "status": "processing",
+                    "thumbnail": "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=400&q=80"
+                }
+            ]
+        },
+        {
+            "id": "pro-features",
+            "title": "Premium Features",
+            "subtitle": "Unlock advanced capabilities",
+            "features": [
+                {
+                    "title": "4K Resolution",
+                    "description": "Generate ultra-high definition content",
+                    "icon": "Star"
+                },
+                {
+                    "title": "Priority Queue",
+                    "description": "Skip the line with instant processing",
+                    "icon": "Zap"
+                },
+                {
+                    "title": "API Access",
+                    "description": "Integrate AI into your applications",
+                    "icon": "Code"
+                },
+                {
+                    "title": "Team Collaboration",
+                    "description": "Work together with your team",
+                    "icon": "Users"
+                }
+            ]
+        }
+    ],
+    "landingFeatures": [
+        {
+            "title": "Mode-KI-Generierung",
+            "description": "Erstelle beeindruckende Modefotografie mit KI-Models",
+            "icon": "Sparkles",
+            "color": "from-purple-500 to-pink-500"
+        },
+        {
+            "title": "Virtuelles Try-On",
+            "description": "Kombiniere Kleidungsstücke sofort auf KI-Models",
+            "icon": "Shirt",
+            "color": "from-blue-500 to-cyan-500"
+        },
+        {
+            "title": "Keine Prompts nötig",
+            "description": "Nutze fertige Vorlagen für sofortige Ergebnisse",
+            "icon": "Zap",
+            "color": "from-yellow-500 to-orange-500"
+        },
+        {
+            "title": "Batch-Verarbeitung",
+            "description": "Generiere Tausende Modebilder auf einmal",
+            "icon": "Layers",
+            "color": "from-green-500 to-emerald-500"
+        },
+        {
+            "title": "Gespeicherte Avatare",
+            "description": "Baue deine Bibliothek mit wiederverwendbaren KI-Models auf",
+            "icon": "Users",
+            "color": "from-indigo-500 to-purple-500"
+        },
+        {
+            "title": "Blitzschnell",
+            "description": "Hochwertige Modebilder in Sekunden",
+            "icon": "Rocket",
+            "color": "from-red-500 to-pink-500"
+        }
+    ],
+    "heroGallery": [
+        {
+            "url": "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=800&q=80",
+            "title": "AI Fashion Model",
+            "description": "Haute couture photography"
+        },
+        {
+            "url": "https://images.unsplash.com/photo-1483985988355-763728e1935b?w=800&q=80",
+            "title": "Editorial Excellence",
+            "description": "Magazine-ready fashion shoots"
+        },
+        {
+            "url": "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=800&q=80",
+            "title": "E-Commerce Ready",
+            "description": "Product photography perfected"
+        },
+        {
+            "url": "https://images.unsplash.com/photo-1483985988355-763728e1935b?w=800&q=80",
+            "title": "Street Style",
+            "description": "Urban fashion aesthetics"
+        },
+        {
+            "url": "https://images.unsplash.com/photo-1509631179647-0177331693ae?w=800&q=80",
+            "title": "Runway Ready",
+            "description": "High fashion editorial shots"
+        },
+        {
+            "url": "https://images.unsplash.com/photo-1529139574466-a303027c1d8b?w=800&q=80",
+            "title": "Luxury Brand",
+            "description": "Premium fashion campaigns"
+        }
+    ],
+    "heroStats": [
+        {
+            "label": "Generierte Bilder",
+            "value": "2.5M+",
+            "icon": "Image"
+        },
+        {
+            "label": "Erstellte Videos",
+            "value": "500K+",
+            "icon": "Video"
+        },
+        {
+            "label": "Aktive Nutzer",
+            "value": "100K+",
+            "icon": "Users"
+        },
+        {
+            "label": "Erfolgsrate",
+            "value": "99.8%",
+            "icon": "TrendingUp"
+        }
+    ],
+    "aiModels": [
+        {
+            "name": "DALL-E 3",
+            "category": "Image Generation",
+            "provider": "OpenAI",
+            "price": "$0.04/image",
+            "capability": "High-quality creative images",
+            "icon": "Image"
+        },
+        {
+            "name": "Stable Diffusion XL",
+            "category": "Image Generation",
+            "provider": "Stability AI",
+            "price": "$0.02/image",
+            "capability": "Fast, customizable outputs",
+            "icon": "Palette"
+        },
+        {
+            "name": "Midjourney V6",
+            "category": "Image Generation",
+            "provider": "Midjourney",
+            "price": "$0.05/image",
+            "capability": "Artistic & photorealistic",
+            "icon": "Camera"
+        },
+        {
+            "name": "Runway Gen-2",
+            "category": "Video Generation",
+            "provider": "Runway",
+            "price": "$0.15/sec",
+            "capability": "Text-to-video synthesis",
+            "icon": "Video"
+        },
+        {
+            "name": "Pika Labs",
+            "category": "Video Generation",
+            "provider": "Pika",
+            "price": "$0.10/sec",
+            "capability": "Dynamic 3D animations",
+            "icon": "Film"
+        },
+        {
+            "name": "GPT-4 Vision",
+            "category": "Image Analysis",
+            "provider": "OpenAI",
+            "price": "$0.01/request",
+            "capability": "Advanced AI understanding",
+            "icon": "Brain"
+        }
+    ],
+    "virtualTryOn": {
+        "title": "Virtuelles Mode-Try-On",
+        "subtitle": "Kombiniere Kleidungsstücke auf KI-Models",
+        "description": "Sieh sofort, wie verschiedene Outfits zusammen aussehen",
+        "baseModel": "https://images.unsplash.com/photo-1529139574466-a303027c1d8b?w=800&q=80",
+        "garments": {
+            "shirts": [
+                {
+                    "id": "shirt-1",
+                    "name": "Klassisches weißes Hemd",
+                    "image": "https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=400&q=80",
+                    "category": "Formal"
+                },
+                {
+                    "id": "shirt-2",
+                    "name": "Lässiges Jeanshemd",
+                    "image": "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=400&q=80",
+                    "category": "Lässig"
+                },
+                {
+                    "id": "shirt-3",
+                    "name": "Schwarzes T-Shirt",
+                    "image": "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400&q=80",
+                    "category": "Lässig"
+                }
+            ],
+            "pants": [
+                {
+                    "id": "pant-1",
+                    "name": "Blaue Jeans",
+                    "image": "https://images.unsplash.com/photo-1542272604-787c3835535d?w=400&q=80",
+                    "category": "Lässig"
+                },
+                {
+                    "id": "pant-2",
+                    "name": "Schwarze Stoffhose",
+                    "image": "https://images.unsplash.com/photo-1473966968600-fa801b869a1a?w=400&q=80",
+                    "category": "Formal"
+                },
+                {
+                    "id": "pant-3",
+                    "name": "Khaki-Chinos",
+                    "image": "https://images.unsplash.com/photo-1506629082955-511b1aa562c8?w=400&q=80",
+                    "category": "Smart Casual"
+                }
+            ],
+            "shoes": [
+                {
+                    "id": "shoe-1",
+                    "name": "Weiße Sneaker",
+                    "image": "https://images.unsplash.com/photo-1549298916-b41d501d3772?w=400&q=80",
+                    "category": "Lässig"
+                },
+                {
+                    "id": "shoe-2",
+                    "name": "Schwarze Lederschuhe",
+                    "image": "https://images.unsplash.com/photo-1533867617858-e7b97e060509?w=400&q=80",
+                    "category": "Formal"
+                },
+                {
+                    "id": "shoe-3",
+                    "name": "Braune Boots",
+                    "image": "https://images.unsplash.com/photo-1605812860427-4024433a70fd?w=400&q=80",
+                    "category": "Lässig"
+                }
+            ],
+            "accessories": [
+                {
+                    "id": "cap-1",
+                    "name": "Baseball Cap",
+                    "image": "https://images.unsplash.com/photo-1588850561407-ed78c282e89b?w=400&q=80",
+                    "category": "Casual"
+                },
+                {
+                    "id": "cap-2",
+                    "name": "Beanie",
+                    "image": "https://images.unsplash.com/photo-1576871337632-b9aef4c17ab9?w=400&q=80",
+                    "category": "Casual"
+                },
+                {
+                    "id": "cap-3",
+                    "name": "Fedora Hat",
+                    "image": "https://images.unsplash.com/photo-1514327605112-b887c0e61c0a?w=400&q=80",
+                    "category": "Formal"
+                }
+            ]
+        }
+    },
+    "savedAvatars": [
+        {
+            "id": "avatar-1",
+            "name": "Fashion Model Sarah",
+            "image": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&q=80",
+            "style": "Realistic",
+            "uses": 245,
+            "created": "2026-01-15"
+        },
+        {
+            "id": "avatar-2",
+            "name": "Editorial Muse Alex",
+            "image": "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&q=80",
+            "style": "High Fashion",
+            "uses": 189,
+            "created": "2026-01-20"
+        },
+        {
+            "id": "avatar-3",
+            "name": "Street Style Jordan",
+            "image": "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=400&q=80",
+            "style": "Urban",
+            "uses": 312,
+            "created": "2026-01-10"
+        },
+        {
+            "id": "avatar-4",
+            "name": "Runway Queen Emma",
+            "image": "https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?w=400&q=80",
+            "style": "Couture",
+            "uses": 428,
+            "created": "2026-01-05"
+        },
+        {
+            "id": "avatar-5",
+            "name": "Casual Chic Maya",
+            "image": "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=400&q=80",
+            "style": "Lifestyle",
+            "uses": 156,
+            "created": "2026-01-25"
+        },
+        {
+            "id": "avatar-6",
+            "name": "Elegant James",
+            "image": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&q=80",
+            "style": "Classic",
+            "uses": 267,
+            "created": "2026-01-12"
+        }
+    ],
+    "quickTemplates": [
+        {
+            "id": "template-1",
+            "title": "Mode-Editorial",
+            "description": "Hochwertige Magazin-Fotostile für Mode",
+            "thumbnail": "https://images.unsplash.com/photo-1509631179647-0177331693ae?w=400&q=80",
+            "category": "Editorial",
+            "icon": "Camera",
+            "popular": true
+        },
+        {
+            "id": "template-2",
+            "title": "E-Commerce-Produkt",
+            "description": "Saubere Produktfotografie für Onlineshops",
+            "thumbnail": "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=400&q=80",
+            "category": "Kommerziell",
+            "icon": "ShoppingBag",
+            "popular": true
+        },
+        {
+            "id": "template-3",
+            "title": "Runway-Show",
+            "description": "Dramatische Laufsteg- und Fashion-Show-Szenen",
+            "thumbnail": "https://images.unsplash.com/photo-1558769132-cb1aea3c6e8d?w=400&q=80",
+            "category": "Runway",
+            "icon": "Sparkles",
+            "popular": false
+        },
+        {
+            "id": "template-4",
+            "title": "Street Fashion",
+            "description": "Urbaner Streetstyle und lässige Looks",
+            "thumbnail": "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=400&q=80",
+            "category": "Lifestyle",
+            "icon": "MapPin",
+            "popular": true
+        },
+        {
+            "id": "template-5",
+            "title": "Luxury-Kampagne",
+            "description": "Hochwertige Werbevisuals für Premium-Marken",
+            "thumbnail": "https://images.unsplash.com/photo-1483985988355-763728e1935b?w=400&q=80",
+            "category": "Werbung",
+            "icon": "Crown",
+            "popular": false
+        },
+        {
+            "id": "template-6",
+            "title": "Lookbook",
+            "description": "Präsentationen saisonaler Kollektionen",
+            "thumbnail": "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=400&q=80",
+            "category": "Kollektionen",
+            "icon": "BookOpen",
+            "popular": true
+        }
+    ],
+    "fashionAnalytics": {
+        "title": "Branchenführende Performance",
+        "subtitle": "Vertrauen von Modemarken weltweit",
+        "stats": [
+            {
+                "value": "2.5M+",
+                "label": "Generierte Modebilder",
+                "description": "Monatliche KI-Modefotografie",
+                "icon": "Image",
+                "color": "from-pink-500 to-rose-500"
+            },
+            {
+                "value": "500K+",
+                "label": "Erstellte Video-Kampagnen",
+                "description": "Dynamischer Mode-Video-Content",
+                "icon": "Video",
+                "color": "from-purple-500 to-indigo-500"
+            },
+            {
+                "value": "10K+",
+                "label": "Modemarken",
+                "description": "Von Startups bis zu Luxusmarken",
+                "icon": "Store",
+                "color": "from-blue-500 to-cyan-500"
+            },
+            {
+                "value": "99.8%",
+                "label": "Kundenzufriedenheit",
+                "description": "Bewertet von Modeprofis",
+                "icon": "Award",
+                "color": "from-yellow-500 to-orange-500"
+            },
+            {
+                "value": "3-5 sec",
+                "label": "Durchschnittliche Generierungszeit",
+                "description": "Blitzschnelle KI-Verarbeitung",
+                "icon": "Zap",
+                "color": "from-green-500 to-emerald-500"
+            },
+            {
+                "value": "856K+",
+                "label": "Erstellte einzigartige Avatare",
+                "description": "Virtuelle Models und Charaktere",
+                "icon": "Users",
+                "color": "from-teal-500 to-cyan-500"
+            }
+        ]
+    },
+    "landingPage": {
+        "hero": {
+            "eyebrow": "Luxus-KI-Mode",
+            "title": "AI Media Studio",
+            "subtitle": "Erstelle ultra-realistische 4K-Modebilder und cineastische Videos in Sekunden",
+            "ctaPrimary": "Jetzt erstellen",
+            "ctaSecondary": "Demo ansehen",
+            "scrollHint": "Scrollen",
+            "imageAlt": "Luxuriöses Mode-Editorial"
+        },
+        "features": {
+            "title": "Leistungsstarke Features mit Präzision",
+            "subtitle": "Entwickelt für Modestudios mit Anspruch auf Diskretion und Qualität"
+        },
+        "preview": {
+            "title": "Identität geschützt. Stil grenzenlos.",
+            "description": "Eine verfeinerte Creation-Suite, die Markenidentität schützt und gleichzeitig Mode-Content über Kampagnen, Regionen und Kollektionen skaliert.",
+            "imageAlt": "Luxuriöse Modevorschau"
+        },
+        "tryOn": {
+            "title": "Virtuelles Mode-Try-On",
+            "description": "Sieh sofort, wie verschiedene Kleidungsstücke zusammen wirken",
+            "imageAlt": "KI-Mode-Model"
+        },
+        "analytics": {
+            "title": "Branchenführende Performance",
+            "subtitle": "Vertrauen von Modemarken weltweit"
+        },
+        "templates": {
+            "title": "Schnelle Vorlagen",
+            "subtitle": "Kein Prompt. Keine Wartezeit. Nur veredelte Modebilder.",
+            "buttonText": "Vorlage verwenden"
+        },
+        "finalCta": {
+            "title": "Bereit, die Zukunft der Mode zu gestalten?",
+            "subtitle": "Veredle jede Kollektion mit cineastischen, KI-generierten Visuals.",
+            "primary": "Kostenlos testen",
+            "secondary": "Demo buchen"
+        }
+    }
+}

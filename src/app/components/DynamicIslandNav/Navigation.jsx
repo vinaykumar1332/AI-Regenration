@@ -21,7 +21,7 @@ import {
     UserRound,
     Video,
 } from "lucide-react";
-import navigationConfig from "@/appConfig/i18n/en/navigation/navigation.json";
+import { useAppConfig } from "@/appConfig/useAppConfig";
 import "./DynamicIslandNav.css";
 
 const iconMap = {
@@ -52,37 +52,16 @@ export function Navigation({ onMenuClick, onLoginClick, isAuthenticated, isLandi
     const NOTIFICATIONS_KEY = "__notifications__";
     const navigate = useNavigate();
     const location = useLocation();
+    const { text } = useAppConfig();
+    const navigationConfig = text?.navigation || {};
     const navRef = useRef(null);
     const subnavRef = useRef(null);
     const [activeDropdownKey, setActiveDropdownKey] = useState(null);
     const [isMobile, setIsMobile] = useState(false);
     const [isScrolled, setIsScrolled] = useState(false);
-    const [notifications, setNotifications] = useState([
-        {
-            id: 1,
-            type: "success",
-            title: "Generation Complete",
-            message: "Your image generation completed successfully",
-            timestamp: "2 minutes ago",
-            read: false,
-        },
-        {
-            id: 2,
-            type: "info",
-            title: "New Feature Available",
-            message: "Try our new bulk processing capabilities",
-            timestamp: "1 hour ago",
-            read: false,
-        },
-        {
-            id: 3,
-            type: "alert",
-            title: "Job Failed",
-            message: "Video generation failed due to timeout",
-            timestamp: "3 hours ago",
-            read: true,
-        },
-    ]);
+    const [notifications, setNotifications] = useState(
+        () => navigationConfig.defaultNotifications || [],
+    );
     const [isDark, setIsDark] = useState(() => {
         try {
             return document.documentElement.classList.contains("dark");
@@ -93,10 +72,15 @@ export function Navigation({ onMenuClick, onLoginClick, isAuthenticated, isLandi
 
     const shouldShowThemeToggle = Boolean(isAuthenticated) && !Boolean(isLandingPage);
 
-    const navItems = useMemo(() => navigationConfig.items || [], []);
+    const navItems = useMemo(() => navigationConfig.items || [], [navigationConfig.items]);
     const userConfig = navigationConfig.user || {};
     const loginItem = navigationConfig.login;
     const brandLabel = navigationConfig.brand?.label || "AI Studio";
+    const navUi = navigationConfig.ui || {};
+
+    useEffect(() => {
+        setNotifications(navigationConfig.defaultNotifications || []);
+    }, [navigationConfig.defaultNotifications]);
 
     const activeNavItem = useMemo(
         () => navItems.find((item) => item.key === activeDropdownKey && item.children?.length),
@@ -112,11 +96,13 @@ export function Navigation({ onMenuClick, onLoginClick, isAuthenticated, isLandi
             {
                 key: "mobile_theme",
                 icon: isDark ? "SunIcon" : "MoonIcon",
-                label: isDark ? "Light Theme" : "Dark Theme",
+                label: isDark
+                    ? (navUi.themeLight || "Light Theme")
+                    : (navUi.themeDark || "Dark Theme"),
                 action: "toggle-theme",
             },
         ];
-    }, [isDark, isMobile, shouldShowThemeToggle]);
+    }, [isDark, isMobile, shouldShowThemeToggle, navUi.themeDark, navUi.themeLight]);
 
     const unreadNotificationsCount = useMemo(
         () => notifications.filter((notif) => !notif.read).length,
@@ -133,7 +119,7 @@ export function Navigation({ onMenuClick, onLoginClick, isAuthenticated, isLandi
             }))
             : activeNavItem?.children || [];
 
-    const userName = user?.username || userConfig.name || "User";
+    const userName = user?.username || userConfig.name || navUi.defaultUser || "User";
     const userEmail = userConfig.email || "";
     const userInitials = useMemo(() => {
         const parts = userName
@@ -344,7 +330,7 @@ export function Navigation({ onMenuClick, onLoginClick, isAuthenticated, isLandi
                             type="button"
                             className="nav-hamburger-btn"
                             onClick={onMenuClick}
-                            aria-label="Open sidebar"
+                            aria-label={navUi.openSidebar || "Open sidebar"}
                         >
                             <Menu className="nav-item-icon" aria-hidden="true" />
                         </button>
@@ -371,7 +357,7 @@ export function Navigation({ onMenuClick, onLoginClick, isAuthenticated, isLandi
                     </div>
 
                     <div className="nav-center-wrap">
-                        <nav className="nav-scroll-track" aria-label="Primary Navigation">
+                        <nav className="nav-scroll-track" aria-label={navUi.primaryNavigation || "Primary Navigation"}>
                             {navItems.map((item) => {
                                 const hasChildren = Boolean(item.children?.length);
                                 const isOpen = activeDropdownKey === item.key && !isMobile;
@@ -434,7 +420,7 @@ export function Navigation({ onMenuClick, onLoginClick, isAuthenticated, isLandi
                                 aria-label={
                                     unreadNotificationsCount
                                         ? `Notifications (${unreadNotificationsCount} unread)`
-                                        : "Notifications"
+                                        : (navUi.notifications || "Notifications")
                                 }
                                 aria-expanded={isNotificationsOpen}
                                 onClick={() =>
@@ -453,7 +439,7 @@ export function Navigation({ onMenuClick, onLoginClick, isAuthenticated, isLandi
                                 <button
                                     type="button"
                                     className="nav-auth-btn"
-                                    aria-label="Notifications"
+                                    aria-label={navUi.notifications || "Notifications"}
                                     aria-expanded={isNotificationsOpen}
                                     onClick={() =>
                                         setActiveDropdownKey((prev) => (prev === NOTIFICATIONS_KEY ? null : NOTIFICATIONS_KEY))
@@ -469,7 +455,7 @@ export function Navigation({ onMenuClick, onLoginClick, isAuthenticated, isLandi
                                         aria-hidden={!isNotificationsOpen}
                                     >
                                         <div className="nav-dropdown-section">
-                                            <p className="nav-dropdown-title">Notifications</p>
+                                            <p className="nav-dropdown-title">{navUi.notifications || "Notifications"}</p>
                                             <p className="nav-dropdown-subtitle">
                                                 {notifications.length} notification{notifications.length === 1 ? "" : "s"}
                                             </p>
@@ -488,7 +474,7 @@ export function Navigation({ onMenuClick, onLoginClick, isAuthenticated, isLandi
                                                             type="button"
                                                             className="nav-notification-remove"
                                                             onClick={() => removeNotification(notif.id)}
-                                                            aria-label="Remove notification"
+                                                            aria-label={navUi.removeNotification || "Remove notification"}
                                                         >
                                                             ×
                                                         </button>
@@ -496,7 +482,7 @@ export function Navigation({ onMenuClick, onLoginClick, isAuthenticated, isLandi
                                                 ))}
                                             </div>
                                         ) : (
-                                            <div className="nav-dropdown-empty">All caught up!</div>
+                                            <div className="nav-dropdown-empty">{navUi.allCaughtUp || "All caught up!"}</div>
                                         )}
 
                                         {notifications.length ? (
@@ -505,7 +491,7 @@ export function Navigation({ onMenuClick, onLoginClick, isAuthenticated, isLandi
                                                 className="nav-dropdown-item"
                                                 onClick={clearAllNotifications}
                                             >
-                                                Clear All
+                                                {navUi.clearAll || "Clear All"}
                                             </button>
                                         ) : null}
                                     </div>
@@ -517,7 +503,9 @@ export function Navigation({ onMenuClick, onLoginClick, isAuthenticated, isLandi
                             <button
                                 type="button"
                                 className="nav-auth-btn"
-                                aria-label={isDark ? "Switch to light theme" : "Switch to dark theme"}
+                                aria-label={isDark
+                                    ? (navUi.switchToLightTheme || "Switch to light theme")
+                                    : (navUi.switchToDarkTheme || "Switch to dark theme")}
                                 onClick={toggleTheme}
                             >
                                 {isDark ? (
@@ -541,7 +529,7 @@ export function Navigation({ onMenuClick, onLoginClick, isAuthenticated, isLandi
                                     onClick={() =>
                                         setActiveDropdownKey((prev) => (prev === USER_MENU_KEY ? null : USER_MENU_KEY))
                                     }
-                                    aria-label="Open user menu"
+                                    aria-label={navUi.openUserMenu || "Open user menu"}
                                 >
                                     <span className="nav-user-initials" aria-hidden="true">
                                         {userInitials}
@@ -592,10 +580,10 @@ export function Navigation({ onMenuClick, onLoginClick, isAuthenticated, isLandi
                                     }
                                     navigate(getLocalizedPath(loginItem?.path || "/login"));
                                 }}
-                                aria-label={loginItem?.label || "Login"}
+                                aria-label={loginItem?.label || navUi.login || "Login"}
                             >
                                 <NavIcon iconName={loginItem?.icon || "LogInIcon"} />
-                                <span className="nav-auth-label">{loginItem?.label || "Login"}</span>
+                                <span className="nav-auth-label">{loginItem?.label || navUi.login || "Login"}</span>
                             </button>
                         )}
                     </div>

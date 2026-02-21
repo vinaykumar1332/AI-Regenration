@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { useNavigate } from "react-router-dom";
+import { useAppConfig } from "@/appConfig/useAppConfig";
 import { Card } from "@/app/components/ui/Card/card";
 import { Badge } from "@/app/components/ui/Badge/badge";
 import { Button } from "@/app/components/ui/Button/button";
@@ -21,7 +22,6 @@ import {
     Clock,
     TrendingUp,
 } from "lucide-react";
-import dashboardData from "@/appConfig/LandingPage.json/Dashbord.json";
 
 const iconMap = {
     Image,
@@ -39,6 +39,16 @@ const iconMap = {
 
 export function CollapsibleDashboard() {
     const navigate = useNavigate();
+    const { text } = useAppConfig();
+    const dashboardData = text?.dashboardData || {};
+    const dashboardUi = text?.dashboardUi || {};
+    const sections = dashboardData?.dashboardSections || [];
+    const modules = dashboardData?.modules || [];
+    const overview = sections[0] || {};
+    const quickStats = sections[1] || {};
+    const featuredModules = sections[2] || {};
+    const recentActivity = sections[3] || {};
+    const proFeatures = sections[4] || {};
     const [expandedSections, setExpandedSections] = useState({
         overview: true,
         quickStats: true,
@@ -85,8 +95,8 @@ export function CollapsibleDashboard() {
             <div className="relative max-w-7xl mx-auto space-y-8">
                 {/* Overview Section */}
                 <CollapsibleSection
-                    title={dashboardData.dashboardSections[0].title}
-                    subtitle={dashboardData.dashboardSections[0].subtitle}
+                    title={overview.title}
+                    subtitle={overview.subtitle}
                     isExpanded={expandedSections.overview}
                     onToggle={() => toggleSection("overview")}
                 >
@@ -96,23 +106,23 @@ export function CollapsibleDashboard() {
                         className="relative rounded-3xl overflow-hidden"
                     >
                         <img
-                            src={dashboardData.dashboardSections[0].image}
-                            alt="Welcome"
+                            src={overview.image}
+                            alt={dashboardUi?.overviewImageAlt || "Welcome"}
                             className="w-full h-64 object-cover"
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent flex items-end">
                             <div className="p-8 text-white">
                                 <h2 className="text-3xl font-bold mb-2">
-                                    {dashboardData.dashboardSections[0].title}
+                                    {overview.title}
                                 </h2>
                                 <p className="text-lg text-white/80 mb-4">
-                                    {dashboardData.dashboardSections[0].description}
+                                    {overview.description}
                                 </p>
                                 <Button
                                     size="lg"
                                     className="bg-white text-black hover:bg-white/90"
                                 >
-                                    {dashboardData.dashboardSections[0].cta.text}
+                                    {overview?.cta?.text}
                                     <ArrowRight className="ml-2 w-5 h-5" />
                                 </Button>
                             </div>
@@ -122,12 +132,12 @@ export function CollapsibleDashboard() {
 
                 {/* Quick Stats Section */}
                 <CollapsibleSection
-                    title={dashboardData.dashboardSections[1].title}
+                    title={quickStats.title}
                     isExpanded={expandedSections.quickStats}
                     onToggle={() => toggleSection("quickStats")}
                 >
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        {dashboardData.dashboardSections[1].cards.map((stat, index) => {
+                        {(quickStats.cards || []).map((stat, index) => {
                             const Icon = iconMap[stat.icon];
                             return (
                                 <motion.div
@@ -166,13 +176,13 @@ export function CollapsibleDashboard() {
 
                 {/* AI Generation Modules Section */}
                 <CollapsibleSection
-                    title={dashboardData.dashboardSections[2].title}
-                    subtitle={dashboardData.dashboardSections[2].subtitle}
+                    title={featuredModules.title}
+                    subtitle={featuredModules.subtitle}
                     isExpanded={expandedSections.modules}
                     onToggle={() => toggleSection("modules")}
                 >
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        {dashboardData.modules.map((module, index) => {
+                        {modules.map((module, index) => {
                             const Icon = iconMap[module.icon];
                             return (
                                 <motion.div
@@ -224,15 +234,15 @@ export function CollapsibleDashboard() {
                                                 <div className="flex gap-4 text-sm">
                                                     <div>
                                                         <span className="text-muted-foreground">
-                                                            Generated:{" "}
+                                                            {dashboardUi?.moduleStatsGenerated || "Generated:"}{" "}
                                                         </span>
                                                         <span className="font-semibold">
-                                                            {module.stats.generated}
+                                                            {module.stats.generated || module.stats.capacity || "-"}
                                                         </span>
                                                     </div>
                                                     <div>
                                                         <span className="text-muted-foreground">
-                                                            Time:{" "}
+                                                            {dashboardUi?.moduleStatsTime || "Time:"}{" "}
                                                         </span>
                                                         <span className="font-semibold">
                                                             {module.stats.avgTime}
@@ -253,13 +263,13 @@ export function CollapsibleDashboard() {
 
                 {/* Recent Activity Section */}
                 <CollapsibleSection
-                    title={dashboardData.dashboardSections[3].title}
-                    subtitle={dashboardData.dashboardSections[3].subtitle}
+                    title={recentActivity.title}
+                    subtitle={recentActivity.subtitle}
                     isExpanded={expandedSections.recentActivity}
                     onToggle={() => toggleSection("recentActivity")}
                 >
                     <div className="space-y-4">
-                        {dashboardData.dashboardSections[3].items.map((item, index) => {
+                        {(recentActivity.items || []).map((item, index) => {
                             const Icon =
                                 item.type === "image"
                                     ? Image
@@ -316,13 +326,13 @@ export function CollapsibleDashboard() {
 
                 {/* Pro Features Section */}
                 <CollapsibleSection
-                    title={dashboardData.dashboardSections[4].title}
-                    subtitle={dashboardData.dashboardSections[4].subtitle}
+                    title={proFeatures.title}
+                    subtitle={proFeatures.subtitle}
                     isExpanded={expandedSections.proFeatures}
                     onToggle={() => toggleSection("proFeatures")}
                 >
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                        {dashboardData.dashboardSections[4].features.map(
+                        {(proFeatures.features || []).map(
                             (feature, index) => {
                                 const Icon = iconMap[feature.icon];
                                 return (
@@ -355,7 +365,7 @@ export function CollapsibleDashboard() {
                             className="bg-gradient-to-r from-primary to-accent text-white"
                         >
                             <Star className="w-5 h-5 mr-2" />
-                            Upgrade to Pro
+                            {dashboardUi?.upgradeToPro || "Upgrade to Pro"}
                         </Button>
                     </div>
                 </CollapsibleSection>

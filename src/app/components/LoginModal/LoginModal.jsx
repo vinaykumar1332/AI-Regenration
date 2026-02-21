@@ -4,12 +4,14 @@ import { Button } from "@/app/components/ui/Button/button";
 import { Input } from "@/app/components/ui/Input/input";
 import { Label } from "@/app/components/ui/Label/label";
 import { X, Lock, Eye, EyeOff, User } from "lucide-react";
-import loginCopy from "@/appConfig/i18n/en/Login/Login.json";
+import { useAppConfig } from "@/appConfig/useAppConfig";
 import "./LoginModal.css";
 
 const STATIC_PASSWORD = import.meta.env.VITE_APP_LOGIN_PASSWORD || "V123@";
 
 export function LoginModal({ isOpen, onClose, onLogin }) {
+    const { text } = useAppConfig();
+    const loginCopy = text?.login || {};
     const [showPassword, setShowPassword] = useState(false);
     const [formData, setFormData] = useState({ username: "", password: "" });
     const [rememberMe, setRememberMe] = useState(true);
@@ -25,12 +27,12 @@ export function LoginModal({ isOpen, onClose, onLogin }) {
     const handleSubmit = (event) => {
         event.preventDefault();
         if (!formData.username.trim() || !formData.password.trim()) {
-            setError(loginCopy.errors.missing);
+            setError(loginCopy?.errors?.missing || "Enter both username and password to continue.");
             return;
         }
 
         if (formData.password !== STATIC_PASSWORD) {
-            setError(loginCopy.errors.invalidPassword || "Invalid username or password");
+            setError(loginCopy?.errors?.invalidPassword || "Invalid username or password");
             return;
         }
 
@@ -63,14 +65,14 @@ export function LoginModal({ isOpen, onClose, onLogin }) {
                         <div className="login-modal__card">
                             <div className="login-modal__header">
                                 <div className="login-modal__logo">
-                                    {loginCopy.logoText}
+                                    {loginCopy.logoText || "AI Studio"}
                                 </div>
                                 <motion.button
                                     type="button"
                                     whileHover={{ scale: 1.1, rotate: 90 }}
                                     whileTap={{ scale: 0.9 }}
                                     onClick={onClose}
-                                    aria-label={loginCopy.closeAriaLabel}
+                                    aria-label={loginCopy.closeAriaLabel || "Close login dialog"}
                                     className="login-modal__close"
                                 >
                                     <X className="w-5 h-5" />
@@ -89,14 +91,14 @@ export function LoginModal({ isOpen, onClose, onLogin }) {
                                         id="login-modal-title"
                                         className="login-modal__title"
                                     >
-                                        {loginCopy.title}
+                                        {loginCopy.title || "Secure login"}
                                     </h2>
                                     <p className="login-modal__subtitle">
-                                        {loginCopy.subtitle}
+                                        {loginCopy.subtitle || "Access your AI workspace"}
                                     </p>
                                 </motion.div>
                                 <p className="login-modal__helper">
-                                    {loginCopy.helperText}
+                                    {loginCopy.helperText || "Use your account credentials to continue"}
                                 </p>
 
                                 <form
@@ -106,14 +108,14 @@ export function LoginModal({ isOpen, onClose, onLogin }) {
                                 >
                                     <div>
                                         <Label htmlFor="username" className="login-modal__label">
-                                            {loginCopy.fields.username.label}
+                                            {loginCopy?.fields?.username?.label || "Email or username"}
                                         </Label>
                                         <div className="relative mt-2">
                                             <User className="login-modal__icon" aria-hidden="true" />
                                             <Input
                                                 id="username"
                                                 type="text"
-                                                placeholder={loginCopy.fields.username.placeholder}
+                                                placeholder={loginCopy?.fields?.username?.placeholder || "you@example.com"}
                                                 value={formData.username}
                                                 onChange={(event) =>
                                                     handleFieldChange("username", event.target.value)
@@ -125,14 +127,14 @@ export function LoginModal({ isOpen, onClose, onLogin }) {
 
                                     <div>
                                         <Label htmlFor="password" className="login-modal__label">
-                                            {loginCopy.fields.password.label}
+                                            {loginCopy?.fields?.password?.label || "Password"}
                                         </Label>
                                         <div className="relative mt-2">
                                             <Lock className="login-modal__icon" aria-hidden="true" />
                                             <Input
                                                 id="password"
                                                 type={showPassword ? "text" : "password"}
-                                                placeholder={loginCopy.fields.password.placeholder}
+                                                placeholder={loginCopy?.fields?.password?.placeholder || "Enter password"}
                                                 value={formData.password}
                                                 onChange={(event) =>
                                                     handleFieldChange("password", event.target.value)
@@ -145,7 +147,9 @@ export function LoginModal({ isOpen, onClose, onLogin }) {
                                                 onClick={() => setShowPassword((prev) => !prev)}
                                                 className="login-modal__toggle"
                                                 aria-label={
-                                                    showPassword ? "Hide password" : "Show password"
+                                                    showPassword
+                                                        ? (loginCopy.hidePassword || "Hide password")
+                                                        : (loginCopy.showPassword || "Show password")
                                                 }
                                             >
                                                 {showPassword ? (
@@ -177,7 +181,7 @@ export function LoginModal({ isOpen, onClose, onLogin }) {
                                             onChange={(event) => setRememberMe(event.target.checked)}
                                             className="login-modal__checkbox"
                                         />
-                                        <span>{loginCopy.rememberMe}</span>
+                                        <span>{loginCopy.rememberMe || "Keep me signed in"}</span>
                                     </label>
 
                                     <Button
@@ -185,16 +189,16 @@ export function LoginModal({ isOpen, onClose, onLogin }) {
                                         className="login-modal__submit w-full bg-gradient-to-r from-primary to-accent hover:opacity-90 text-white"
                                         size="lg"
                                     >
-                                        {loginCopy.primaryButton}
+                                        {loginCopy.primaryButton || "Sign in"}
                                     </Button>
                                 </form>
 
                                 <div className="login-modal__footer">
                                     <a
-                                        href={loginCopy.supportLink.href}
+                                        href={loginCopy?.supportLink?.href || "/contact"}
                                         className="login-modal__support"
                                     >
-                                        {loginCopy.supportLink.label}
+                                        {loginCopy?.supportLink?.label || "Need help?"}
                                     </a>
                                 </div>
                             </div>

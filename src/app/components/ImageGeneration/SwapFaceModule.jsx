@@ -21,16 +21,16 @@ function readFilePreview(file) {
     });
 }
 
-function validateFile(file) {
-    if (!file) return "File is required";
-    if (file.size > MAX_FILE_SIZE) return "File size must be under 10MB";
+function validateFile(file, copy) {
+    if (!file) return copy?.errors?.fileRequired || "File is required";
+    if (file.size > MAX_FILE_SIZE) return copy?.errors?.fileTooLarge || "File size must be under 10MB";
     if (!ACCEPTED_TYPES.includes(file.type)) {
-        return "Only JPG or PNG files are allowed";
+        return copy?.errors?.invalidFileType || "Only JPG or PNG files are allowed";
     }
     return null;
 }
 
-function MultipleUploadCard({ label, required, hint, files, onFilesChange }) {
+function MultipleUploadCard({ label, required, hint, files, onFilesChange, copy }) {
     const [removingIds, setRemovingIds] = useState(new Set());
     const inputRef = useRef(null);
 
@@ -41,7 +41,7 @@ function MultipleUploadCard({ label, required, hint, files, onFilesChange }) {
         const next = [...files];
 
         for (const file of incoming) {
-            const error = validateFile(file);
+            const error = validateFile(file, copy);
             if (error) {
                 toast.error(`${file.name}: ${error}`);
                 continue;
@@ -53,7 +53,7 @@ function MultipleUploadCard({ label, required, hint, files, onFilesChange }) {
                     preview = await readFilePreview(file);
                 } catch (err) {
                     console.error("Failed to read file", err);
-                    toast.error(`Failed to read ${file.name}`);
+                    toast.error(`${copy?.errors?.readFileFailed || "Failed to read"} ${file.name}`);
                 }
             }
 
@@ -135,14 +135,14 @@ function MultipleUploadCard({ label, required, hint, files, onFilesChange }) {
                             )}
                         </div>
                         <span className="swap-face-upload-cta">
-                            Drag & drop or click
+                            {copy?.dragDrop || "Drag & drop or click"}
                         </span>
                     </div>
 
                     <div className="swap-face-upload-dropzone">
                         <div className="swap-face-upload-dropzone-inner">
                             <Upload className="swap-face-upload-dropzone-icon" />
-                            <span>JPG / PNG, up to 10MB each</span>
+                            <span>{copy?.fileTypes || "JPG / PNG, up to 10MB each"}</span>
                         </div>
                     </div>
                 </div>
@@ -152,7 +152,7 @@ function MultipleUploadCard({ label, required, hint, files, onFilesChange }) {
             {files.length > 0 && (
                 <div className="swap-face-upload-selected">
                     <p className="swap-face-upload-selected-label">
-                        Selected ({files.length})
+                        {(copy?.selected || "Selected")} ({files.length})
                     </p>
                     <div className="swap-face-upload-selected-list">
                         {files.map((item) => (
@@ -176,7 +176,7 @@ function MultipleUploadCard({ label, required, hint, files, onFilesChange }) {
                                 <span className="swap-face-upload-pill-name">{item.name}</span>
                                 <button
                                     type="button"
-                                    aria-label="Remove image"
+                                    aria-label={copy?.removeImage || "Remove image"}
                                     className="swap-face-upload-remove"
                                     onClick={(e) => {
                                         e.stopPropagation();
@@ -195,8 +195,9 @@ function MultipleUploadCard({ label, required, hint, files, onFilesChange }) {
 }
 
 export function SwapFaceModule({ onResult }) {
-    const { static: staticConfig } = useAppConfig();
+    const { static: staticConfig, text } = useAppConfig();
     const swapFacePrompt = staticConfig?.swapFacePrompt || "";
+    const copy = text?.imageGeneration?.swapFace || {};
 
     const [inputImages, setInputImages] = useState([]);
     const [referenceImages, setReferenceImages] = useState([]);
@@ -207,17 +208,17 @@ export function SwapFaceModule({ onResult }) {
 
     const handleGenerate = async () => {
         if (inputImages.length === 0) {
-            toast.error("Please upload at least one input image");
+            toast.error(copy?.errors?.uploadInput || "Please upload at least one input image");
             return;
         }
 
         if (referenceImages.length === 0) {
-            toast.error("Please upload at least one reference image");
+            toast.error(copy?.errors?.uploadReference || "Please upload at least one reference image");
             return;
         }
 
         if (!swapFacePrompt) {
-            toast.error("Swap-face prompt is not configured");
+            toast.error(copy?.errors?.promptMissing || "Swap-face prompt is not configured");
             return;
         }
 
@@ -291,13 +292,13 @@ export function SwapFaceModule({ onResult }) {
             setProgress(100);
             setResults((prev) => [...normalizedResults, ...prev]);
             normalizedResults.forEach((result) => onResult?.(result));
-            toast.success("Swap face images generated");
+            toast.success(copy?.success?.generated || "Swap face images generated");
         } catch (error) {
             console.error("Swap face error", error);
             if (error.name === "AbortError") {
-                toast.error("Request timed out. Please try again.");
+                toast.error(copy?.errors?.timeout || "Request timed out. Please try again.");
             } else {
-                toast.error(error.message || "Failed to generate swapped image");
+                toast.error(error.message || copy?.errors?.generationFailed || "Failed to generate swapped image");
             }
         } finally {
             clearTimeout(timeoutId);
@@ -328,36 +329,38 @@ export function SwapFaceModule({ onResult }) {
         <div className="swap-face-module">
             <Card className="swap-face-card">
                 <div className="swap-face-header">
-                    <h2 className="swap-face-title">Swap Face Generation</h2>
+                    <h2 className="swap-face-title">{copy?.title || "Swap Face Generation"}</h2>
                     <p className="swap-face-subtitle">
-                        Upload your input fashion images and reference identity images. We apply a high-quality swap prompt from the backend for consistent, premium results.
+                        {copy?.subtitle || "Upload your input fashion images and reference identity images. We apply a high-quality swap prompt from the backend for consistent, premium results."}
                     </p>
                 </div>
 
                 {/* Step 1 – Upload Section */}
                 <div className="swap-face-step swap-face-step-upload">
-                    <p className="swap-face-step-label">Step 1 – Upload inputs</p>
+                    <p className="swap-face-step-label">{copy?.step1 || "Step 1 – Upload inputs"}</p>
                     <div className="swap-face-upload-grid">
                         <MultipleUploadCard
-                            label="Input Images"
+                            label={copy?.inputImagesLabel || "Input Images"}
                             required
-                            hint="Upload one or multiple fashion images that should be used as the base."
+                            hint={copy?.inputImagesHint || "Upload one or multiple fashion images that should be used as the base."}
                             files={inputImages}
                             onFilesChange={setInputImages}
+                            copy={copy}
                         />
                         <MultipleUploadCard
-                            label="Reference Identity"
+                            label={copy?.referenceLabel || "Reference Identity"}
                             required
-                            hint="Upload one or more face images whose identity should be transferred."
+                            hint={copy?.referenceHint || "Upload one or more face images whose identity should be transferred."}
                             files={referenceImages}
                             onFilesChange={setReferenceImages}
+                            copy={copy}
                         />
                     </div>
                 </div>
 
                 {/* Step 2 – Generate */}
                 <div className="swap-face-step swap-face-step-generate">
-                    <p className="swap-face-step-label">Step 2 – Generate</p>
+                    <p className="swap-face-step-label">{copy?.step2 || "Step 2 – Generate"}</p>
                     <div className="swap-face-button-wrapper">
                         <Button
                             type="button"
@@ -368,22 +371,22 @@ export function SwapFaceModule({ onResult }) {
                             {isSubmitting ? (
                                 <>
                                     <Loader2 className="swap-face-generate-loader" />
-                                    Generating swap...
+                                    {copy?.generating || "Generating swap..."}
                                 </>
                             ) : (
-                                <>Generate Swap</>
+                                <>{copy?.generate || "Generate Swap"}</>
                             )}
                         </Button>
                     </div>
                     <p className="swap-face-generate-helper">
-                        Your images are encoded as base64 and sent with a curated swap prompt from the backend.
+                        {copy?.generateHelper || "Your images are encoded as base64 and sent with a curated swap prompt from the backend."}
                     </p>
                     {showProgress && (
                         <div className="swap-face-progress">
                             <div className="swap-face-progress-info">
                                 <Loader2 className="swap-face-progress-loader" />
                                 <div className="swap-face-progress-text">
-                                    <span>Processing swaps...</span>
+                                    <span>{copy?.processing || "Processing swaps..."}</span>
                                     <span>{progress}%</span>
                                 </div>
                             </div>
@@ -400,14 +403,14 @@ export function SwapFaceModule({ onResult }) {
 
             {/* Results dashboard */}
             <div className="swap-face-results">
-                <h3 className="swap-face-results-title">Recent Swaps</h3>
+                <h3 className="swap-face-results-title">{copy?.recentTitle || "Recent Swaps"}</h3>
                 {results.length === 0 ? (
                     <Card className="swap-face-results-empty">
                         <div className="swap-face-results-empty-inner">
                             <Skeleton className="swap-face-results-empty-skeleton" />
                             <div className="swap-face-results-empty-text">
-                                <p className="swap-face-results-empty-title">No swaps yet</p>
-                                <p>Generate a swap to see your outputs appear here.</p>
+                                <p className="swap-face-results-empty-title">{copy?.emptyTitle || "No swaps yet"}</p>
+                                <p>{copy?.emptySubtitle || "Generate a swap to see your outputs appear here."}</p>
                             </div>
                         </div>
                     </Card>
