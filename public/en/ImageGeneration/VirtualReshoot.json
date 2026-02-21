@@ -1,0 +1,9 @@
+{
+  "title": "Virtual Reshoot",
+  "description": "Upload your image and transform it using AI-powered avatar selection.",
+  "genderLabel": "Select Gender",
+  "originLabel": "Select Origin",
+  "avatarLabel": "Select Avatar",
+  "generateButton": "Generate Reshoot",
+  "showAllImages": "Show All Images"
+}

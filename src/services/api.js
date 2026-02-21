@@ -51,3 +51,17 @@ export const swapFaceApi = async (payload, signal = null) => {
         ...(signal && { signal }),
     });
 };
+
+/**
+ * Virtual Reshoot API (Avatar-based identity anchor)
+ * @param {Object} payload - { baseImages, avatarImageUrl, gender, origin }
+ * @param {AbortSignal} signal - Abort signal for cancellation
+ * @returns {Promise<Object>}
+ */
+export const virtualReshootApi = async (payload, signal = null) => {
+    return apiCall('/api/virtual-reshoot', {
+        method: 'POST',
+        body: JSON.stringify(payload),
+        ...(signal && { signal }),
+    });
+};

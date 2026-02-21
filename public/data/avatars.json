@@ -1,0 +1,50 @@
+{
+    "male": {
+        "european": [
+            {
+                "id": "m_eu_1",
+                "name": "Lukas",
+                "images": [
+                    "https://images.unsplash.com/photo-1500648767791-00dcc994a43e",
+                    "https://images.unsplash.com/photo-1527980965255-d3b416303d12"
+                ]
+            },
+            {
+                "id": "m_eu_2",
+                "name": "Daniel",
+                "images": [
+                    "https://images.unsplash.com/photo-1492562080023-ab3db95bfbce"
+                ]
+            }
+        ],
+        "african": [
+            {
+                "id": "m_af_1",
+                "name": "Kwame",
+                "images": [
+                    "https://images.unsplash.com/photo-1521119989659-a83eee488004"
+                ]
+            }
+        ]
+    },
+    "female": {
+        "european": [
+            {
+                "id": "f_eu_1",
+                "name": "Sophie",
+                "images": [
+                    "https://images.unsplash.com/photo-1494790108377-be9c29b29330"
+                ]
+            }
+        ],
+        "asian": [
+            {
+                "id": "f_as_1",
+                "name": "Mei",
+                "images": [
+                    "https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91"
+                ]
+            }
+        ]
+    }
+}
