@@ -497,7 +497,97 @@
     align-items: center;
     justify-content: center;
     padding: 1.25rem;
-    z-index: 50;
+    z-index: 200;
+}
+
+@media (max-width: 640px) {
+    .virtual-reshoot-modal-overlay {
+        padding: 0.75rem;
+        align-items: center;
+    }
+}
+
+/* Ultra-small screens: keep it compact and image-focused */
+@media (max-width: 420px) {
+    .virtual-reshoot-modal-overlay {
+        padding: 0.5rem;
+    }
+
+    .virtual-reshoot-modal {
+        padding: 0.75rem;
+        gap: 0.65rem;
+        border-radius: 0.85rem;
+    }
+
+    .virtual-reshoot-modal-title {
+        font-size: 0.95rem;
+    }
+
+    .virtual-reshoot-guide-subtitle {
+        display: none;
+    }
+
+    .virtual-reshoot-guide-accordion {
+        padding: 0.35rem 0.6rem;
+    }
+
+    .virtual-reshoot-guide-accordion-trigger {
+        font-size: 0.82rem;
+        padding: 0.45rem 0;
+    }
+
+    .virtual-reshoot-guide-examples-title {
+        font-size: 0.8rem;
+    }
+
+    .virtual-reshoot-guide-example-caption {
+        font-size: 0.75rem;
+        padding: 0.55rem 0.65rem;
+    }
+
+    .virtual-reshoot-guide-example-media {
+        padding: 0.25rem;
+    }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    .virtual-reshoot-modal-overlay {
+        animation: virtual-reshoot-overlay-in 160ms ease-out;
+    }
+
+    .virtual-reshoot-modal {
+        animation: virtual-reshoot-modal-in 180ms ease-out;
+    }
+
+    .virtual-reshoot-modal-overlay.is-closing {
+        animation: virtual-reshoot-overlay-out 160ms ease-in;
+    }
+
+    .virtual-reshoot-modal.is-closing {
+        animation: virtual-reshoot-modal-out 160ms ease-in;
+    }
+}
+
+@keyframes virtual-reshoot-overlay-in {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes virtual-reshoot-modal-in {
+    from {
+        opacity: 0;
+        transform: translateY(10px) scale(0.98);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
 }
 
 .virtual-reshoot-modal {
@@ -510,6 +600,24 @@
     display: flex;
     flex-direction: column;
     gap: 1rem;
+}
+
+.virtual-reshoot-guide-modal {
+    max-height: calc(100dvh - 2rem);
+    overflow: auto;
+    overscroll-behavior: contain;
+}
+
+@media (max-width: 640px) {
+    .virtual-reshoot-modal {
+        padding: 0.9rem;
+        gap: 0.85rem;
+        border-radius: 0.9rem;
+    }
+
+    .virtual-reshoot-guide-modal {
+        max-height: calc(100dvh - 1.5rem);
+    }
 }
 
 @media (min-width: 768px) {
@@ -525,10 +633,174 @@
     gap: 0.75rem;
 }
 
+@media (max-width: 640px) {
+    .virtual-reshoot-modal-header {
+        flex-direction: column;
+        align-items: stretch;
+    }
+}
+
 .virtual-reshoot-modal-title {
     font-size: 1rem;
     font-weight: 700;
     color: var(--foreground);
+}
+
+.virtual-reshoot-guide-header-text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.virtual-reshoot-guide-subtitle {
+    font-size: 0.8rem;
+    line-height: 1.35;
+    color: var(--muted-foreground);
+}
+
+.virtual-reshoot-guide-close {
+    flex-shrink: 0;
+}
+
+@media (max-width: 640px) {
+    .virtual-reshoot-guide-close {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+.virtual-reshoot-guide-columns {
+    display: grid;
+    gap: 0.9rem;
+}
+
+@media (min-width: 768px) {
+    .virtual-reshoot-guide-columns {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+.virtual-reshoot-guide-col {
+    border-radius: 0.9rem;
+    border: 1px solid var(--border);
+    background: var(--muted);
+    padding: 0.9rem;
+}
+
+.virtual-reshoot-guide-accordion {
+    padding: 0.5rem 0.75rem;
+}
+
+.virtual-reshoot-guide-accordion-item {
+    border: 0;
+}
+
+.virtual-reshoot-guide-accordion-trigger {
+    padding: 0.5rem 0;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--foreground);
+    text-decoration: none;
+}
+
+.virtual-reshoot-guide-accordion-trigger:hover {
+    text-decoration: none;
+}
+
+.virtual-reshoot-guide-accordion-content {
+    padding-bottom: 0.25rem;
+}
+
+.virtual-reshoot-guide-coltitle {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--foreground);
+    margin-bottom: 0.4rem;
+}
+
+.virtual-reshoot-guide-list {
+    margin: 0;
+    padding-left: 1.15rem;
+    display: grid;
+    gap: 0.35rem;
+    font-size: 0.8rem;
+    line-height: 1.35;
+    color: var(--muted-foreground);
+}
+
+.virtual-reshoot-guide-examples {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
+.virtual-reshoot-guide-examples-title {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--foreground);
+}
+
+.virtual-reshoot-guide-examples-grid {
+    display: grid;
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+    gap: 0.75rem;
+}
+
+@media (min-width: 640px) {
+    .virtual-reshoot-guide-examples-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (min-width: 1024px) {
+    .virtual-reshoot-guide-examples-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+.virtual-reshoot-guide-example {
+    border-radius: 0.9rem;
+    border: 1px solid var(--border);
+    background: var(--card);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.virtual-reshoot-guide-example-media {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    background: var(--muted);
+    border-bottom: 1px solid var(--border);
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.35rem;
+}
+
+@media (max-width: 640px) {
+    .virtual-reshoot-guide-example-media {
+        aspect-ratio: 16 / 10;
+    }
+}
+
+.virtual-reshoot-guide-example-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    opacity: 0;
+    transition: opacity 220ms ease;
+}
+
+.virtual-reshoot-guide-example-img.loaded {
+    opacity: 1;
+}
+
+.virtual-reshoot-guide-example-caption {
+    padding: 0.65rem 0.75rem;
+    font-size: 0.8rem;
+    color: var(--muted-foreground);
 }
 
 .virtual-reshoot-modal-grid {
@@ -683,4 +955,26 @@
     line-height: 1.4;
     color: var(--muted-foreground);
     white-space: pre-wrap;
+}
+
+@keyframes virtual-reshoot-overlay-out {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0;
+    }
+}
+
+@keyframes virtual-reshoot-modal-out {
+    from {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+
+    to {
+        opacity: 0;
+        transform: translateY(8px) scale(0.98);
+    }
 }

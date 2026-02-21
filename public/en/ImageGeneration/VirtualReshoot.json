@@ -5,5 +5,41 @@
   "originLabel": "Select Origin",
   "avatarLabel": "Select Avatar",
   "generateButton": "Generate Reshoot",
-  "showAllImages": "Show All Images"
+  "showAllImages": "Show All Images",
+  "uploadGuide": {
+    "title": "Before you upload: best results tips",
+    "subtitle": "Your base image controls body, clothing, pose, and background. A clean, high-quality photo produces the best reshoot.",
+    "doTitle": "Recommended",
+    "dontTitle": "Avoid",
+    "do": [
+      "Clear, sharp photo (not pixelated)",
+      "Good lighting with minimal shadows",
+      "Single person in frame",
+      "Face visible (no heavy occlusion)",
+      "Full body or at least upper body in frame"
+    ],
+    "dont": [
+      "Blurry / low-resolution images",
+      "Multiple people in the same photo",
+      "Extreme angles or heavy motion blur",
+      "Very dark photos or harsh backlight",
+      "Large face occlusions (mask/hand covering)"
+    ],
+    "examplesTitle": "Example base images",
+    "exampleImages": [
+      {
+        "src": "/assests/LandingPage/PROTOTYPE%20DEMO/MODEL/82470831010303_21938_M1_1.jpg",
+        "label": "Good lighting + clear subject"
+      },
+      {
+        "src": "/assests/LandingPage/PROTOTYPE%20DEMO/MODEL/82433411010308_22969.jpg",
+        "label": "Single person in frame"
+      },
+      {
+        "src": "/assests/LandingPage/PROTOTYPE%20DEMO/MODEL/82432081020303_22296.jpg",
+        "label": "Sharp image with visible face"
+      }
+    ],
+    "closeButton": "Close"
+  }
 }

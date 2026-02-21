@@ -5,6 +5,12 @@ import { Button } from "@/app/components/ui/Button/button";
 import { Skeleton } from "@/app/components/ui/Skeleton/skeleton";
 import { Badge } from "@/app/components/ui/Badge/badge";
 import {
+    Accordion,
+    AccordionContent,
+    AccordionItem,
+    AccordionTrigger,
+} from "@/app/components/ui/Accordion/accordion";
+import {
     Select,
     SelectContent,
     SelectItem,
@@ -233,6 +239,13 @@ export function VirtualReshootModule({ onResult }) {
     const [avatarsDb, setAvatarsDb] = useState(null);
     const [isLoadingAvatars, setIsLoadingAvatars] = useState(true);
 
+    const [showUploadGuide, setShowUploadGuide] = useState(false);
+    const [recommendedAccordionValue, setRecommendedAccordionValue] = useState("");
+    const [avoidAccordionValue, setAvoidAccordionValue] = useState("");
+    const [isUploadGuideClosing, setIsUploadGuideClosing] = useState(false);
+
+    const uploadGuideCloseTimeoutRef = useRef(null);
+
     const [gender, setGender] = useState("");
     const [origin, setOrigin] = useState("");
     const [selectedAvatarId, setSelectedAvatarId] = useState("");
@@ -250,7 +263,36 @@ export function VirtualReshootModule({ onResult }) {
         avatarLabel: "Select Avatar",
         generateButton: "Generate Reshoot",
         showAllImages: "Show All Images",
+        uploadGuide: {
+            title: "Before you upload: best results tips",
+            subtitle:
+                "Your base image controls body, clothing, pose, and background. A clean, high-quality photo produces the best reshoot.",
+            doTitle: "Recommended",
+            dontTitle: "Avoid",
+            do: [
+                "Clear, sharp photo (not pixelated)",
+                "Good lighting with minimal shadows",
+                "Single person in frame",
+                "Face visible (no heavy occlusion)",
+                "Full body or at least upper body in frame",
+            ],
+            dont: [
+                "Blurry / low-resolution images",
+                "Multiple people in the same photo",
+                "Extreme angles or heavy motion blur",
+                "Very dark photos or harsh backlight",
+                "Large face occlusions (mask/hand covering)",
+            ],
+            examplesTitle: "Example base images",
+            exampleImages: [],
+            closeButton: "Close",
+        },
     });
+
+    useEffect(() => {
+        const id = setTimeout(() => setShowUploadGuide(true), 300);
+        return () => clearTimeout(id);
+    }, []);
 
     useEffect(() => {
         let isMounted = true;
@@ -294,6 +336,51 @@ export function VirtualReshootModule({ onResult }) {
             isMounted = false;
         };
     }, []);
+
+    useEffect(() => {
+        if (!showUploadGuide) return;
+        if (isUploadGuideClosing) return;
+
+        const isDesktop =
+            typeof window !== "undefined" &&
+            window.matchMedia &&
+            window.matchMedia("(min-width: 768px)").matches;
+
+        const id = setTimeout(() => {
+            setRecommendedAccordionValue("recommended");
+            if (isDesktop) setAvoidAccordionValue("avoid");
+        }, 450);
+
+        return () => clearTimeout(id);
+    }, [showUploadGuide, isUploadGuideClosing]);
+
+    useEffect(() => {
+        return () => {
+            if (uploadGuideCloseTimeoutRef.current) {
+                clearTimeout(uploadGuideCloseTimeoutRef.current);
+                uploadGuideCloseTimeoutRef.current = null;
+            }
+        };
+    }, []);
+
+    const closeUploadGuide = () => {
+        if (isUploadGuideClosing) return;
+        setIsUploadGuideClosing(true);
+
+        // Collapse dropdown first so the user sees it close.
+        setRecommendedAccordionValue("");
+        setAvoidAccordionValue("");
+
+        if (uploadGuideCloseTimeoutRef.current) {
+            clearTimeout(uploadGuideCloseTimeoutRef.current);
+        }
+
+        uploadGuideCloseTimeoutRef.current = setTimeout(() => {
+            setShowUploadGuide(false);
+            setIsUploadGuideClosing(false);
+            uploadGuideCloseTimeoutRef.current = null;
+        }, 220);
+    };
 
     const genderOptions = useMemo(() => {
         if (!avatarsDb) return [];
@@ -449,9 +536,127 @@ export function VirtualReshootModule({ onResult }) {
 
     const canShowAll = (selectedAvatar?.images?.length || 0) > 1;
     const modalImages = (selectedAvatar?.images || []).map((u) => normalizeImageUrl(u));
+    const uploadGuide = uiText?.uploadGuide || {};
+    const uploadGuideExamples = Array.isArray(uploadGuide?.exampleImages)
+        ? uploadGuide.exampleImages
+        : [];
 
     return (
         <div className="virtual-reshoot-module">
+            {showUploadGuide && (
+                <div
+                    className={`virtual-reshoot-modal-overlay ${isUploadGuideClosing ? "is-closing" : ""}`}
+                    role="dialog"
+                    aria-modal="true"
+                    aria-label="Upload guidelines"
+                    onClick={() => closeUploadGuide()}
+                >
+                    <div
+                        className={`virtual-reshoot-modal virtual-reshoot-guide-modal ${isUploadGuideClosing ? "is-closing" : ""}`}
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        <div className="virtual-reshoot-modal-header">
+                            <div className="virtual-reshoot-guide-header-text">
+                                <p className="virtual-reshoot-modal-title">
+                                    {uploadGuide.title || "Before you upload: best results tips"}
+                                </p>
+                                {uploadGuide.subtitle ? (
+                                    <p className="virtual-reshoot-guide-subtitle">{uploadGuide.subtitle}</p>
+                                ) : null}
+                            </div>
+                            <Button
+                                type="button"
+                                variant="outline"
+                                className="virtual-reshoot-guide-close"
+                                onClick={() => closeUploadGuide()}
+                            >
+                                {uploadGuide.closeButton || "Close"}
+                            </Button>
+                        </div>
+
+                        <div className="virtual-reshoot-guide-columns">
+                            <Accordion
+                                type="single"
+                                collapsible
+                                value={recommendedAccordionValue}
+                                onValueChange={setRecommendedAccordionValue}
+                                className="virtual-reshoot-guide-col virtual-reshoot-guide-accordion"
+                            >
+                                <AccordionItem value="recommended" className="virtual-reshoot-guide-accordion-item">
+                                    <AccordionTrigger className="virtual-reshoot-guide-accordion-trigger">
+                                        {uploadGuide.doTitle || "Recommended"}
+                                    </AccordionTrigger>
+                                    <AccordionContent className="virtual-reshoot-guide-accordion-content">
+                                        <ul className="virtual-reshoot-guide-list">
+                                            {(Array.isArray(uploadGuide.do) ? uploadGuide.do : []).map(
+                                                (line) => (
+                                                    <li key={line}>{line}</li>
+                                                )
+                                            )}
+                                        </ul>
+                                    </AccordionContent>
+                                </AccordionItem>
+                            </Accordion>
+
+                            <Accordion
+                                type="single"
+                                collapsible
+                                value={avoidAccordionValue}
+                                onValueChange={setAvoidAccordionValue}
+                                className="virtual-reshoot-guide-col virtual-reshoot-guide-accordion"
+                            >
+                                <AccordionItem value="avoid" className="virtual-reshoot-guide-accordion-item">
+                                    <AccordionTrigger className="virtual-reshoot-guide-accordion-trigger">
+                                        {uploadGuide.dontTitle || "Avoid"}
+                                    </AccordionTrigger>
+                                    <AccordionContent className="virtual-reshoot-guide-accordion-content">
+                                        <ul className="virtual-reshoot-guide-list">
+                                            {(Array.isArray(uploadGuide.dont) ? uploadGuide.dont : []).map(
+                                                (line) => (
+                                                    <li key={line}>{line}</li>
+                                                )
+                                            )}
+                                        </ul>
+                                    </AccordionContent>
+                                </AccordionItem>
+                            </Accordion>
+                        </div>
+
+                        {uploadGuideExamples.length > 0 && (
+                            <div className="virtual-reshoot-guide-examples">
+                                <p className="virtual-reshoot-guide-examples-title">
+                                    {uploadGuide.examplesTitle || "Example base images"}
+                                </p>
+                                <div className="virtual-reshoot-guide-examples-grid">
+                                    {uploadGuideExamples.map((ex) => {
+                                        const src = normalizeImageUrl(ex?.src || "");
+                                        const label = ex?.label || "";
+                                        if (!src) return null;
+                                        return (
+                                            <div
+                                                key={`${src}_${label}`}
+                                                className="virtual-reshoot-guide-example"
+                                            >
+                                                <div className="virtual-reshoot-guide-example-media">
+                                                    <FadeInImage
+                                                        src={src}
+                                                        alt={label || "Example base image"}
+                                                        className="virtual-reshoot-guide-example-img"
+                                                    />
+                                                </div>
+                                                {label ? (
+                                                    <p className="virtual-reshoot-guide-example-caption">{label}</p>
+                                                ) : null}
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            )}
+
             <Card className="virtual-reshoot-card">
                 <div className="virtual-reshoot-header">
                     <h2 className="virtual-reshoot-title">{uiText.title}</h2>

@@ -10,7 +10,7 @@ function Accordion({ ...props }) {
   return <AccordionPrimitive.Root data-slot="accordion" {...props} />;
 }
 
-function AccordionItem({ ...props }) {
+function AccordionItem({ className, ...props }) {
   return (
     <AccordionPrimitive.Item
       data-slot="accordion-item"
@@ -20,7 +20,7 @@ function AccordionItem({ ...props }) {
   );
 }
 
-function AccordionTrigger({ ...props }) {
+function AccordionTrigger({ className, children, ...props }) {
   return (
     <AccordionPrimitive.Header className="flex">
       <AccordionPrimitive.Trigger
@@ -38,7 +38,7 @@ function AccordionTrigger({ ...props }) {
   );
 }
 
-function AccordionContent({ ...props }) {
+function AccordionContent({ className, children, ...props }) {
   return (
     <AccordionPrimitive.Content
       data-slot="accordion-content"
