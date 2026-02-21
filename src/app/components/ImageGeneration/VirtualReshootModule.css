@@ -165,6 +165,43 @@
     gap: 0.25rem;
 }
 
+.virtual-reshoot-progress {
+    margin-top: 0.75rem;
+}
+
+.virtual-reshoot-progress-info {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    color: var(--muted-foreground);
+    font-size: 0.85rem;
+}
+
+.virtual-reshoot-progress-loader {
+    width: 1rem;
+    height: 1rem;
+}
+
+.virtual-reshoot-progress-text {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.virtual-reshoot-progress-bar-bg {
+    height: 6px;
+    background: rgba(0, 0, 0, 0.06);
+    border-radius: 999px;
+    margin-top: 0.5rem;
+    overflow: hidden;
+}
+
+.virtual-reshoot-progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #5b21b6, #7c3aed);
+    transition: width 280ms linear;
+}
+
 .virtual-reshoot-upload-dropzone-icon {
     width: 1rem;
     height: 1rem;
@@ -868,7 +905,7 @@
 .virtual-reshoot-button-wrapper {
     display: flex;
     align-items: center;
-    justify-content: flex-start;
+    justify-content: center;
 }
 
 .virtual-reshoot-generate-button {
@@ -927,8 +964,11 @@
 }
 
 .virtual-reshoot-result-media {
-    width: 100%;
-    aspect-ratio: 1 / 1;
+    width: min(82%, 220px);
+    margin: 0.85rem auto 0;
+    border-radius: 0.8rem;
+    overflow: hidden;
+    aspect-ratio: 3 / 4;
     background: var(--muted);
     display: flex;
     align-items: center;
@@ -965,12 +1005,15 @@
 .virtual-reshoot-result-actions {
     display: flex;
     align-items: center;
-    justify-content: flex-start;
-    margin-top: 0.15rem;
+    justify-content: stretch;
+    width: 100%;
+    margin-top: 0.25rem;
 }
 
 .virtual-reshoot-result-btn {
-    min-width: 6.5rem;
+    width: 100%;
+    min-height: 2.25rem;
+    font-weight: 600;
 }
 
 .virtual-reshoot-result-text {

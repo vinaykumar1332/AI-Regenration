@@ -277,6 +277,9 @@ export function VirtualReshootModule({ onResult }) {
     const [showAllImages, setShowAllImages] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [results, setResults] = useState([]);
+    const [progress, setProgress] = useState(0);
+    const [showProgress, setShowProgress] = useState(false);
+    const resultsRef = useRef(null);
 
     useEffect(() => {
         const id = setTimeout(() => setShowUploadGuide(true), 300);
@@ -383,6 +386,14 @@ export function VirtualReshootModule({ onResult }) {
 
         const link = document.createElement("a");
         link.href = item.url;
+        setProgress(0);
+        setShowProgress(true);
+        let progressTimer = window.setInterval(() => {
+            setProgress((p) => {
+                if (p >= 92) return p;
+                return p + Math.floor(Math.random() * 6) + 2; // jump 2-7%
+            });
+        }, 350);
         const extension = getDownloadExtension(item.url);
         link.download = `${item.id || `virtual_reshoot_${Date.now()}`}.${extension}`;
         document.body.appendChild(link);
@@ -448,6 +459,11 @@ export function VirtualReshootModule({ onResult }) {
             const reader = new FileReader();
             reader.onloadend = () => {
                 setSelectedAvatarImageUrl(reader.result);
+                // scroll to results and briefly keep progress visible
+                setTimeout(() => {
+                    if (resultsRef.current) resultsRef.current.scrollIntoView({ behavior: 'smooth' });
+                }, 120);
+                setTimeout(() => setShowProgress(false), 700);
             };
             reader.readAsDataURL(blob);
         } catch (err) {
@@ -472,6 +488,7 @@ export function VirtualReshootModule({ onResult }) {
 
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), 90000);
+        setTimeout(() => setShowProgress(false), 600);
 
         try {
             const firstBase = baseFiles[0];
@@ -853,7 +870,6 @@ export function VirtualReshootModule({ onResult }) {
                 </div>
 
                 <div className="virtual-reshoot-step">
-                    <p className="virtual-reshoot-step-label">{copy?.step3 || "Step 3 – Generate"}</p>
                     <div className="virtual-reshoot-button-wrapper">
                         <Button
                             type="button"
@@ -871,9 +887,23 @@ export function VirtualReshootModule({ onResult }) {
                             )}
                         </Button>
                     </div>
-                    <p className="text-xs text-muted-foreground">
-                        {copy?.backendHint || "Sends base images + selected avatar URL to the backend. The AI prompt is hardcoded server-side."}
-                    </p>
+                    {showProgress && (
+                        <div className="virtual-reshoot-progress">
+                            <div className="virtual-reshoot-progress-info">
+                                <Loader2 className="virtual-reshoot-progress-loader" />
+                                <div className="virtual-reshoot-progress-text">
+                                    <span>{copy?.processing || "Processing..."}</span>
+                                    <span>{progress}%</span>
+                                </div>
+                            </div>
+                            <div className="virtual-reshoot-progress-bar-bg">
+                                <div
+                                    className="virtual-reshoot-progress-bar-fill"
+                                    style={{ width: `${progress}%` }}
+                                />
+                            </div>
+                        </div>
+                    )}
                 </div>
             </Card>
 
@@ -929,7 +959,7 @@ export function VirtualReshootModule({ onResult }) {
                                             <Button
                                                 type="button"
                                                 size="sm"
-                                                variant="outline"
+                                                variant="default"
                                                 className="virtual-reshoot-result-btn"
                                                 onClick={() => handleDownloadResult(item)}
                                             >
