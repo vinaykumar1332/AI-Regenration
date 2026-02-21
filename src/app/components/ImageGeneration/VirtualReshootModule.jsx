@@ -397,15 +397,6 @@ export function VirtualReshootModule({ onResult }) {
             return;
         }
 
-        if (!gender) {
-            toast.error(copy?.errors?.selectGender || "Please select a gender");
-            return;
-        }
-
-        if (!origin) {
-            toast.error(copy?.errors?.selectOrigin || "Please select an origin");
-            return;
-        }
 
         if (!selectedAvatarImageUrl) {
             toast.error(copy?.errors?.selectAvatar || "Please select an avatar");
@@ -429,8 +420,6 @@ export function VirtualReshootModule({ onResult }) {
                 {
                     baseImages: basePayload,
                     avatarImageUrl: selectedAvatarImageUrl,
-                    gender,
-                    origin,
                 },
                 controller.signal
             );

@@ -1,28 +1,40 @@
 {
     "predefinedAvatars": [
         {
-            "id": "sholi",
+            "id": "himari",
             "originKey": "asian",
             "skinToneKey": "medium",
-            "imageUrl": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=400&fit=crop&q=80"
+            "imageUrl": "https://res.cloudinary.com/dqy6ux1fa/image/upload/v1771661478/himari_fhptaf.png"
         },
         {
-            "id": "max",
+            "id": "seo-jun",
+            "originKey": "asian",
+            "skinToneKey": "light",
+            "imageUrl": "https://res.cloudinary.com/dqy6ux1fa/image/upload/v1771661474/seo-jun_zmtffm.png"
+        },
+        {
+            "id": "henry",
             "originKey": "european",
             "skinToneKey": "pale",
-            "imageUrl": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&q=80"
+            "imageUrl": "https://res.cloudinary.com/dqy6ux1fa/image/upload/v1771661472/henry_fdl90e.png"
         },
         {
-            "id": "aisha",
+            "id": "lora",
+            "originKey": "european",
+            "skinToneKey": "light",
+            "imageUrl": "https://res.cloudinary.com/dqy6ux1fa/image/upload/v1771660793/Lora_ghytpr.png"
+        },
+        {
+            "id": "zola",
             "originKey": "african",
             "skinToneKey": "dark",
-            "imageUrl": "https://images.unsplash.com/photo-1507239711619-bd914236b374?w=400&h=400&fit=crop&q=80"
+            "imageUrl": "https://res.cloudinary.com/dqy6ux1fa/image/upload/v1771661474/zola_xyp2j9.png"
         },
         {
-            "id": "kiran",
-            "originKey": "indian",
-            "skinToneKey": "tan",
-            "imageUrl": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=400&fit=crop&q=80"
+            "id": "kwane",
+            "originKey": "african",
+            "skinToneKey": "dark",
+            "imageUrl": "https://res.cloudinary.com/dqy6ux1fa/image/upload/v1771661473/kwame_cvwyiv.png"
         }
     ],
     "options": {
@@ -33,9 +45,7 @@
         "continents": [
             "european",
             "african",
-            "asian",
-            "middle_eastern",
-            "latin"
+            "asian"
         ],
         "skinTones": [
             "very_pale",

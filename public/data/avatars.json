@@ -1,48 +1,58 @@
 {
     "male": {
+        "asian": [
+            {
+                "id": "m_as_seo_jun",
+                "name": "seo-jun",
+                "images": [
+                    "https://res.cloudinary.com/dqy6ux1fa/image/upload/v1771661474/seo-jun_zmtffm.png"
+                ]
+            }
+        ],
         "european": [
             {
-                "id": "m_eu_1",
-                "name": "Lukas",
+                "id": "m_eu_henry",
+                "name": "henry",
                 "images": [
-                    "https://images.unsplash.com/photo-1500648767791-00dcc994a43e",
-                    "https://images.unsplash.com/photo-1527980965255-d3b416303d12"
-                ]
-            },
-            {
-                "id": "m_eu_2",
-                "name": "Daniel",
-                "images": [
-                    "https://images.unsplash.com/photo-1492562080023-ab3db95bfbce"
+                    "https://res.cloudinary.com/dqy6ux1fa/image/upload/v1771661472/henry_fdl90e.png"
                 ]
             }
         ],
         "african": [
             {
-                "id": "m_af_1",
-                "name": "Kwame",
+                "id": "m_af_kwane",
+                "name": "kwane",
                 "images": [
-                    "https://images.unsplash.com/photo-1521119989659-a83eee488004"
+                    "https://res.cloudinary.com/dqy6ux1fa/image/upload/v1771661473/kwame_cvwyiv.png"
                 ]
             }
         ]
     },
     "female": {
-        "european": [
+        "asian": [
             {
-                "id": "f_eu_1",
-                "name": "Sophie",
+                "id": "f_as_himari",
+                "name": "himari",
                 "images": [
-                    "https://images.unsplash.com/photo-1494790108377-be9c29b29330"
+                    "https://res.cloudinary.com/dqy6ux1fa/image/upload/v1771661478/himari_fhptaf.png"
                 ]
             }
         ],
-        "asian": [
+        "european": [
             {
-                "id": "f_as_1",
-                "name": "Mei",
+                "id": "f_eu_lora",
+                "name": "lora",
                 "images": [
-                    "https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91"
+                    "https://res.cloudinary.com/dqy6ux1fa/image/upload/v1771660793/Lora_ghytpr.png"
+                ]
+            }
+        ],
+        "african": [
+            {
+                "id": "f_af_zola",
+                "name": "zola",
+                "images": [
+                    "https://res.cloudinary.com/dqy6ux1fa/image/upload/v1771661474/zola_xyp2j9.png"
                 ]
             }
         ]

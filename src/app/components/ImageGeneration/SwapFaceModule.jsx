@@ -195,8 +195,7 @@ function MultipleUploadCard({ label, required, hint, files, onFilesChange, copy 
 }
 
 export function SwapFaceModule({ onResult }) {
-    const { static: staticConfig, text } = useAppConfig();
-    const swapFacePrompt = staticConfig?.swapFacePrompt || "";
+    const { text } = useAppConfig();
     const copy = text?.imageGeneration?.swapFace || {};
 
     const [inputImages, setInputImages] = useState([]);
@@ -214,11 +213,6 @@ export function SwapFaceModule({ onResult }) {
 
         if (referenceImages.length === 0) {
             toast.error(copy?.errors?.uploadReference || "Please upload at least one reference image");
-            return;
-        }
-
-        if (!swapFacePrompt) {
-            toast.error(copy?.errors?.promptMissing || "Swap-face prompt is not configured");
             return;
         }
 
@@ -250,19 +244,10 @@ export function SwapFaceModule({ onResult }) {
             const inputPayload = await toBase64Array(inputImages);
             const referencePayload = await toBase64Array(referenceImages);
 
-            let userId = null;
-            try {
-                userId = window?.localStorage?.getItem("userId") || null;
-            } catch {
-                // ignore
-            }
-
             const response = await swapFaceApi(
                 {
                     inputImages: inputPayload,
                     referenceImages: referencePayload,
-                    prompt: swapFacePrompt,
-                    userId,
                 },
                 controller.signal
             );
